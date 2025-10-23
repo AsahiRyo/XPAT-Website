@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cloud Dodger - X'PAT Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            color: #fff;
+            touch-action: none;
+        }
+
+        .game-wrapper {
+            width: 100%;
+            max-width: 800px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            background: #000;
+            border: 4px solid #FFD700;
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            background: linear-gradient(180deg, #87CEEB 0%, #4A90E2 50%, #1e3a8a 100%);
+        }
+
+        .hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .stat {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 2px solid #FFD700;
+            font-size: 10px;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .stat-label {
+            color: #FFD700;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            color: #FFF;
+            font-size: 14px;
+        }
+
+        .branding {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .brand-tag {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 2px solid #0118D8;
+            font-size: 8px;
+            color: #FFD700;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            z-index: 100;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .overlay.hidden {
+            display: none;
+        }
+
+        .title {
+            font-size: 24px;
+            color: #FFD700;
+            text-shadow: 3px 3px 0 #000;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 10px;
+            color: #FFF;
+            line-height: 1.8;
+            max-width: 300px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #000;
+            border: 3px solid #000;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Press Start 2P', cursive;
+            box-shadow: 0 4px 0 #8B4513;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #8B4513;
+        }
+
+        .controls {
+            display: none;
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            gap: 60px;
+            z-index: 50;
+        }
+
+        .control-btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(1, 24, 216, 0.8);
+            border: 3px solid #FFD700;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            color: #FFF;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+            transition: all 0.1s;
+        }
+
+        .control-btn:active {
+            transform: scale(0.95) translateY(2px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+            background: rgba(1, 24, 216, 1);
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .controls {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .title {
+                font-size: 18px;
+            }
+            .subtitle {
+                font-size: 8px;
+            }
+            .stat {
+                padding: 6px 8px;
+                font-size: 8px;
+            }
+            .stat-value {
+                font-size: 12px;
+            }
+            .brand-tag {
+                font-size: 6px;
+            }
+            .control-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+
+        .game-over-stats {
+            background: rgba(1, 24, 216, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #FFD700;
+            margin: 10px 0;
+        }
+
+        .game-over-stats div {
+            margin: 5px 0;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="game-container">
+            <canvas id="gameCanvas" width="600" height="800"></canvas>
+            
+            <!-- HUD -->
+            <div class="hud">
+                <div class="stat">
+                    <div class="stat-label">ALTITUDE</div>
+                    <div class="stat-value" id="altitude">0m</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">LEVEL</div>
+                    <div class="stat-value" id="level">1</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">LIVES</div>
+                    <div class="stat-value" id="lives">❤️❤️❤️</div>
+                </div>
+            </div>
+
+            <!-- Branding -->
+            <div class="branding">
+                <div class="brand-tag">X'PAT</div>
+                <div class="brand-tag">TFP Solutions</div>
+                <div class="brand-tag">MobilityOne</div>
+                <div class="brand-tag">MiPAY</div>
+            </div>
+
+            <!-- Start Overlay -->
+            <div class="overlay" id="startOverlay">
+                <div class="title">☁️ CLOUD DODGER ☁️</div>
+                <div class="subtitle">
+                    Navigate through clouds<br>
+                    to reach Malaysia!<br><br>
+                    Avoid dark storm clouds ⚡<br>
+                    Collect white clouds ☁️<br>
+                    Reach higher altitudes!
+                </div>
+                <button class="btn" onclick="startGame()">START JOURNEY</button>
+            </div>
+
+            <!-- Game Over Overlay -->
+            <div class="overlay hidden" id="gameOverOverlay">
+                <div class="title">JOURNEY PAUSED</div>
+                <div class="game-over-stats">
+                    <div>ALTITUDE: <span id="finalAltitude">0</span>m</div>
+                    <div>LEVEL: <span id="finalLevel">0</span></div>
+                    <div>CLOUDS: <span id="finalClouds">0</span></div>
+                </div>
+                <button class="btn" onclick="restartGame()">TRY AGAIN</button>
+            </div>
+
+            <!-- Mobile Controls -->
+            <div class="controls">
+                <div class="control-btn" id="leftBtn">◀</div>
+                <div class="control-btn" id="rightBtn">▶</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Game state
+        let gameActive = false;
+        let altitude = 0;
+        let level = 1;
+        let lives = 3;
+        let cloudsCollected = 0;
+        let speed = 2;
+        let cloudSpawnRate = 0.02;
+        let animationId;
+
+        // Player (airplane)
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 150,
+            width: 40,
+            height: 30,
+            speed: 6,
+            dx: 0
+        };
+
+        // Clouds array
+        let clouds = [];
+        let particles = [];
+
+        // Input handling
+        const keys = {};
+        let touchLeft = false;
+        let touchRight = false;
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        // Mobile controls
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchLeft = true;
+        });
+
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchLeft = false;
+        });
+
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchRight = true;
+        });
+
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchRight = false;
+        });
+
+        // Cloud class with Perlin-like movement
+        class Cloud {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.width = type === 'bad' ? 60 : 50;
+                this.height = type === 'bad' ? 40 : 35;
+                this.type = type; // 'good' or 'bad'
+                this.speed = speed + Math.random() * 2;
+                this.wobble = Math.random() * Math.PI * 2;
+                this.wobbleSpeed = 0.02 + Math.random() * 0.03;
+                this.amplitude = 15 + Math.random() * 20;
+                this.hit = false;
+            }
+
+            update() {
+                this.y += this.speed;
+                this.wobble += this.wobbleSpeed;
+                this.x += Math.sin(this.wobble) * 0.5;
+            }
+
+            draw() {
+                if (this.type === 'bad') {
+                    // Dark storm cloud
+                    ctx.fillStyle = '#2C3E50';
+                    ctx.strokeStyle = '#1A252F';
+                    ctx.lineWidth = 2;
+                    
+                    // Cloud shape
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.width / 3, 0, Math.PI * 2);
+                    ctx.arc(this.x + this.width / 3, this.y, this.width / 3, 0, Math.PI * 2);
+                    ctx.arc(this.x + this.width / 6, this.y - this.height / 3, this.width / 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Lightning effect
+                    if (Math.random() > 0.9) {
+                        ctx.strokeStyle = '#FFD700';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + this.width / 2, this.y);
+                        ctx.lineTo(this.x + this.width / 2 - 5, this.y + 15);
+                        ctx.lineTo(this.x + this.width / 2 + 5, this.y + 15);
+                        ctx.lineTo(this.x + this.width / 2, this.y + 30);
+                        ctx.stroke();
+                    }
+                } else {
+                    // White fluffy cloud
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.strokeStyle = '#E0E0E0';
+                    ctx.lineWidth = 2;
+                    
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.width / 3, 0, Math.PI * 2);
+                    ctx.arc(this.x + this.width / 3, this.y, this.width / 3, 0, Math.PI * 2);
+                    ctx.arc(this.x + this.width / 6, this.y - this.height / 3, this.width / 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+            }
+
+            isOffScreen() {
+                return this.y > canvas.height + 50;
+            }
+        }
+
+        // Particle class for effects
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4;
+                this.size = Math.random() * 4 + 2;
+                this.color = color;
+                this.life = 1;
+                this.decay = 0.02;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                this.size *= 0.98;
+            }
+
+            draw() {
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+                ctx.globalAlpha = 1;
+            }
+
+            isDead() {
+                return this.life <= 0;
+            }
+        }
+
+        function spawnCloud() {
+            // Spawn rate increases with level
+            if (Math.random() < cloudSpawnRate * (1 + level * 0.1)) {
+                const x = Math.random() * (canvas.width - 100) + 50;
+                const y = -50;
+                // Bad clouds become more frequent as level increases
+                const badCloudChance = 0.3 + (level * 0.05);
+                const type = Math.random() < badCloudChance ? 'bad' : 'good';
+                clouds.push(new Cloud(x, y, type));
+            }
+        }
+
+        function createParticles(x, y, color, count = 10) {
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function checkCollision(rect1, rect2) {
+            return rect1.x < rect2.x + rect2.width &&
+                   rect1.x + rect1.width > rect2.x &&
+                   rect1.y < rect2.y + rect2.height &&
+                   rect1.y + rect1.height > rect2.y;
+        }
+
+        function drawPlayer() {
+            // Airplane body
+            ctx.fillStyle = '#0118D8';
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(player.x + player.width / 2, player.y - player.height);
+            ctx.lineTo(player.x + player.width, player.y);
+            ctx.closePath();
+            ctx.fill();
+
+            // Wings
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(player.x - 10, player.y - player.height / 2, player.width + 20, 5);
+
+            // Window
+            ctx.fillStyle = '#87CEEB';
+            ctx.beginPath();
+            ctx.arc(player.x + player.width / 2, player.y - player.height / 2, 5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function updatePlayer() {
+            // Handle input
+            if (keys['ArrowLeft'] || keys['a'] || keys['A'] || touchLeft) {
+                player.dx = -player.speed;
+            } else if (keys['ArrowRight'] || keys['d'] || keys['D'] || touchRight) {
+                player.dx = player.speed;
+            } else {
+                player.dx = 0;
+            }
+
+            player.x += player.dx;
+
+            // Boundary collision
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+        }
+
+        function updateGame() {
+            if (!gameActive) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update player
+            updatePlayer();
+
+            // Spawn clouds
+            spawnCloud();
+
+            // Update and draw clouds
+            clouds = clouds.filter(cloud => {
+                cloud.update();
+                cloud.draw();
+
+                // Check collision
+                if (!cloud.hit && checkCollision(player, cloud)) {
+                    cloud.hit = true;
+                    if (cloud.type === 'bad') {
+                        lives--;
+                        createParticles(cloud.x + cloud.width / 2, cloud.y, '#FF0000', 15);
+                        updateLives();
+                        if (lives <= 0) {
+                            gameOver();
+                        }
+                    } else {
+                        cloudsCollected++;
+                        altitude += 100;
+                        createParticles(cloud.x + cloud.width / 2, cloud.y, '#FFFFFF', 10);
+                        updateAltitude();
+                    }
+                }
+
+                return !cloud.isOffScreen();
+            });
+
+            // Update and draw particles
+            particles = particles.filter(particle => {
+                particle.update();
+                particle.draw();
+                return !particle.isDead();
+            });
+
+            // Draw player
+            drawPlayer();
+
+            // Passive altitude gain
+            altitude += 0.5;
+            updateAltitude();
+
+            // Level progression based on altitude
+            const newLevel = Math.floor(altitude / 1000) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                speed += 0.5;
+                updateLevel();
+            }
+
+            animationId = requestAnimationFrame(updateGame);
+        }
+
+        function updateAltitude() {
+            document.getElementById('altitude').textContent = Math.floor(altitude) + 'm';
+        }
+
+        function updateLevel() {
+            document.getElementById('level').textContent = level;
+        }
+
+        function updateLives() {
+            const hearts = '❤️'.repeat(lives);
+            document.getElementById('lives').textContent = hearts || '💀';
+        }
+
+        function startGame() {
+            document.getElementById('startOverlay').classList.add('hidden');
+            gameActive = true;
+            resetGame();
+            updateGame();
+        }
+
+        function gameOver() {
+            gameActive = false;
+            cancelAnimationFrame(animationId);
+            
+            document.getElementById('finalAltitude').textContent = Math.floor(altitude);
+            document.getElementById('finalLevel').textContent = level;
+            document.getElementById('finalClouds').textContent = cloudsCollected;
+            document.getElementById('gameOverOverlay').classList.remove('hidden');
+        }
+
+        function restartGame() {
+            document.getElementById('gameOverOverlay').classList.add('hidden');
+            gameActive = true;
+            resetGame();
+            updateGame();
+        }
+
+        function resetGame() {
+            altitude = 0;
+            level = 1;
+            lives = 3;
+            cloudsCollected = 0;
+            speed = 2;
+            clouds = [];
+            particles = [];
+            player.x = canvas.width / 2;
+            player.y = canvas.height - 150;
+            updateAltitude();
+            updateLevel();
+            updateLives();
+        }
+
+        // Responsive canvas
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const ratio = 600 / 800;
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            if (containerWidth / containerHeight > ratio) {
+                canvas.style.height = '100%';
+                canvas.style.width = 'auto';
+            } else {
+                canvas.style.width = '100%';
+                canvas.style.height = 'auto';
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+    </script>
+</body>
+</html>
