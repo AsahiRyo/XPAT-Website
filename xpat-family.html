@@ -62,7 +62,7 @@
         .content-wrapper {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 70px 15px 40px;
+            padding: 70px 20px 40px;
         }
 
         /* Section Styling */
@@ -91,7 +91,7 @@
         }
 
         .section-title {
-            font-size: clamp(28px, 5vw, 48px);
+            font-size: clamp(24px, 6vw, 48px);
             font-weight: 800;
             margin-bottom: 12px;
             background: linear-gradient(135deg, #FFF8F8 0%, #1B56FD 50%, #E9DFC3 100%);
@@ -99,33 +99,39 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
+            word-break: break-word;
         }
 
         .section-subtitle {
-            font-size: clamp(14px, 2.5vw, 18px);
+            font-size: clamp(13px, 3vw, 18px);
             color: rgba(233, 223, 195, 0.8);
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
+            word-break: break-word;
         }
 
-        /* Community Grid */
+        /* Community Grid - RESPONSIVE */
         .community-grid-wrapper {
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 30px 10px;
-            min-height: 400px;
+            padding: 20px;
+            min-height: auto;
+            overflow: visible;
         }
 
         .xpat-grid-container {
             display: flex;
+            flex-direction: row;
             justify-content: center;
-            align-items: center;
-            gap: clamp(8px, 2vw, 25px);
+            align-items: flex-start;
+            gap: 12px;
             flex-wrap: wrap;
             animation: breathe 4s ease-in-out infinite;
+            max-width: 100%;
+            margin: 0 auto;
         }
 
         @keyframes breathe {
@@ -135,14 +141,15 @@
 
         .letter-grid {
             display: grid;
-            gap: clamp(2px, 0.4vw, 4px);
+            gap: 3px;
             background: rgba(1, 24, 216, 0.15);
             backdrop-filter: blur(15px);
-            padding: clamp(10px, 2.5vw, 18px);
-            border-radius: clamp(10px, 2.5vw, 18px);
+            padding: 12px;
+            border-radius: 12px;
             box-shadow: 0 10px 25px rgba(1, 24, 216, 0.3);
             border: 1px solid rgba(233, 223, 195, 0.3);
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         .letter-grid:hover {
@@ -151,19 +158,19 @@
         }
 
         .letter-x, .letter-p, .letter-a, .letter-t {
-            grid-template-columns: repeat(5, clamp(12px, 2vw, 22px));
-            grid-template-rows: repeat(7, clamp(12px, 2vw, 22px));
+            grid-template-columns: repeat(5, 16px);
+            grid-template-rows: repeat(7, 16px);
         }
 
         .letter-apostrophe {
-            grid-template-columns: repeat(2, clamp(12px, 2vw, 22px));
-            grid-template-rows: repeat(7, clamp(12px, 2vw, 22px));
+            grid-template-columns: repeat(2, 16px);
+            grid-template-rows: repeat(7, 16px);
         }
 
         .grid-cell {
-            width: clamp(12px, 2vw, 22px);
-            height: clamp(12px, 2vw, 22px);
-            border-radius: clamp(3px, 0.6vw, 5px);
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
             overflow: hidden;
             position: relative;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -192,7 +199,7 @@
 
         @media (hover: hover) {
             .grid-cell:hover {
-                transform: scale(1.1);
+                transform: scale(1.15);
                 z-index: 10;
                 box-shadow: 0 10px 25px rgba(27, 86, 253, 0.6);
                 border: 2px solid #1B56FD;
@@ -394,13 +401,12 @@
             box-shadow: 0 10px 25px rgba(0, 8, 20, 0.5);
         }
 
-        .video-container video {
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
             border-radius: 15px;
         }
 
@@ -426,8 +432,8 @@
         /* Support Section */
         .support-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-            gap: clamp(18px, 3vw, 25px);
+            grid-template-columns: 1fr;
+            gap: clamp(16px, 3vw, 25px);
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -484,7 +490,7 @@
 
         .support-text {
             color: rgba(233, 223, 195, 0.9);
-            font-size: clamp(14px, 2.5vw, 15px);
+            font-size: clamp(13px, 2.5vw, 15px);
             line-height: 1.6;
         }
 
@@ -569,90 +575,196 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transition: opacity 0.3s ease;
+            max-width: 200px;
         }
 
         .status-indicator.show {
             opacity: 1;
         }
 
-        /* Mobile Optimizations */
-        @media (max-width: 768px) {
+        /* Tablet View */
+        @media (min-width: 768px) {
             .content-wrapper {
-                padding: 60px 12px 30px;
-            }
-
-            .section {
-                margin-bottom: 40px;
-            }
-
-            .xpat-grid-container {
-                gap: 6px;
-            }
-
-            .letter-grid {
-                padding: 8px;
-            }
-
-            .modal-content {
-                margin: 2vh auto;
-                max-height: 96vh;
+                padding: 70px 30px 40px;
             }
 
             .support-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        @media (max-width: 480px) {
-            .return-btn {
-                padding: 8px 16px;
-                font-size: 13px;
-            }
-
-            .xpat-grid-container {
-                gap: 5px;
-                padding: 0 5px;
-            }
-
-            .section-divider {
-                margin: 30px auto;
-            }
-        }
-
+        /* Desktop View */
         @media (min-width: 1024px) {
+            .content-wrapper {
+                padding: 70px 40px 40px;
+            }
+
             .support-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
-        /* Landscape mobile fix */
-        @media (max-height: 500px) and (orientation: landscape) {
+        /* Mobile View - Vertical Stack */
+        @media (max-width: 767px) {
+            .content-wrapper {
+                padding: 60px 12px 30px;
+            }
+
+            .section {
+                margin-bottom: 30px;
+            }
+
+            .xpat-grid-container {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .letter-grid {
+                padding: 10px;
+                gap: 2px;
+            }
+
+            .letter-x, .letter-p, .letter-a, .letter-t {
+                grid-template-columns: repeat(5, 14px);
+                grid-template-rows: repeat(7, 14px);
+            }
+
+            .letter-apostrophe {
+                grid-template-columns: repeat(2, 14px);
+                grid-template-rows: repeat(7, 14px);
+            }
+
+            .grid-cell {
+                width: 14px;
+                height: 14px;
+            }
+
+            .community-grid-wrapper {
+                overflow: visible;
+                padding: 15px;
+            }
+
+            .section-divider {
+                margin: 25px auto;
+            }
+
+            .return-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+                top: 10px;
+                left: 10px;
+            }
+
             .modal-content {
-                max-height: 95vh;
-                margin: 2.5vh auto;
+                margin: 20% auto;
+                max-height: 80vh;
             }
 
             .modal-image {
                 max-height: 50vh;
             }
         }
+
+        /* Very Small Phones */
+        @media (max-width: 480px) {
+            .content-wrapper {
+                padding: 55px 10px 25px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .section-subtitle {
+                font-size: 12px;
+            }
+
+            .letter-x, .letter-p, .letter-a, .letter-t {
+                grid-template-columns: repeat(5, 12px);
+                grid-template-rows: repeat(7, 12px);
+            }
+
+            .letter-apostrophe {
+                grid-template-columns: repeat(2, 12px);
+                grid-template-rows: repeat(7, 12px);
+            }
+
+            .grid-cell {
+                width: 12px;
+                height: 12px;
+                border-radius: 2px;
+            }
+
+            .letter-grid {
+                padding: 8px;
+                gap: 2px;
+            }
+
+            .community-grid-wrapper {
+                padding: 12px;
+            }
+
+            .return-btn {
+                padding: 7px 12px;
+                font-size: 11px;
+            }
+
+            .status-indicator {
+                font-size: 11px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* Landscape Orientation */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .content-wrapper {
+                padding: 50px 20px 30px;
+            }
+
+            .section {
+                margin-bottom: 25px;
+            }
+
+            .section-header {
+                margin-bottom: 20px;
+            }
+
+            .section-title {
+                font-size: 24px;
+                margin-bottom: 8px;
+            }
+
+            .section-subtitle {
+                font-size: 12px;
+            }
+
+            .modal-content {
+                max-height: 95vh;
+                margin: 2% auto;
+            }
+        }
+
+        /* iPad/Tablet Landscape */
+        @media (min-width: 768px) and (max-height: 600px) and (orientation: landscape) {
+            .xpat-grid-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Decorative Glow Effects -->
     <div class="glow-effect glow-1"></div>
     <div class="glow-effect glow-2"></div>
 
-    <!-- Return Button -->
     <a href="#" onclick="goBack(); return false;" class="return-btn">Return Home</a>
 
-    <!-- Status Indicator -->
     <div class="status-indicator" id="statusIndicator">Loading...</div>
 
-    <!-- Content Wrapper -->
     <div class="content-wrapper">
         
-        <!-- Community Grid Section -->
         <section class="section">
             <div class="section-header">
                 <h2 class="section-title">Our Growing Community</h2>
@@ -661,7 +773,6 @@
 
             <div class="community-grid-wrapper">
                 <div class="xpat-grid-container">
-                    <!-- Letter X -->
                     <div class="letter-grid letter-x" data-letter="X">
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
@@ -672,7 +783,6 @@
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
                     </div>
 
-                    <!-- Apostrophe -->
                     <div class="letter-grid letter-apostrophe" data-letter="'">
                         <div class="grid-cell"></div><div class="grid-cell"></div>
                         <div class="grid-cell"></div><div class="grid-cell"></div>
@@ -683,7 +793,6 @@
                         <div class="grid-cell"></div><div class="grid-cell"></div>
                     </div>
 
-                    <!-- Letter P -->
                     <div class="letter-grid letter-p" data-letter="P">
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
@@ -694,7 +803,6 @@
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
                     </div>
 
-                    <!-- Letter A -->
                     <div class="letter-grid letter-a" data-letter="A">
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
@@ -705,7 +813,6 @@
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
                     </div>
 
-                    <!-- Letter T -->
                     <div class="letter-grid letter-t" data-letter="T">
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
                         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
@@ -719,10 +826,8 @@
             </div>
         </section>
 
-        <!-- Section Divider -->
         <div class="section-divider"></div>
 
-        <!-- Video Section -->
         <section class="section">
             <div class="section-header">
                 <h2 class="section-title">Discover X'PAT</h2>
@@ -737,17 +842,14 @@
                         title="X'PAT Promotional Video" 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        allowfullscreen
-                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 15px;">
+                        allowfullscreen>
                     </iframe>
                 </div>
             </div>
         </section>
 
-        <!-- Section Divider -->
         <div class="section-divider"></div>
 
-        <!-- Support Section -->
         <section class="section">
             <div class="section-header">
                 <h2 class="section-title">Connect With Us</h2>
@@ -790,7 +892,6 @@
 
     </div>
 
-    <!-- Modal for Community Images -->
     <div id="imageModal" class="modal">
         <span class="close">&times;</span>
         <div class="modal-content">
@@ -806,7 +907,6 @@
     </div>
 
     <script>
-        // Community Data
         const communityData = [
             { image: 'community-images/community-01.jpg', title: 'Community Partner 1', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
             { image: 'community-images/community-02.jpg', title: 'Community Partner 2', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
@@ -848,11 +948,9 @@
         let randomInterval = null;
 
         function goBack() {
-            // Try to go back in history first
             if (window.history.length > 1 && document.referrer) {
                 window.history.back();
             } else {
-                // If no history, try to go to index.html
                 window.location.href = 'index.html';
             }
         }
@@ -872,15 +970,10 @@
             const cells = document.querySelectorAll('.grid-cell');
             const activeCells = [];
             
-            // X pattern cells
             const xIndices = [0, 4, 6, 8, 11, 13, 17, 21, 23, 26, 28, 30, 34];
-            // Apostrophe cells (offset by 35)
             const apostropheIndices = [35, 37];
-            // P pattern cells (offset by 49)
             const pIndices = [0, 1, 2, 3, 5, 9, 10, 14, 15, 16, 17, 18, 20, 25, 30].map(i => i + 49);
-            // A pattern cells (offset by 84)
             const aIndices = [1, 2, 3, 5, 9, 10, 14, 15, 16, 17, 18, 19, 20, 24, 25, 29, 30, 34].map(i => i + 84);
-            // T pattern cells (offset by 119)
             const tIndices = [0, 1, 2, 3, 4, 7, 12, 17, 22, 27, 32].map(i => i + 119);
             
             const allIndices = [...xIndices, ...apostropheIndices, ...pIndices, ...aIndices, ...tIndices];
@@ -919,7 +1012,7 @@
 
             Promise.all(loadPromises).then(() => {
                 if (loadedImages.length > 0) {
-                    showStatus(`✓ ${loadedImages.length} images ready!`, 3000);
+                    showStatus('✓ ' + loadedImages.length + ' images ready!', 3000);
                     startCommunityGridSystem();
                 } else {
                     showStatus('⚠ No images found - check image folder', 5000);
@@ -943,14 +1036,13 @@
         }
 
         function setCellImage(cell, imageData) {
-            cell.style.backgroundImage = `url('${imageData.image}')`;
+            cell.style.backgroundImage = 'url(\'' + imageData.image + '\')';
             cell.classList.add('community-image');
             cell.dataset.imageIndex = loadedImages.indexOf(imageData);
             cell.dataset.imageUrl = imageData.image;
             cell.dataset.imageTitle = imageData.title;
             cell.dataset.imageLink = imageData.link;
             
-            // Use both click and touchstart for better mobile responsiveness
             cell.onclick = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1030,17 +1122,14 @@
             if (isInitialized) return;
             isInitialized = true;
 
-            // Initial load after short delay
             setTimeout(() => {
                 runAnimationCycle();
             }, 500);
 
-            // Main animation cycle
             animationInterval = setInterval(() => {
                 runAnimationCycle();
             }, 4000);
 
-            // Random cell updates for dynamic effect
             randomInterval = setInterval(() => {
                 if (loadedImages.length === 0) return;
                 
@@ -1067,25 +1156,23 @@
             modalTitle.textContent = imageData.title;
             
             modal.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Prevent background scroll
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             const modal = document.getElementById('imageModal');
             modal.style.display = 'none';
-            document.body.style.overflow = ''; // Restore scroll
+            document.body.style.overflow = '';
         }
 
         function openCustomerCare() {
             const phoneNumber = '+601158583070';
             const message = encodeURIComponent('Hello! I need help with X\'PAT services. Please assist me.');
-            const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^\d]/g, '')}?text=${message}`;
+            const whatsappUrl = 'https://wa.me/' + phoneNumber.replace(/[^\d]/g, '') + '?text=' + message;
             window.open(whatsappUrl, '_blank');
         }
 
-        // Initialize on DOM ready
         document.addEventListener('DOMContentLoaded', function() {
-            // Modal close handlers
             const closeBtn = document.querySelector('.close');
             if (closeBtn) {
                 closeBtn.onclick = closeModal;
@@ -1104,7 +1191,6 @@
                 }
             });
 
-            // Pause animations when tab is hidden
             document.addEventListener('visibilitychange', function() {
                 const container = document.querySelector('.xpat-grid-container');
                 if (document.hidden) {
@@ -1127,11 +1213,9 @@
                 }
             });
 
-            // Start the system
             preloadImages();
         });
 
-        // Clean up on page unload
         window.addEventListener('beforeunload', function() {
             if (animationInterval) clearInterval(animationInterval);
             if (randomInterval) clearInterval(randomInterval);
@@ -1139,4 +1223,3 @@
     </script>
 </body>
 </html>
-                

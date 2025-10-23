@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>S4S SIM Card Plans - Stay Connected in Malaysia</title>
     <meta name="description" content="Choose from affordable S4S mobile data plans with unlimited calls and high-speed internet. Perfect for foreigners living and working in Malaysia.">
     
@@ -34,11 +34,14 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
         }
 
         html {
             scroll-behavior: smooth;
             font-size: 16px;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         body {
@@ -46,11 +49,12 @@
             background: #000814;
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: hidden;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             position: relative;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         /* Animated Liquid Background */
@@ -60,7 +64,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -2;
             overflow: hidden;
             background: linear-gradient(135deg, #000814 0%, #001233 50%, #000814 100%);
         }
@@ -71,7 +75,6 @@
             filter: blur(80px);
             opacity: 0.5;
             mix-blend-mode: screen;
-            animation: morph 15s ease-in-out infinite, float 20s ease-in-out infinite;
             will-change: transform, border-radius;
         }
 
@@ -81,7 +84,7 @@
             background: radial-gradient(circle at 30% 50%, #0118D8, #1B56FD);
             top: 10%;
             left: -15%;
-            animation-delay: 0s;
+            animation: morph 15s ease-in-out infinite, float 20s ease-in-out infinite;
         }
 
         .blob-2 {
@@ -90,7 +93,7 @@
             background: radial-gradient(circle at 70% 50%, #1B56FD, #0118D8);
             top: 40%;
             right: -20%;
-            animation-delay: -5s;
+            animation: morph 15s ease-in-out infinite -5s, float 20s ease-in-out infinite -5s;
         }
 
         .blob-3 {
@@ -99,7 +102,7 @@
             background: radial-gradient(circle at 50% 50%, #0118D8, #1B56FD);
             bottom: 5%;
             left: 25%;
-            animation-delay: -10s;
+            animation: morph 15s ease-in-out infinite -10s, float 20s ease-in-out infinite -10s;
         }
 
         @keyframes morph {
@@ -133,6 +136,22 @@
             }
             75% {
                 transform: translate(40px, 60px) rotate(270deg);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -175,6 +194,7 @@
             align-items: center;
             gap: 8px;
             box-shadow: 0 10px 30px rgba(1, 24, 216, 0.5);
+            user-select: none;
         }
 
         .back-btn:hover,
@@ -192,6 +212,7 @@
             justify-content: center;
             padding: 140px 20px 40px;
             text-align: center;
+            width: 100%;
         }
 
         .hero-content h1 {
@@ -204,6 +225,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
+            word-wrap: break-word;
         }
 
         .hero-content p {
@@ -212,20 +234,21 @@
             max-width: 800px;
             margin: 0 auto 40px;
             line-height: 1.6;
+            word-wrap: break-word;
         }
 
         /* SIM Card Display */
         .sim-card-hero {
             padding: 120px 0 60px;
             text-align: center;
+            width: 100%;
         }
 
         .sim-card-display {
+            width: 100%;
             max-width: 380px;
             margin: 40px auto;
             perspective: 1000px;
-            cursor: pointer;
-            touch-action: manipulation;
         }
 
         .sim-card {
@@ -234,32 +257,23 @@
             background: linear-gradient(135deg, var(--primary-blue) 0%, #4A90E2 100%);
             border-radius: 20px;
             position: relative;
-            transition: all 0.4s ease;
             box-shadow: 0 20px 50px rgba(1, 24, 216, 0.5);
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            animation: cardFloat 6s ease-in-out infinite;
             transform-style: preserve-3d;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            touch-action: none;
+            user-select: none;
         }
 
         .sim-card.spinning {
-            animation: spin 1s ease-in-out;
+            animation: spin 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
 
-        @keyframes spin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-
-        .sim-card:hover,
-        .sim-card:active {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 30px 70px rgba(27, 86, 253, 0.6);
-        }
-
-        @keyframes cardFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        .sim-card:active:not(.spinning) {
+            transform: scale(0.98);
+            transition: transform 0.2s ease;
         }
 
         .s4s-oval {
@@ -283,6 +297,7 @@
             letter-spacing: 3px;
             margin-left: 30%;
             margin-bottom: 20%;
+            user-select: none;
         }
 
         .sim-card-outline {
@@ -312,6 +327,7 @@
         /* Video Section */
         .video-section {
             padding: 80px 0;
+            width: 100%;
         }
 
         .section-header {
@@ -327,6 +343,7 @@
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            word-wrap: break-word;
         }
 
         .section-subtitle {
@@ -335,10 +352,12 @@
             max-width: 800px;
             margin: 0 auto;
             line-height: 1.6;
+            word-wrap: break-word;
         }
 
         .video-container {
             max-width: 500px;
+            width: 100%;
             margin: 0 auto;
             background: rgba(0, 8, 20, 0.7);
             backdrop-filter: var(--blur);
@@ -357,17 +376,12 @@
 
         .video-wrapper {
             position: relative;
-            padding-bottom: 56.25%;
+            padding-bottom: 177.78%;
             height: 0;
             overflow: hidden;
             border-radius: 16px;
             background: #000;
-        }
-
-        /* Vertical Video (iPhone style - 9:16 ratio) */
-        .video-wrapper-vertical {
-            padding-bottom: 177.78%; /* 16:9 inverted = 9:16 */
-            max-width: 100%;
+            width: 100%;
         }
 
         .video-wrapper iframe {
@@ -382,6 +396,7 @@
         /* Plans Section */
         .plans-section {
             padding: 80px 0;
+            width: 100%;
         }
 
         .plans-grid {
@@ -390,6 +405,7 @@
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .plan-card {
@@ -408,6 +424,7 @@
             min-height: 560px;
             cursor: pointer;
             touch-action: manipulation;
+            user-select: none;
         }
 
         .plan-card::before {
@@ -475,6 +492,7 @@
             color: var(--off-white);
             text-transform: uppercase;
             letter-spacing: 1.5px;
+            word-wrap: break-word;
         }
 
         .plan-price {
@@ -553,6 +571,7 @@
             position: relative;
             overflow: hidden;
             touch-action: manipulation;
+            user-select: none;
         }
 
         .btn-plan::before {
@@ -580,6 +599,7 @@
         /* Features Section */
         .features-section {
             padding: 80px 0;
+            width: 100%;
         }
 
         .features-grid {
@@ -588,6 +608,7 @@
             gap: 28px;
             max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .feature-card {
@@ -602,6 +623,7 @@
             position: relative;
             cursor: pointer;
             touch-action: manipulation;
+            user-select: none;
         }
 
         .feature-card::before {
@@ -648,17 +670,20 @@
             font-weight: 700;
             margin-bottom: 14px;
             color: var(--off-white);
+            word-wrap: break-word;
         }
 
         .feature-text {
             color: var(--cream);
             font-size: clamp(14px, 3vw, 17px);
             line-height: 1.7;
+            word-wrap: break-word;
         }
 
         /* CTA Section */
         .cta-section {
             padding: 80px 0 100px;
+            width: 100%;
         }
 
         .cta-box {
@@ -671,6 +696,7 @@
             box-shadow: 0 20px 60px rgba(1, 24, 216, 0.3);
             max-width: 900px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .cta-title {
@@ -678,6 +704,7 @@
             font-weight: 700;
             margin-bottom: 20px;
             color: var(--off-white);
+            word-wrap: break-word;
         }
 
         .cta-text {
@@ -688,6 +715,7 @@
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            word-wrap: break-word;
         }
 
         .cta-buttons {
@@ -696,6 +724,7 @@
             gap: 16px;
             max-width: 400px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .btn-cta {
@@ -712,6 +741,7 @@
             justify-content: center;
             width: 100%;
             touch-action: manipulation;
+            user-select: none;
         }
 
         .btn-primary {
@@ -726,8 +756,32 @@
             box-shadow: 0 15px 40px rgba(27, 86, 253, 0.5);
         }
 
+        #orderLink {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+            margin-top: 30px;
+            pointer-events: none;
+        }
+
+        #orderLink.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .order-link-btn {
+            max-width: 300px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+
             .back-btn {
                 padding: 12px 18px;
                 font-size: 14px;
@@ -745,7 +799,8 @@
             }
 
             .sim-card-display {
-                max-width: 320px;
+                max-width: 100%;
+                width: 90%;
             }
 
             .video-section,
@@ -757,9 +812,10 @@
 
             .plans-grid {
                 grid-template-columns: 1fr;
-                max-width: 380px;
+                max-width: 100%;
                 margin: 0 auto;
                 gap: 24px;
+                padding: 0 20px;
             }
 
             .plan-card {
@@ -779,14 +835,64 @@
             .features-grid {
                 grid-template-columns: 1fr;
                 gap: 24px;
+                padding: 0 20px;
             }
 
             .cta-box {
                 padding: 40px 20px;
+                margin: 0 auto;
+                width: calc(100% - 40px);
             }
 
             .cta-buttons {
                 width: 100%;
+                max-width: 100%;
+            }
+
+            .btn-cta {
+                width: 100%;
+            }
+
+            .video-container {
+                width: calc(100% - 40px);
+                padding: 15px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .back-btn {
+                padding: 10px 14px;
+                font-size: 12px;
+                gap: 4px;
+            }
+
+            .plan-card {
+                padding: 20px;
+                min-height: auto;
+            }
+
+            .plan-title {
+                font-size: 20px;
+            }
+
+            .plan-features li {
+                font-size: 13px;
+                padding: 8px 0;
+            }
+
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .cta-box {
+                padding: 30px 15px;
             }
         }
 
@@ -834,7 +940,7 @@
                 transform: none;
             }
 
-            .sim-card:active {
+            .sim-card:active:not(.spinning) {
                 transform: scale(0.98);
             }
 
@@ -856,18 +962,6 @@
             }
         }
 
-        /* Loading animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .animate-in {
             animation: fadeInUp 0.6s ease-out;
         }
@@ -884,7 +978,7 @@
 
     <!-- Back Button -->
     <a href="index.html" class="back-btn">
-        <span>←</span> Back to Home
+        <span>←</span> Back
     </a>
 
     <!-- SIM Card Hero Section -->
@@ -907,8 +1001,8 @@
             </div>
             
             <!-- Order Link (initially hidden) -->
-            <div id="orderLink" style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease; margin-top: 30px;">
-                <a href="https://tr.ee/nbnQzf0nxV" target="_blank" class="btn-cta btn-primary" style="max-width: 300px; margin: 0 auto;">
+            <div id="orderLink">
+                <a href="https://tr.ee/nbnQzf0nxV" target="_blank" class="btn-cta btn-primary order-link-btn">
                     🛒 Order Your SIM Now
                 </a>
             </div>
@@ -924,11 +1018,12 @@
             </div>
             
             <div class="video-container">
-                <div class="video-wrapper video-wrapper-vertical">
+                <div class="video-wrapper">
                     <iframe 
                         src="https://www.youtube.com/embed/VH5J2HptsKA" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
+                        allowfullscreen
+                        loading="lazy">
                     </iframe>
                 </div>
             </div>
@@ -1073,45 +1168,56 @@
     </section>
 
     <script>
-        // SIM Card Spin Function with Order Link Reveal
+        // Prevent body scroll on mobile
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.sim-card')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // SIM Card Spin Function
         const simCard = document.getElementById('simCard');
         const orderLink = document.getElementById('orderLink');
         let hasSpun = false;
+        let isSpinning = false;
         
         function spinCard() {
+            if (isSpinning) return;
+            
+            isSpinning = true;
             simCard.classList.add('spinning');
             
             setTimeout(() => {
                 simCard.classList.remove('spinning');
+                isSpinning = false;
                 
                 // Reveal order link after first spin
                 if (!hasSpun) {
                     hasSpun = true;
                     setTimeout(() => {
-                        orderLink.style.opacity = '1';
-                        orderLink.style.transform = 'translateY(0)';
+                        orderLink.classList.add('show');
                     }, 300);
                 }
-            }, 1000);
+            }, 800);
         }
 
         // Add click/tap event
-        simCard.addEventListener('click', spinCard);
+        simCard.addEventListener('click', spinCard, { passive: true });
         simCard.addEventListener('touchend', (e) => {
-            e.preventDefault();
             spinCard();
-        });
+        }, { passive: true });
 
         // Interactive Liquid Background
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let targetX = mouseX;
         let targetY = mouseY;
+        let animationId = null;
 
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-        });
+        }, { passive: true });
 
         document.addEventListener('touchmove', (e) => {
             if (e.touches.length > 0) {
@@ -1133,7 +1239,7 @@
                 blob.style.transform = `translate(${x}px, ${y}px)`;
             });
 
-            requestAnimationFrame(animateBlobs);
+            animationId = requestAnimationFrame(animateBlobs);
         }
 
         animateBlobs();
@@ -1180,10 +1286,10 @@
                         behavior: 'smooth'
                     });
                 }
-            });
+            }, { passive: true });
         });
 
-        // Prevent double-tap zoom on buttons
+        // Prevent zoom on double tap
         let lastTouchEnd = 0;
         document.addEventListener('touchend', (e) => {
             const now = Date.now();
@@ -1191,32 +1297,29 @@
                 e.preventDefault();
             }
             lastTouchEnd = now;
-        }, false);
-
-        // Add active state for touch devices
-        const interactiveElements = document.querySelectorAll('.btn-plan, .btn-cta, .back-btn, .plan-card, .feature-card');
-        interactiveElements.forEach(el => {
-            el.addEventListener('touchstart', function() {
-                this.style.transition = 'transform 0.1s ease';
-            }, { passive: true });
-            
-            el.addEventListener('touchend', function() {
-                this.style.transition = 'transform 0.3s ease';
-            }, { passive: true });
-        });
-
-        // Performance optimization: Reduce blob animation on low-power devices
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.querySelectorAll('.liquid-blob').forEach(blob => {
-                blob.style.animation = 'none';
-            });
-        }
+        }, { passive: false });
 
         // Memory cleanup
         window.addEventListener('beforeunload', () => {
             observer.disconnect();
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
         });
+
+        // Fix for mobile viewport
+        let initialTouchY = 0;
+        document.addEventListener('touchstart', (e) => {
+            initialTouchY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!e.target.closest('iframe') && 
+                !e.target.closest('.sim-card') &&
+                Math.abs(e.touches[0].clientY - initialTouchY) < 5) {
+                // Allow default scroll
+            }
+        }, { passive: true });
     </script>
 </body>
 </html>
-            
