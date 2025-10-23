@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S4S SIM Card Plans - Stay Connected in Malaysia</title>
+    <meta name="description" content="Choose from affordable S4S mobile data plans with unlimited calls and high-speed internet. Perfect for foreigners living and working in Malaysia.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #0118D8;
+            --secondary-blue: #1B56FD;
+            --cream: #E9DFC3;
+            --off-white: #FFF8F8;
+            --text-primary: #FFF8F8;
+            --text-secondary: #E9DFC3;
+            --glass-bg: rgba(1, 24, 216, 0.15);
+            --glass-border: rgba(233, 223, 195, 0.3);
+            --glass-strong: rgba(27, 86, 253, 0.25);
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            --shadow-light: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --shadow-strong: 0 25px 60px rgba(1, 24, 216, 0.4);
+            --radius: 24px;
+            --blur: blur(30px);
+            --blur-strong: blur(40px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000814;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated Liquid Background */
+        .liquid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(135deg, #000814 0%, #001233 50%, #000814 100%);
+        }
+
+        .liquid-blob {
+            position: absolute;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            mix-blend-mode: screen;
+            animation: morph 15s ease-in-out infinite, float 20s ease-in-out infinite;
+            will-change: transform, border-radius;
+        }
+
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle at 30% 50%, #0118D8, #1B56FD);
+            top: 10%;
+            left: -15%;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle at 70% 50%, #1B56FD, #0118D8);
+            top: 40%;
+            right: -20%;
+            animation-delay: -5s;
+        }
+
+        .blob-3 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle at 50% 50%, #0118D8, #1B56FD);
+            bottom: 5%;
+            left: 25%;
+            animation-delay: -10s;
+        }
+
+        @keyframes morph {
+            0%, 100% {
+                border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+                transform: rotate(0deg) scale(1);
+            }
+            25% {
+                border-radius: 70% 30% 50% 50% / 30% 60% 40% 60%;
+                transform: rotate(90deg) scale(1.1);
+            }
+            50% {
+                border-radius: 50% 50% 30% 70% / 50% 40% 60% 40%;
+                transform: rotate(180deg) scale(0.9);
+            }
+            75% {
+                border-radius: 30% 70% 60% 40% / 60% 30% 70% 40%;
+                transform: rotate(270deg) scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(60px, -60px) rotate(90deg);
+            }
+            50% {
+                transform: translate(-40px, 40px) rotate(180deg);
+            }
+            75% {
+                transform: translate(40px, 60px) rotate(270deg);
+            }
+        }
+
+        .glass-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: rgba(0, 8, 20, 0.3);
+            backdrop-filter: blur(2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            backdrop-filter: var(--blur);
+            border: none;
+            color: var(--off-white);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 14px 24px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(1, 24, 216, 0.5);
+        }
+
+        .back-btn:hover,
+        .back-btn:active {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            transform: translateX(-4px);
+            box-shadow: 0 15px 40px rgba(27, 86, 253, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 140px 20px 40px;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(36px, 8vw, 72px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #FFF8F8 0%, #1B56FD 50%, #0118D8 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .hero-content p {
+            font-size: clamp(18px, 4vw, 24px);
+            color: var(--cream);
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        /* SIM Card Display */
+        .sim-card-hero {
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+
+        .sim-card-display {
+            max-width: 380px;
+            margin: 40px auto;
+            perspective: 1000px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .sim-card {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #4A90E2 100%);
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.4s ease;
+            box-shadow: 0 20px 50px rgba(1, 24, 216, 0.5);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: cardFloat 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        .sim-card.spinning {
+            animation: spin 1s ease-in-out;
+        }
+
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .sim-card:hover,
+        .sim-card:active {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 70px rgba(27, 86, 253, 0.6);
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .s4s-oval {
+            position: absolute;
+            left: -25%;
+            bottom: -30%;
+            width: 70%;
+            height: 55%;
+            background: linear-gradient(135deg, #FF3B30 0%, #FF6B7A 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .s4s-text {
+            font-size: clamp(1.5rem, 5vw, 2.25rem);
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+            letter-spacing: 3px;
+            margin-left: 30%;
+            margin-bottom: 20%;
+        }
+
+        .sim-card-outline {
+            position: absolute;
+            right: 8%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35%;
+            height: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sim-chip {
+            width: 60%;
+            height: 60%;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+            border: 2px solid #B8860B;
+            border-radius: 6px;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--off-white) 0%, var(--secondary-blue) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            font-size: clamp(16px, 3vw, 22px);
+            color: var(--cream);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .video-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(0, 8, 20, 0.7);
+            backdrop-filter: var(--blur);
+            border: 2px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(1, 24, 216, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .video-container:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 80px rgba(27, 86, 253, 0.5);
+            border-color: var(--secondary-blue);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 16px;
+            background: #000;
+        }
+
+        /* Vertical Video (iPhone style - 9:16 ratio) */
+        .video-wrapper-vertical {
+            padding-bottom: 177.78%; /* 16:9 inverted = 9:16 */
+            max-width: 100%;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Plans Section */
+        .plans-section {
+            padding: 80px 0;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .plan-card {
+            background: rgba(0, 8, 20, 0.7);
+            backdrop-filter: var(--blur-strong);
+            border: 2px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 36px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            min-height: 560px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(27, 86, 253, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .plan-card:hover,
+        .plan-card:active {
+            transform: translateY(-12px);
+            box-shadow: 0 30px 70px rgba(27, 86, 253, 0.5);
+            border-color: var(--secondary-blue);
+        }
+
+        .plan-card:hover::before,
+        .plan-card:active::before {
+            background: radial-gradient(circle, rgba(27, 86, 253, 0.25) 0%, transparent 70%);
+        }
+
+        .plan-card.featured {
+            border: 2px solid var(--secondary-blue);
+            background: rgba(27, 86, 253, 0.1);
+        }
+
+        .plan-card.featured::before {
+            background: radial-gradient(circle, rgba(27, 86, 253, 0.25) 0%, transparent 70%);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--off-white);
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 10px 25px rgba(1, 24, 216, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .plan-header {
+            margin-bottom: 28px;
+            margin-top: 16px;
+        }
+
+        .plan-title {
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--off-white);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .plan-price {
+            font-size: clamp(44px, 8vw, 64px);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #FFF8F8 0%, var(--secondary-blue) 50%, var(--primary-blue) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .plan-validity {
+            font-size: clamp(14px, 3vw, 18px);
+            color: var(--cream);
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: auto;
+            text-align: left;
+            flex-grow: 1;
+        }
+
+        .plan-features li {
+            padding: 10px 0;
+            color: var(--cream);
+            font-size: clamp(14px, 2.8vw, 17px);
+            display: flex;
+            align-items: flex-start;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            color: var(--secondary-blue);
+            font-weight: 700;
+            margin-right: 12px;
+            font-size: 16px;
+            background: rgba(27, 86, 253, 0.2);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .plan-cta {
+            margin-top: 28px;
+        }
+
+        .btn-plan {
+            width: 100%;
+            padding: 18px;
+            border-radius: 20px;
+            font-size: clamp(15px, 3vw, 18px);
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--off-white);
+            box-shadow: 0 10px 30px rgba(1, 24, 216, 0.4);
+            position: relative;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .btn-plan::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-plan:hover::before,
+        .btn-plan:active::before {
+            left: 100%;
+        }
+
+        .btn-plan:hover,
+        .btn-plan:active {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(27, 86, 253, 0.6);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+            gap: 28px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(0, 8, 20, 0.7);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 36px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(1, 24, 216, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover,
+        .feature-card:active {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(1, 24, 216, 0.4);
+            border-color: var(--primary-blue);
+        }
+
+        .feature-card:hover::before,
+        .feature-card:active::before {
+            background: radial-gradient(circle, rgba(1, 24, 216, 0.25) 0%, transparent 70%);
+        }
+
+        .feature-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 30px rgba(1, 24, 216, 0.4);
+        }
+
+        .feature-title {
+            font-size: clamp(18px, 4vw, 26px);
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--off-white);
+        }
+
+        .feature-text {
+            color: var(--cream);
+            font-size: clamp(14px, 3vw, 17px);
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0 100px;
+        }
+
+        .cta-box {
+            background: rgba(0, 8, 20, 0.7);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(1, 24, 216, 0.3);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(26px, 5vw, 40px);
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--off-white);
+        }
+
+        .cta-text {
+            font-size: clamp(15px, 3vw, 20px);
+            color: var(--cream);
+            margin-bottom: 36px;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .btn-cta {
+            padding: 18px 36px;
+            border-radius: 20px;
+            font-size: clamp(15px, 3vw, 18px);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            touch-action: manipulation;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--off-white);
+            box-shadow: 0 10px 30px rgba(1, 24, 216, 0.4);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:active {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(27, 86, 253, 0.5);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .back-btn {
+                padding: 12px 18px;
+                font-size: 14px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 100px 20px 30px;
+            }
+
+            .sim-card-hero {
+                padding: 100px 0 40px;
+            }
+
+            .sim-card-display {
+                max-width: 320px;
+            }
+
+            .video-section,
+            .plans-section,
+            .features-section,
+            .cta-section {
+                padding: 60px 0;
+            }
+
+            .plans-grid {
+                grid-template-columns: 1fr;
+                max-width: 380px;
+                margin: 0 auto;
+                gap: 24px;
+            }
+
+            .plan-card {
+                min-height: auto;
+                padding: 28px;
+            }
+
+            .plan-card.featured {
+                transform: scale(1);
+            }
+
+            .plan-card.featured:hover,
+            .plan-card.featured:active {
+                transform: translateY(-8px);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .cta-box {
+                padding: 40px 20px;
+            }
+
+            .cta-buttons {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .container {
+                padding: 0 40px;
+            }
+
+            .cta-buttons {
+                flex-direction: row;
+                max-width: 100%;
+                justify-content: center;
+            }
+
+            .btn-cta {
+                width: auto;
+                min-width: 220px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .plans-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .plan-card.featured {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .sim-card:hover {
+                transform: none;
+            }
+
+            .plan-card:hover,
+            .feature-card:hover,
+            .btn-plan:hover,
+            .btn-cta:hover {
+                transform: none;
+            }
+
+            .sim-card:active {
+                transform: scale(0.98);
+            }
+
+            .plan-card:active,
+            .feature-card:active {
+                transform: translateY(-6px);
+            }
+
+            .btn-plan:active,
+            .btn-cta:active {
+                transform: scale(0.98);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Liquid Background -->
+    <div class="liquid-background">
+        <div class="liquid-blob blob-1"></div>
+        <div class="liquid-blob blob-2"></div>
+        <div class="liquid-blob blob-3"></div>
+    </div>
+    <div class="glass-layer"></div>
+
+    <!-- Back Button -->
+    <a href="index.html" class="back-btn">
+        <span>←</span> Back to Home
+    </a>
+
+    <!-- SIM Card Hero Section -->
+    <section class="sim-card-hero">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get Your S4S SIM</h2>
+                <p class="section-subtitle">Tap the card to see it spin and order yours!</p>
+            </div>
+            
+            <div class="sim-card-display">
+                <div class="sim-card" id="simCard">
+                    <div class="s4s-oval">
+                        <div class="s4s-text">S4S</div>
+                    </div>
+                    <div class="sim-card-outline">
+                        <div class="sim-chip"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Link (initially hidden) -->
+            <div id="orderLink" style="opacity: 0; transform: translateY(20px); transition: all 0.6s ease; margin-top: 30px;">
+                <a href="https://tr.ee/nbnQzf0nxV" target="_blank" class="btn-cta btn-primary" style="max-width: 300px; margin: 0 auto;">
+                    🛒 Order Your SIM Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How to Buy a Package</h2>
+                <p class="section-subtitle">Follow these simple steps to get your S4S plan</p>
+            </div>
+            
+            <div class="video-container">
+                <div class="video-wrapper video-wrapper-vertical">
+                    <iframe 
+                        src="https://www.youtube.com/embed/VH5J2HptsKA" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plans Section -->
+    <section class="plans-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Choose Your Perfect S4S Plan</h2>
+                <p class="section-subtitle">Stay connected with affordable mobile plans designed for expatriates living in Malaysia</p>
+            </div>
+            
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3 class="plan-title">XPAT PRO</h3>
+                        <div class="plan-price">RM18</div>
+                        <p class="plan-validity">30-day validity</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Unlimited data at 6Mbps speed</li>
+                        <li>Hotspot: 10GB</li>
+                        <li>Fair Usage Policy: 50GB</li>
+                        <li>Unlimited on-network calls</li>
+                        <li>Auto-recurring monthly plan</li>
+                        <li>Perfect for daily browsing & social media</li>
+                    </ul>
+                    <div class="plan-cta">
+                        <a href="https://apps.apple.com/my/app/s4s/id6621239971" target="_blank" class="btn-plan">Get XPAT PRO</a>
+                    </div>
+                </div>
+                
+                <div class="plan-card featured">
+                    <div class="plan-badge">⭐ Most Popular</div>
+                    <div class="plan-header">
+                        <h3 class="plan-title">S4S 22</h3>
+                        <div class="plan-price">RM22</div>
+                        <p class="plan-validity">30-day validity</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>100GB high-speed data</li>
+                        <li>Hotspot follows quota</li>
+                        <li>Fair Usage Policy: 100GB</li>
+                        <li>Unlimited all-network calls</li>
+                        <li>Auto-recurring monthly plan</li>
+                        <li>Best value for heavy users</li>
+                    </ul>
+                    <div class="plan-cta">
+                        <a href="https://play.google.com/store/apps/details?id=com.mobilityone.s4s&hl=en" target="_blank" class="btn-plan">Get S4S 22</a>
+                    </div>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3 class="plan-title">S4S 35</h3>
+                        <div class="plan-price">RM35</div>
+                        <p class="plan-validity">30-day validity</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>50GB high-speed data</li>
+                        <li>Unlimited at 10Mbps after FUP</li>
+                        <li>Hotspot follows quota</li>
+                        <li>Fair Usage Policy: 200GB</li>
+                        <li>Unlimited all-network calls</li>
+                        <li>Auto-recurring monthly plan</li>
+                        <li>Premium speed & performance</li>
+                    </ul>
+                    <div class="plan-cta">
+                        <a href="https://apps.apple.com/my/app/s4s/id6621239971" target="_blank" class="btn-plan">Get S4S 35</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose S4S Mobile?</h2>
+                <p class="section-subtitle">Everything you need to stay connected in Malaysia</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">Easy Activation</h3>
+                    <p class="feature-text">Get your SIM activated instantly through the S4S app. No paperwork, no hassle.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Affordable Prices</h3>
+                    <p class="feature-text">Budget-friendly plans starting from RM18. Save more for what matters.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3 class="feature-title">Nationwide Coverage</h3>
+                    <p class="feature-text">Stay connected anywhere in Malaysia with reliable network coverage.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3 class="feature-title">Auto-Renewal</h3>
+                    <p class="feature-text">Never run out of data. Plans renew automatically every month.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">☎️</div>
+                    <h3 class="feature-title">Unlimited Calls</h3>
+                    <p class="feature-text">Talk as much as you want. All plans include unlimited local calls.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">No Hidden Fees</h3>
+                    <p class="feature-text">What you see is what you pay. Transparent pricing with no surprises.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <h2 class="cta-title">Ready to Get Connected?</h2>
+                <p class="cta-text">Download the S4S app now and choose the perfect plan for your needs. Stay connected with friends, family, and work.</p>
+                <div class="cta-buttons">
+                    <a href="https://apps.apple.com/my/app/s4s/id6621239971" target="_blank" class="btn-cta btn-primary">
+                        📱 Download for iOS
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.mobilityone.s4s&hl=en" target="_blank" class="btn-cta btn-primary">
+                        🤖 Download for Android
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // SIM Card Spin Function with Order Link Reveal
+        const simCard = document.getElementById('simCard');
+        const orderLink = document.getElementById('orderLink');
+        let hasSpun = false;
+        
+        function spinCard() {
+            simCard.classList.add('spinning');
+            
+            setTimeout(() => {
+                simCard.classList.remove('spinning');
+                
+                // Reveal order link after first spin
+                if (!hasSpun) {
+                    hasSpun = true;
+                    setTimeout(() => {
+                        orderLink.style.opacity = '1';
+                        orderLink.style.transform = 'translateY(0)';
+                    }, 300);
+                }
+            }, 1000);
+        }
+
+        // Add click/tap event
+        simCard.addEventListener('click', spinCard);
+        simCard.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            spinCard();
+        });
+
+        // Interactive Liquid Background
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let targetX = mouseX;
+        let targetY = mouseY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                mouseX = e.touches[0].clientX;
+                mouseY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+
+        function animateBlobs() {
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            const blobs = document.querySelectorAll('.liquid-blob');
+            blobs.forEach((blob, index) => {
+                const speed = (index + 1) * 0.02;
+                const x = (targetX - window.innerWidth / 2) * speed;
+                const y = (targetY - window.innerHeight / 2) * speed;
+                
+                blob.style.transform = `translate(${x}px, ${y}px)`;
+            });
+
+            requestAnimationFrame(animateBlobs);
+        }
+
+        animateBlobs();
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElements = document.querySelectorAll('.plan-card, .feature-card, .video-container');
+            animateElements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = `opacity 0.6s ease ${Math.min(index * 0.1, 1)}s, transform 0.6s ease ${Math.min(index * 0.1, 1)}s`;
+                observer.observe(el);
+            });
+        });
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 100;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Prevent double-tap zoom on buttons
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Add active state for touch devices
+        const interactiveElements = document.querySelectorAll('.btn-plan, .btn-cta, .back-btn, .plan-card, .feature-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('touchstart', function() {
+                this.style.transition = 'transform 0.1s ease';
+            }, { passive: true });
+            
+            el.addEventListener('touchend', function() {
+                this.style.transition = 'transform 0.3s ease';
+            }, { passive: true });
+        });
+
+        // Performance optimization: Reduce blob animation on low-power devices
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('.liquid-blob').forEach(blob => {
+                blob.style.animation = 'none';
+            });
+        }
+
+        // Memory cleanup
+        window.addEventListener('beforeunload', () => {
+            observer.disconnect();
+        });
+    </script>
+</body>
+</html>
+            

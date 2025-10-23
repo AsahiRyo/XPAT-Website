@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>X'PAT Community & Promo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #000814 0%, #001233 50%, #000814 100%);
+            background-attachment: fixed;
+            color: #FFF8F8;
+            overflow-x: hidden;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Return Button */
+        .return-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 2000;
+            background: linear-gradient(135deg, #0118D8, #1B56FD);
+            color: #FFF8F8;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(1, 24, 216, 0.4);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(233, 223, 195, 0.3);
+            touch-action: manipulation;
+        }
+
+        .return-btn:active {
+            transform: scale(0.95);
+        }
+
+        .return-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(27, 86, 253, 0.6);
+        }
+
+        .return-btn::before {
+            content: '←';
+            font-size: 16px;
+        }
+
+        /* Container */
+        .content-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 70px 15px 40px;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding: 0 10px;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #FFF8F8 0%, #1B56FD 50%, #E9DFC3 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            font-size: clamp(14px, 2.5vw, 18px);
+            color: rgba(233, 223, 195, 0.8);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Community Grid */
+        .community-grid-wrapper {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 10px;
+            min-height: 400px;
+        }
+
+        .xpat-grid-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(8px, 2vw, 25px);
+            flex-wrap: wrap;
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.95; }
+            50% { transform: scale(1.02); opacity: 1; }
+        }
+
+        .letter-grid {
+            display: grid;
+            gap: clamp(2px, 0.4vw, 4px);
+            background: rgba(1, 24, 216, 0.15);
+            backdrop-filter: blur(15px);
+            padding: clamp(10px, 2.5vw, 18px);
+            border-radius: clamp(10px, 2.5vw, 18px);
+            box-shadow: 0 10px 25px rgba(1, 24, 216, 0.3);
+            border: 1px solid rgba(233, 223, 195, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .letter-grid:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(27, 86, 253, 0.5);
+        }
+
+        .letter-x, .letter-p, .letter-a, .letter-t {
+            grid-template-columns: repeat(5, clamp(12px, 2vw, 22px));
+            grid-template-rows: repeat(7, clamp(12px, 2vw, 22px));
+        }
+
+        .letter-apostrophe {
+            grid-template-columns: repeat(2, clamp(12px, 2vw, 22px));
+            grid-template-rows: repeat(7, clamp(12px, 2vw, 22px));
+        }
+
+        .grid-cell {
+            width: clamp(12px, 2vw, 22px);
+            height: clamp(12px, 2vw, 22px);
+            border-radius: clamp(3px, 0.6vw, 5px);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(0, 8, 20, 0.3);
+            border: 1px solid rgba(233, 223, 195, 0.2);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .grid-cell.active {
+            background: linear-gradient(135deg, #0118D8, #1B56FD);
+            box-shadow: 0 3px 10px rgba(1, 24, 216, 0.5);
+        }
+
+        .grid-cell.community-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 2px solid rgba(233, 223, 195, 0.4);
+            box-shadow: 0 5px 15px rgba(1, 24, 216, 0.3);
+        }
+
+        .grid-cell:active {
+            transform: scale(0.95);
+        }
+
+        @media (hover: hover) {
+            .grid-cell:hover {
+                transform: scale(1.1);
+                z-index: 10;
+                box-shadow: 0 10px 25px rgba(27, 86, 253, 0.6);
+                border: 2px solid #1B56FD;
+            }
+        }
+
+        /* Letter patterns */
+        .letter-x .grid-cell:nth-child(1), .letter-x .grid-cell:nth-child(5),
+        .letter-x .grid-cell:nth-child(7), .letter-x .grid-cell:nth-child(9),
+        .letter-x .grid-cell:nth-child(12), .letter-x .grid-cell:nth-child(14),
+        .letter-x .grid-cell:nth-child(18), .letter-x .grid-cell:nth-child(22),
+        .letter-x .grid-cell:nth-child(24), .letter-x .grid-cell:nth-child(27),
+        .letter-x .grid-cell:nth-child(29), .letter-x .grid-cell:nth-child(31),
+        .letter-x .grid-cell:nth-child(35) {
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
+        }
+
+        .letter-apostrophe .grid-cell:nth-child(1),
+        .letter-apostrophe .grid-cell:nth-child(3) {
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
+        }
+
+        .letter-p .grid-cell:nth-child(1), .letter-p .grid-cell:nth-child(2),
+        .letter-p .grid-cell:nth-child(3), .letter-p .grid-cell:nth-child(4),
+        .letter-p .grid-cell:nth-child(6), .letter-p .grid-cell:nth-child(10),
+        .letter-p .grid-cell:nth-child(11), .letter-p .grid-cell:nth-child(15),
+        .letter-p .grid-cell:nth-child(16), .letter-p .grid-cell:nth-child(17),
+        .letter-p .grid-cell:nth-child(18), .letter-p .grid-cell:nth-child(19),
+        .letter-p .grid-cell:nth-child(21), .letter-p .grid-cell:nth-child(26),
+        .letter-p .grid-cell:nth-child(31) {
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
+        }
+
+        .letter-a .grid-cell:nth-child(2), .letter-a .grid-cell:nth-child(3),
+        .letter-a .grid-cell:nth-child(4), .letter-a .grid-cell:nth-child(6),
+        .letter-a .grid-cell:nth-child(10), .letter-a .grid-cell:nth-child(11),
+        .letter-a .grid-cell:nth-child(15), .letter-a .grid-cell:nth-child(16),
+        .letter-a .grid-cell:nth-child(17), .letter-a .grid-cell:nth-child(18),
+        .letter-a .grid-cell:nth-child(19), .letter-a .grid-cell:nth-child(20),
+        .letter-a .grid-cell:nth-child(21), .letter-a .grid-cell:nth-child(25),
+        .letter-a .grid-cell:nth-child(26), .letter-a .grid-cell:nth-child(30),
+        .letter-a .grid-cell:nth-child(31), .letter-a .grid-cell:nth-child(35) {
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
+        }
+
+        .letter-t .grid-cell:nth-child(1), .letter-t .grid-cell:nth-child(2),
+        .letter-t .grid-cell:nth-child(3), .letter-t .grid-cell:nth-child(4),
+        .letter-t .grid-cell:nth-child(5), .letter-t .grid-cell:nth-child(8),
+        .letter-t .grid-cell:nth-child(13), .letter-t .grid-cell:nth-child(18),
+        .letter-t .grid-cell:nth-child(23), .letter-t .grid-cell:nth-child(28),
+        .letter-t .grid-cell:nth-child(33) {
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 8, 20, 0.95);
+            backdrop-filter: blur(10px);
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: min(90vw, 800px);
+            max-height: 90vh;
+            margin: 5vh auto;
+            background: rgba(0, 8, 20, 0.9);
+            border: 1px solid rgba(233, 223, 195, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(1, 24, 216, 0.5);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 60vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .modal-info {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(1, 24, 216, 0.2), rgba(27, 86, 253, 0.2));
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: clamp(16px, 3vw, 20px);
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #FFF8F8;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 110px;
+            touch-action: manipulation;
+        }
+
+        .modal-btn:active {
+            transform: scale(0.95);
+        }
+
+        .visit-btn {
+            background: linear-gradient(135deg, #0118D8, #1B56FD);
+            color: #FFF8F8;
+        }
+
+        .visit-btn:hover {
+            box-shadow: 0 6px 20px rgba(27, 86, 253, 0.5);
+        }
+
+        .close-btn {
+            background: rgba(233, 223, 195, 0.2);
+            color: #FFF8F8;
+            border: 1px solid rgba(233, 223, 195, 0.3);
+        }
+
+        .close-btn:hover {
+            background: rgba(233, 223, 195, 0.3);
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #FFF8F8;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 3001;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(1, 24, 216, 0.5);
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .close:active {
+            transform: scale(0.9);
+        }
+
+        .close:hover {
+            background: rgba(27, 86, 253, 0.8);
+        }
+
+        /* Video Section */
+        .video-container-wrapper {
+            background: rgba(1, 24, 216, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(233, 223, 195, 0.3);
+            border-radius: 20px;
+            padding: clamp(15px, 3vw, 35px);
+            box-shadow: 0 15px 40px rgba(1, 24, 216, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .video-container-wrapper:hover {
+            box-shadow: 0 20px 50px rgba(27, 86, 253, 0.5);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            overflow: hidden;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(1, 24, 216, 0.2), rgba(27, 86, 253, 0.2));
+            box-shadow: 0 10px 25px rgba(0, 8, 20, 0.5);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: rgba(233, 223, 195, 0.7);
+            font-size: clamp(14px, 2.5vw, 16px);
+            font-weight: 500;
+            padding: 20px;
+        }
+
+        .video-placeholder::before {
+            content: '🎬';
+            display: block;
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        /* Support Section */
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+            gap: clamp(18px, 3vw, 25px);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .support-card {
+            background: rgba(0, 8, 20, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(233, 223, 195, 0.3);
+            border-radius: 18px;
+            padding: clamp(24px, 4vw, 32px);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .support-card:active {
+            transform: scale(0.98);
+        }
+
+        .support-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(1, 24, 216, 0.4);
+            border-color: #1B56FD;
+        }
+
+        .support-icon {
+            width: clamp(50px, 8vw, 60px);
+            height: clamp(50px, 8vw, 60px);
+            background: rgba(1, 24, 216, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(233, 223, 195, 0.3);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: clamp(16px, 3vw, 20px);
+            box-shadow: 0 6px 15px rgba(1, 24, 216, 0.3);
+            overflow: hidden;
+        }
+
+        .support-icon img {
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+        }
+
+        .support-title {
+            font-size: clamp(17px, 3vw, 20px);
+            font-weight: 700;
+            margin-bottom: clamp(10px, 2vw, 14px);
+            color: #FFF8F8;
+        }
+
+        .support-text {
+            color: rgba(233, 223, 195, 0.9);
+            font-size: clamp(14px, 2.5vw, 15px);
+            line-height: 1.6;
+        }
+
+        /* Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(233, 223, 195, 0.3), transparent);
+            margin: 40px auto;
+            max-width: 80%;
+        }
+
+        /* Glow Effects */
+        .glow-effect {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-1 {
+            background: radial-gradient(circle, #0118D8, transparent);
+            top: -150px;
+            left: -150px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .glow-2 {
+            background: radial-gradient(circle, #1B56FD, transparent);
+            bottom: -150px;
+            right: -150px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, 30px) scale(1.1); }
+        }
+
+        /* Animations */
+        @keyframes imageReveal {
+            from {
+                opacity: 0;
+                transform: scale(0.5) rotate(90deg);
+                filter: blur(5px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                filter: blur(0px);
+            }
+        }
+
+        @keyframes pixelFlip {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(90deg); }
+            100% { transform: rotateY(0deg); }
+        }
+
+        .grid-cell.animate-in {
+            animation: imageReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .grid-cell.flipping {
+            animation: pixelFlip 0.6s ease-in-out;
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(1, 24, 216, 0.9);
+            color: #FFF8F8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .status-indicator.show {
+            opacity: 1;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 60px 12px 30px;
+            }
+
+            .section {
+                margin-bottom: 40px;
+            }
+
+            .xpat-grid-container {
+                gap: 6px;
+            }
+
+            .letter-grid {
+                padding: 8px;
+            }
+
+            .modal-content {
+                margin: 2vh auto;
+                max-height: 96vh;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .return-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .xpat-grid-container {
+                gap: 5px;
+                padding: 0 5px;
+            }
+
+            .section-divider {
+                margin: 30px auto;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .support-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Landscape mobile fix */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .modal-content {
+                max-height: 95vh;
+                margin: 2.5vh auto;
+            }
+
+            .modal-image {
+                max-height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative Glow Effects -->
+    <div class="glow-effect glow-1"></div>
+    <div class="glow-effect glow-2"></div>
+
+    <!-- Return Button -->
+    <a href="#" onclick="goBack(); return false;" class="return-btn">Return Home</a>
+
+    <!-- Status Indicator -->
+    <div class="status-indicator" id="statusIndicator">Loading...</div>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        
+        <!-- Community Grid Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Our Growing Community</h2>
+                <p class="section-subtitle">Join thousands of foreigners who trust X'PAT for their daily needs</p>
+            </div>
+
+            <div class="community-grid-wrapper">
+                <div class="xpat-grid-container">
+                    <!-- Letter X -->
+                    <div class="letter-grid letter-x" data-letter="X">
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                    </div>
+
+                    <!-- Apostrophe -->
+                    <div class="letter-grid letter-apostrophe" data-letter="'">
+                        <div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div>
+                    </div>
+
+                    <!-- Letter P -->
+                    <div class="letter-grid letter-p" data-letter="P">
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                    </div>
+
+                    <!-- Letter A -->
+                    <div class="letter-grid letter-a" data-letter="A">
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                    </div>
+
+                    <!-- Letter T -->
+                    <div class="letter-grid letter-t" data-letter="T">
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider"></div>
+
+        <!-- Video Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Discover X'PAT</h2>
+                <p class="section-subtitle">Watch how X'PAT is transforming lives for foreigners in Malaysia</p>
+            </div>
+
+            <div class="video-container-wrapper">
+                <div class="video-container">
+                    <iframe 
+                        id="promoVideo"
+                        src="https://www.youtube.com/embed/sg-xaFr-K2s?si=tBmZoIhx8fLWY4Sk&rel=0&modestbranding=1" 
+                        title="X'PAT Promotional Video" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 15px;">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider"></div>
+
+        <!-- Support Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Connect With Us</h2>
+                <p class="section-subtitle">Get support anytime, anywhere — in your language</p>
+            </div>
+            
+            <div class="support-grid">
+                <div class="support-card" onclick="openCustomerCare()">
+                    <div class="support-icon">
+                        <img src="icons/customer-care-icon.png" alt="Customer Care" onerror="this.style.display='none'">
+                    </div>
+                    <h3 class="support-title">Customer Support</h3>
+                    <p class="support-text">
+                        <span style="opacity: 0.7;">(9am–6pm)</span><br>
+                        Our support team is available from 9am to 6pm daily to assist you in multiple languages via WhatsApp.
+                    </p>
+                </div>
+
+                <div class="support-card" onclick="window.open('https://www.tiktok.com/@tfp.solutions', '_blank')">
+                    <div class="support-icon">
+                        <img src="icons/tiktok-icon.png" alt="TikTok" onerror="this.style.display='none'">
+                    </div>
+                    <h3 class="support-title">Follow on TikTok</h3>
+                    <p class="support-text">
+                        Watch helpful videos and tips on how to use X'PAT. Learn about new features and stay connected with our community.
+                    </p>
+                </div>
+
+                <div class="support-card" onclick="window.open('https://www.facebook.com/share/16cyuH7xvw/?mibextid=wwXIfr', '_blank')">
+                    <div class="support-icon">
+                        <img src="icons/facebook-icon.png" alt="Facebook" onerror="this.style.display='none'">
+                    </div>
+                    <h3 class="support-title">Join Our Facebook</h3>
+                    <p class="support-text">
+                        Connect with other X'PAT users, get updates, and find answers to common questions in our active Facebook community.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Modal for Community Images -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img class="modal-image" id="modalImage" alt="Community Image">
+            <div class="modal-info">
+                <div class="modal-title" id="modalTitle">Community Member</div>
+                <div class="modal-buttons">
+                    <a href="https://www.tiktok.com/@tfp.solutions?lang=en" class="modal-btn visit-btn" target="_blank">Visit TikTok</a>
+                    <button class="modal-btn close-btn" onclick="closeModal()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Community Data
+        const communityData = [
+            { image: 'community-images/community-01.jpg', title: 'Community Partner 1', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-02.jpg', title: 'Community Partner 2', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-03.jpg', title: 'Community Partner 3', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-04.jpg', title: 'Community Partner 4', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-05.jpeg', title: 'Community Partner 5', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-06.jpg', title: 'Community Partner 6', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-07.jpg', title: 'Community Partner 7', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-08.jpg', title: 'Community Partner 8', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-09.jpg', title: 'Community Partner 9', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-10.jpg', title: 'Community Partner 10', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-11.jpg', title: 'Community Partner 11', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-12.jpg', title: 'Community Partner 12', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-13.jpg', title: 'Community Partner 13', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-14.jpg', title: 'Community Partner 14', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-15.jpg', title: 'Community Partner 15', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-16.jpg', title: 'Community Partner 16', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-17.jpg', title: 'Community Partner 17', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-18.jpg', title: 'Community Partner 18', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-19.jpg', title: 'Community Partner 19', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-20.jpg', title: 'Community Partner 20', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-21.jpg', title: 'Community Partner 21', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-22.jpg', title: 'Community Partner 22', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-23.jpg', title: 'Community Partner 23', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-24.jpg', title: 'Community Partner 24', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-25.jpg', title: 'Community Partner 25', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-26.jpg', title: 'Community Partner 26', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-27.jpg', title: 'Community Partner 27', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-28.jpg', title: 'Community Partner 28', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-29.jpg', title: 'Community Partner 29', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' },
+            { image: 'community-images/community-30.jpg', title: 'Community Partner 30', link: 'https://www.tiktok.com/@tfp.solutions?lang=en' }
+        ];
+
+        let loadedImages = [];
+        let currentImageIndex = 0;
+        let animationPhase = 0;
+        let isInitialized = false;
+        let animationInterval = null;
+        let randomInterval = null;
+
+        function goBack() {
+            // Try to go back in history first
+            if (window.history.length > 1 && document.referrer) {
+                window.history.back();
+            } else {
+                // If no history, try to go to index.html
+                window.location.href = 'index.html';
+            }
+        }
+
+        function showStatus(message, duration = 3000) {
+            const status = document.getElementById('statusIndicator');
+            if (status) {
+                status.textContent = message;
+                status.classList.add('show');
+                setTimeout(() => {
+                    status.classList.remove('show');
+                }, duration);
+            }
+        }
+
+        function getActiveCells() {
+            const cells = document.querySelectorAll('.grid-cell');
+            const activeCells = [];
+            
+            // X pattern cells
+            const xIndices = [0, 4, 6, 8, 11, 13, 17, 21, 23, 26, 28, 30, 34];
+            // Apostrophe cells (offset by 35)
+            const apostropheIndices = [35, 37];
+            // P pattern cells (offset by 49)
+            const pIndices = [0, 1, 2, 3, 5, 9, 10, 14, 15, 16, 17, 18, 20, 25, 30].map(i => i + 49);
+            // A pattern cells (offset by 84)
+            const aIndices = [1, 2, 3, 5, 9, 10, 14, 15, 16, 17, 18, 19, 20, 24, 25, 29, 30, 34].map(i => i + 84);
+            // T pattern cells (offset by 119)
+            const tIndices = [0, 1, 2, 3, 4, 7, 12, 17, 22, 27, 32].map(i => i + 119);
+            
+            const allIndices = [...xIndices, ...apostropheIndices, ...pIndices, ...aIndices, ...tIndices];
+            
+            allIndices.forEach(index => {
+                if (cells[index]) {
+                    activeCells.push(cells[index]);
+                }
+            });
+            
+            return activeCells;
+        }
+
+        function preloadImages() {
+            showStatus('Loading community images...', 5000);
+            let loadedCount = 0;
+            const totalImages = communityData.length;
+
+            const loadPromises = communityData.map((item) => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = function() {
+                        loadedImages.push(item);
+                        loadedCount++;
+                        if (loadedCount % 5 === 0) {
+                            showStatus(`Loaded ${loadedCount}/${totalImages} images`, 1000);
+                        }
+                        resolve(true);
+                    };
+                    img.onerror = function() {
+                        resolve(false);
+                    };
+                    img.src = item.image;
+                });
+            });
+
+            Promise.all(loadPromises).then(() => {
+                if (loadedImages.length > 0) {
+                    showStatus(`✓ ${loadedImages.length} images ready!`, 3000);
+                    startCommunityGridSystem();
+                } else {
+                    showStatus('⚠ No images found - check image folder', 5000);
+                    isInitialized = true;
+                }
+            });
+        }
+
+        function applyCommunityImage(cell, imageData, animate = false) {
+            if (animate) {
+                cell.classList.add('flipping');
+                setTimeout(() => {
+                    setCellImage(cell, imageData);
+                    cell.classList.remove('flipping');
+                }, 300);
+            } else {
+                setCellImage(cell, imageData);
+                cell.classList.add('animate-in');
+                setTimeout(() => cell.classList.remove('animate-in'), 800);
+            }
+        }
+
+        function setCellImage(cell, imageData) {
+            cell.style.backgroundImage = `url('${imageData.image}')`;
+            cell.classList.add('community-image');
+            cell.dataset.imageIndex = loadedImages.indexOf(imageData);
+            cell.dataset.imageUrl = imageData.image;
+            cell.dataset.imageTitle = imageData.title;
+            cell.dataset.imageLink = imageData.link;
+            
+            // Use both click and touchstart for better mobile responsiveness
+            cell.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openModal(parseInt(this.dataset.imageIndex));
+            };
+            
+            cell.ontouchstart = function(e) {
+                e.stopPropagation();
+            };
+        }
+
+        function loadInitialImages() {
+            if (loadedImages.length === 0) return;
+
+            const activeCells = getActiveCells();
+            
+            activeCells.forEach((cell, index) => {
+                setTimeout(() => {
+                    const imageData = loadedImages[currentImageIndex % loadedImages.length];
+                    applyCommunityImage(cell, imageData, false);
+                    currentImageIndex++;
+                }, index * 25);
+            });
+        }
+
+        function animateRandomCells() {
+            if (loadedImages.length === 0) return;
+
+            const activeCells = getActiveCells();
+            const animateCount = Math.floor(activeCells.length * 0.35);
+            
+            const shuffledCells = Array.from(activeCells).sort(() => 0.5 - Math.random());
+            const selectedCells = shuffledCells.slice(0, animateCount);
+
+            selectedCells.forEach((cell, index) => {
+                setTimeout(() => {
+                    const randomImageData = loadedImages[Math.floor(Math.random() * loadedImages.length)];
+                    applyCommunityImage(cell, randomImageData, true);
+                }, index * 40);
+            });
+        }
+
+        function cycleAllImages() {
+            if (loadedImages.length === 0) return;
+
+            const activeCells = getActiveCells();
+
+            activeCells.forEach((cell, index) => {
+                setTimeout(() => {
+                    const imageData = loadedImages[currentImageIndex % loadedImages.length];
+                    applyCommunityImage(cell, imageData, true);
+                    currentImageIndex++;
+                }, index * 35);
+            });
+        }
+
+        function runAnimationCycle() {
+            switch(animationPhase) {
+                case 0:
+                    loadInitialImages();
+                    break;
+                case 1:
+                    animateRandomCells();
+                    break;
+                case 2:
+                    cycleAllImages();
+                    break;
+                case 3:
+                    animateRandomCells();
+                    break;
+            }
+            
+            animationPhase = (animationPhase + 1) % 4;
+        }
+
+        function startCommunityGridSystem() {
+            if (isInitialized) return;
+            isInitialized = true;
+
+            // Initial load after short delay
+            setTimeout(() => {
+                runAnimationCycle();
+            }, 500);
+
+            // Main animation cycle
+            animationInterval = setInterval(() => {
+                runAnimationCycle();
+            }, 4000);
+
+            // Random cell updates for dynamic effect
+            randomInterval = setInterval(() => {
+                if (loadedImages.length === 0) return;
+                
+                const activeCells = getActiveCells();
+                const randomCell = activeCells[Math.floor(Math.random() * activeCells.length)];
+                
+                if (randomCell) {
+                    const randomImageData = loadedImages[Math.floor(Math.random() * loadedImages.length)];
+                    applyCommunityImage(randomCell, randomImageData, true);
+                }
+            }, 2000);
+        }
+
+        function openModal(imageIndex) {
+            if (imageIndex < 0 || imageIndex >= loadedImages.length) return;
+
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            const imageData = loadedImages[imageIndex];
+            
+            modalImg.src = imageData.image;
+            modalTitle.textContent = imageData.title;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = ''; // Restore scroll
+        }
+
+        function openCustomerCare() {
+            const phoneNumber = '+601158583070';
+            const message = encodeURIComponent('Hello! I need help with X\'PAT services. Please assist me.');
+            const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^\d]/g, '')}?text=${message}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modal close handlers
+            const closeBtn = document.querySelector('.close');
+            if (closeBtn) {
+                closeBtn.onclick = closeModal;
+            }
+            
+            const modal = document.getElementById('imageModal');
+            modal.onclick = function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            };
+            
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            // Pause animations when tab is hidden
+            document.addEventListener('visibilitychange', function() {
+                const container = document.querySelector('.xpat-grid-container');
+                if (document.hidden) {
+                    if (container) container.style.animationPlayState = 'paused';
+                    if (animationInterval) clearInterval(animationInterval);
+                    if (randomInterval) clearInterval(randomInterval);
+                } else {
+                    if (container) container.style.animationPlayState = 'running';
+                    if (isInitialized && !animationInterval) {
+                        animationInterval = setInterval(runAnimationCycle, 4000);
+                        randomInterval = setInterval(() => {
+                            const activeCells = getActiveCells();
+                            const randomCell = activeCells[Math.floor(Math.random() * activeCells.length)];
+                            if (randomCell && loadedImages.length > 0) {
+                                const randomImageData = loadedImages[Math.floor(Math.random() * loadedImages.length)];
+                                applyCommunityImage(randomCell, randomImageData, true);
+                            }
+                        }, 2000);
+                    }
+                }
+            });
+
+            // Start the system
+            preloadImages();
+        });
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            if (animationInterval) clearInterval(animationInterval);
+            if (randomInterval) clearInterval(randomInterval);
+        });
+    </script>
+</body>
+</html>
+                
