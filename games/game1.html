@@ -41,33 +41,33 @@
 
         .branding {
             text-align: center;
-            padding: 10px;
+            padding: 8px;
             background: rgba(0, 0, 0, 0.8);
             animation: glow 2s ease-in-out infinite;
+            flex-shrink: 0;
         }
 
         .brand-logos {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .brand-tag {
             background: linear-gradient(135deg, #0118D8, #1B56FD);
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 6px;
-            font-size: 8px;
+            font-size: 7px;
             border: 2px solid #FFD700;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
         .game-title {
-            font-size: 16px;
+            font-size: 14px;
             color: #FFD700;
             text-shadow: 2px 2px 0 #000;
-            margin-bottom: 5px;
         }
 
         @keyframes glow {
@@ -85,6 +85,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 0;
         }
 
         canvas {
@@ -99,26 +100,109 @@
 
         .hud {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
+            top: 8px;
+            left: 8px;
+            right: 8px;
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
+            font-size: 9px;
             color: #FFD700;
             text-shadow: 2px 2px 0 #000;
             z-index: 10;
             pointer-events: none;
-            gap: 5px;
+            gap: 4px;
         }
 
         .stat {
             background: rgba(0, 0, 0, 0.8);
-            padding: 6px 10px;
+            padding: 5px 8px;
             border-radius: 6px;
             border: 2px solid #FFD700;
             white-space: nowrap;
             flex-shrink: 0;
+        }
+
+        /* Mobile D-Pad Controls */
+        .mobile-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: none;
+        }
+
+        .dpad-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .dpad-btn {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #0118D8, #1B56FD);
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #FFD700;
+            cursor: pointer;
+            user-select: none;
+            touch-action: none;
+            box-shadow: 0 4px 15px rgba(1, 24, 216, 0.5);
+            transition: all 0.1s ease;
+        }
+
+        .dpad-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(135deg, #1B56FD, #0118D8);
+            box-shadow: 0 2px 10px rgba(1, 24, 216, 0.7);
+        }
+
+        .dpad-up {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dpad-down {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dpad-left {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .dpad-right {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .dpad-center {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 215, 0, 0.3);
+            border: 2px solid #FFD700;
+            pointer-events: none;
+        }
+
+        /* Show controls only on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .mobile-controls {
+                display: block;
+            }
         }
 
         .game-over-screen, .start-screen {
@@ -142,10 +226,10 @@
         }
 
         .screen-title {
-            font-size: 24px;
+            font-size: 22px;
             color: #FFD700;
             text-shadow: 3px 3px 0 #000;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             animation: pulse 1s ease-in-out infinite;
         }
 
@@ -155,9 +239,9 @@
         }
 
         .instructions {
-            font-size: 9px;
+            font-size: 8px;
             line-height: 1.8;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: #FFF;
             max-width: 90%;
         }
@@ -169,7 +253,7 @@
             border: none;
             border-radius: 8px;
             font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
@@ -182,13 +266,13 @@
         }
 
         .final-score {
-            font-size: 20px;
+            font-size: 18px;
             color: #FFD700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .controls-hint {
-            margin-top: 10px;
+            margin-top: 8px;
             font-size: 7px;
             color: #AAA;
             text-align: center;
@@ -199,7 +283,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 32px;
+            font-size: 28px;
             color: #FFD700;
             text-shadow: 3px 3px 0 #000;
             animation: levelUpAnim 1s ease-out forwards;
@@ -214,27 +298,38 @@
         }
 
         @media (max-width: 768px) {
-            .game-title { font-size: 12px; }
-            .brand-tag { font-size: 6px; padding: 4px 8px; }
-            .screen-title { font-size: 18px; }
-            .instructions { font-size: 8px; }
-            .btn { font-size: 10px; padding: 10px 20px; }
+            .game-title { font-size: 11px; }
+            .brand-tag { font-size: 6px; padding: 3px 6px; }
+            .screen-title { font-size: 16px; }
+            .instructions { font-size: 7px; }
+            .btn { font-size: 9px; padding: 10px 20px; }
             .hud { font-size: 8px; }
-            .stat { padding: 5px 8px; }
+            .stat { padding: 4px 6px; }
+            .dpad-container { width: 160px; height: 160px; }
+            .dpad-btn { width: 50px; height: 50px; font-size: 20px; }
+            .dpad-center { width: 40px; height: 40px; }
         }
 
         @media (max-width: 480px) {
-            .game-title { font-size: 10px; }
-            .brand-tag { font-size: 5px; padding: 3px 6px; }
-            .screen-title { font-size: 16px; }
-            .instructions { font-size: 7px; }
+            .branding { padding: 5px; }
+            .game-title { font-size: 9px; }
+            .brand-tag { font-size: 5px; padding: 2px 5px; }
+            .screen-title { font-size: 14px; }
+            .dpad-container { width: 140px; height: 140px; }
+            .dpad-btn { width: 45px; height: 45px; font-size: 18px; }
+            .dpad-center { width: 35px; height: 35px; }
         }
 
         @media (orientation: landscape) and (max-height: 500px) {
-            .branding { padding: 5px; }
-            .game-title { font-size: 10px; margin-bottom: 3px; }
-            .brand-tag { font-size: 5px; padding: 3px 6px; }
+            .branding { padding: 3px; }
+            .game-title { font-size: 8px; margin-bottom: 2px; }
+            .brand-logos { margin-bottom: 3px; gap: 4px; }
+            .brand-tag { font-size: 5px; padding: 2px 4px; }
             .hud { font-size: 7px; top: 5px; }
+            .mobile-controls { bottom: 10px; }
+            .dpad-container { width: 120px; height: 120px; }
+            .dpad-btn { width: 38px; height: 38px; font-size: 16px; }
+            .dpad-center { width: 30px; height: 30px; }
         }
     </style>
 </head>
@@ -259,6 +354,17 @@
                 <div class="stat">LV: <span id="level">1</span></div>
             </div>
 
+            <!-- Mobile D-Pad Controls -->
+            <div class="mobile-controls">
+                <div class="dpad-container">
+                    <div class="dpad-btn dpad-up" id="btnUp">▲</div>
+                    <div class="dpad-btn dpad-down" id="btnDown">▼</div>
+                    <div class="dpad-btn dpad-left" id="btnLeft">◄</div>
+                    <div class="dpad-btn dpad-right" id="btnRight">►</div>
+                    <div class="dpad-center"></div>
+                </div>
+            </div>
+
             <div class="start-screen" id="startScreen">
                 <div class="screen-title">DREAM CATCHER</div>
                 <div class="instructions">
@@ -266,7 +372,7 @@
                     Avoid RED OBSTACLES ⬛<br>
                     Collect POWER-UPS 💎<br><br>
                     🎮 Desktop: WASD / Arrow Keys<br>
-                    📱 Mobile: Touch & Drag<br><br>
+                    📱 Mobile: D-Pad Controls<br><br>
                     Game speeds up each level!
                 </div>
                 <button class="btn" onclick="startGame()">START GAME</button>
@@ -329,11 +435,8 @@
             color: '#1B56FD'
         };
 
-        // Input handling
+        // Input handling - keyboard
         const keys = {};
-        let touchX = null;
-        let touchY = null;
-        let isTouching = false;
 
         document.addEventListener('keydown', (e) => {
             keys[e.key] = true;
@@ -348,41 +451,37 @@
         });
         document.addEventListener('keyup', (e) => keys[e.key] = false);
 
-        // Enhanced touch controls
-        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-        canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+        // Mobile D-Pad Controls
+        const dpadButtons = {
+            up: false,
+            down: false,
+            left: false,
+            right: false
+        };
 
-        function handleTouchStart(e) {
-            e.preventDefault();
-            isTouching = true;
-            updateTouchPosition(e);
-        }
-
-        function handleTouchMove(e) {
-            e.preventDefault();
-            if (isTouching) {
-                updateTouchPosition(e);
-            }
-        }
-
-        function handleTouchEnd(e) {
-            e.preventDefault();
-            isTouching = false;
-            touchX = null;
-            touchY = null;
-        }
-
-        function updateTouchPosition(e) {
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
+        function setupDpadButton(id, direction) {
+            const btn = document.getElementById(id);
             
-            if (e.touches && e.touches.length > 0) {
-                touchX = (e.touches[0].clientX - rect.left) * scaleX;
-                touchY = (e.touches[0].clientY - rect.top) * scaleY;
-            }
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                dpadButtons[direction] = true;
+            });
+            
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                dpadButtons[direction] = false;
+            });
+            
+            btn.addEventListener('touchcancel', (e) => {
+                e.preventDefault();
+                dpadButtons[direction] = false;
+            });
         }
+
+        setupDpadButton('btnUp', 'up');
+        setupDpadButton('btnDown', 'down');
+        setupDpadButton('btnLeft', 'left');
+        setupDpadButton('btnRight', 'right');
 
         // Game objects
         let stars = [];
@@ -442,34 +541,17 @@
             if (gameState !== 'playing') return;
 
             // Keyboard controls
-            if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+            if (keys['ArrowLeft'] || keys['a'] || keys['A'] || dpadButtons.left) {
                 player.x = Math.max(0, player.x - player.speed);
             }
-            if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+            if (keys['ArrowRight'] || keys['d'] || keys['D'] || dpadButtons.right) {
                 player.x = Math.min(canvas.width - player.width, player.x + player.speed);
             }
-            if (keys['ArrowUp'] || keys['w'] || keys['W']) {
+            if (keys['ArrowUp'] || keys['w'] || keys['W'] || dpadButtons.up) {
                 player.y = Math.max(0, player.y - player.speed);
             }
-            if (keys['ArrowDown'] || keys['s'] || keys['S']) {
+            if (keys['ArrowDown'] || keys['s'] || keys['S'] || dpadButtons.down) {
                 player.y = Math.min(canvas.height - player.height, player.y + player.speed);
-            }
-
-            // Enhanced touch control - smooth follow
-            if (isTouching && touchX !== null && touchY !== null) {
-                const targetX = touchX - player.width / 2;
-                const targetY = touchY - player.height / 2;
-                
-                const diffX = targetX - player.x;
-                const diffY = targetY - player.y;
-                
-                // Smooth movement
-                player.x += Math.sign(diffX) * Math.min(Math.abs(diffX), player.speed);
-                player.y += Math.sign(diffY) * Math.min(Math.abs(diffY), player.speed);
-                
-                // Keep in bounds
-                player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-                player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
             }
 
             // Shield timer
@@ -566,7 +648,7 @@
             if (newLevel > lastLevel) {
                 level = newLevel;
                 lastLevel = level;
-                // Increase speed progressively - gets significantly faster
+                // Increase speed progressively
                 gameSpeed = baseSpeed + (level - 1) * 0.8;
                 showLevelUp();
             }
