@@ -163,28 +163,35 @@
 
         .controls {
             display: none;
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            gap: 60px;
-            z-index: 50;
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+            z-index: 1000;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
         .control-btn {
-            width: 70px;
-            height: 70px;
-            background: rgba(1, 24, 216, 0.8);
-            border: 3px solid #FFD700;
+            pointer-events: auto;
+            width: 50px;
+            height: 50px;
+            background: rgba(1, 24, 216, 0.6);
+            border: 2px solid rgba(255, 215, 0, 0.8);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 28px;
+            font-size: 20px;
             color: #FFF;
             cursor: pointer;
             user-select: none;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
             transition: all 0.1s;
         }
 
@@ -192,12 +199,6 @@
             transform: scale(0.95) translateY(2px);
             box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
             background: rgba(1, 24, 216, 1);
-        }
-
-        @media (hover: none) and (pointer: coarse) {
-            .controls {
-                display: flex;
-            }
         }
 
         @media (max-width: 600px) {
@@ -218,9 +219,21 @@
                 font-size: 6px;
             }
             .control-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .controls {
+                bottom: 5px;
+            }
+            
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
             }
         }
 
