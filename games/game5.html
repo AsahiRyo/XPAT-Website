@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tower Tap - Rhythm Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            position: fixed;
+        }
+
+        .gameboy-container {
+            background: linear-gradient(135deg, #8B9DC3 0%, #6B7DA1 100%);
+            border-radius: 20px 20px 40px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+            width: 90vw;
+            max-width: 600px;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            padding: clamp(15px, 3vh, 30px);
+            overflow-y: auto;
+        }
+
+        .screen-bezel {
+            background: #2a2a2a;
+            padding: clamp(10px, 2vh, 20px);
+            border-radius: 10px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: clamp(15px, 3vh, 30px);
+            flex-shrink: 0;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: clamp(6px, 1.2vh, 8px);
+            margin-bottom: clamp(5px, 1vh, 10px);
+            padding: 0 5px;
+        }
+
+        .game-screen {
+            background: #9bbc0f;
+            width: 100%;
+            aspect-ratio: 4/3;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #1a1a1a;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            image-rendering: pixelated;
+            touch-action: none;
+        }
+
+        .brand {
+            text-align: center;
+            color: #333;
+            font-size: clamp(10px, 2vh, 14px);
+            margin: clamp(10px, 2vh, 20px) 0;
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+        .controls-hint {
+            background: rgba(0, 0, 0, 0.2);
+            padding: clamp(10px, 2vh, 15px);
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+            font-size: clamp(6px, 1.2vh, 8px);
+            line-height: 1.8;
+            margin-bottom: clamp(15px, 2vh, 25px);
+            flex-shrink: 0;
+        }
+
+        .console-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(10px, 2vw, 15px);
+            padding: clamp(10px, 2vh, 20px) 0;
+            flex-shrink: 0;
+        }
+
+        .tower-button {
+            width: clamp(80px, 18vw, 110px);
+            height: clamp(80px, 18vw, 110px);
+            border-radius: 50%;
+            border: 4px solid;
+            color: #fff;
+            font-size: clamp(14px, 3vh, 18px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            touch-action: none;
+            transition: all 0.1s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5),
+                        inset 0 -3px 10px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+        }
+
+        .tower-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6),
+                        inset 0 -1px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        .tower-button.left {
+            background: linear-gradient(145deg, #FF0000 0%, #CC0000 100%);
+            border-color: #ff3333;
+        }
+
+        .tower-button.center {
+            background: linear-gradient(145deg, #00FF00 0%, #00CC00 100%);
+            border-color: #33ff33;
+        }
+
+        .tower-button.right {
+            background: linear-gradient(145deg, #0000FF 0%, #0000CC 100%);
+            border-color: #3333ff;
+        }
+
+        .tower-button .key-label {
+            font-size: clamp(24px, 5vh, 32px);
+            margin-bottom: 5px;
+        }
+
+        .tower-button .tower-label {
+            font-size: clamp(8px, 1.5vh, 10px);
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #9bbc0f;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #0f380f;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .start-screen.hidden {
+            display: none;
+        }
+
+        .game-title {
+            font-size: clamp(14px, 3vh, 20px);
+            margin-bottom: clamp(10px, 2vh, 15px);
+            text-align: center;
+            padding: 0 20px;
+            line-height: 1.5;
+        }
+
+        .game-subtitle {
+            font-size: clamp(8px, 1.5vh, 10px);
+            margin-bottom: clamp(20px, 4vh, 30px);
+            color: #8b0000;
+        }
+
+        .start-instruction {
+            font-size: clamp(8px, 1.8vh, 11px);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .gameboy-container {
+                flex-direction: row;
+                max-width: 95vw;
+                padding: 2vh 3vw;
+            }
+
+            .screen-section {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .controls-section {
+                flex: 0 0 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-left: 2vw;
+            }
+
+            .screen-bezel {
+                margin-bottom: 1vh;
+            }
+
+            .brand {
+                margin: 1vh 0;
+                font-size: clamp(8px, 1.5vh, 12px);
+            }
+
+            .controls-hint {
+                margin-bottom: 1vh;
+                padding: 1vh;
+                font-size: clamp(5px, 1vh, 7px);
+            }
+
+            .console-controls {
+                padding: 0;
+            }
+
+            .tower-button {
+                width: clamp(70px, 14vw, 90px);
+                height: clamp(70px, 14vw, 90px);
+            }
+        }
+
+        @media (min-width: 768px) and (orientation: portrait) {
+            .gameboy-container {
+                max-width: 500px;
+            }
+        }
+
+        .gameboy-container::-webkit-scrollbar {
+            width: 0;
+            display: none;
+        }
+
+        .gameboy-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="gameboy-container">
+        <div class="screen-section">
+            <div class="screen-bezel">
+                <div class="screen-header">
+                    <span>◄ POWER ON</span>
+                    <span>BATTERY FULL ►</span>
+                </div>
+                <div class="game-screen">
+                    <div class="start-screen" id="startScreen">
+                        <div class="game-title">TOWER TAP<br>RHYTHM GAME</div>
+                        <div class="game-subtitle">⚡ PERFECT TIMING ⚡</div>
+                        <div class="start-instruction">TAP TO START</div>
+                    </div>
+                    <canvas id="gameCanvas"></canvas>
+                </div>
+            </div>
+            
+            <div class="brand">GAME BOY ADVANCE SP</div>
+            
+            <div class="controls-hint">
+                KEYBOARD: A=RED S=GREEN D=BLUE<br>
+                MOBILE: TAP COLOR BUTTONS<br>
+                HIT PERFECT TIMING! 📡
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <div class="console-controls">
+                <button class="tower-button left" id="btnLeft">
+                    <div class="key-label">A</div>
+                    <div class="tower-label">RED</div>
+                </button>
+                <button class="tower-button center" id="btnCenter">
+                    <div class="key-label">S</div>
+                    <div class="tower-label">GREEN</div>
+                </button>
+                <button class="tower-button right" id="btnRight">
+                    <div class="key-label">D</div>
+                    <div class="tower-label">BLUE</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
+
+        canvas.width = 480;
+        canvas.height = 360;
+
+        let gameStarted = false;
+        let gameOver = false;
+        let score = 0;
+        let combo = 0;
+        let maxCombo = 0;
+        let hits = 0;
+        let misses = 0;
+        let perfectHits = 0;
+        let wrongButtonPresses = 0;
+        let maxWrongPresses = 3;
+        let levelUpAnimation = 0;
+        
+        let towers = [];
+        let signals = [];
+        let particles = [];
+        let feedbackText = [];
+        
+        const NUM_TOWERS = 3;
+        const TOWER_WIDTH = 120;
+        const TOWER_HEIGHT = 60;
+        const SIGNAL_SIZE = 20;
+        const HIT_ZONE_HEIGHT = 80; // Larger hit zone for easier gameplay
+        
+        const BASE_SIGNAL_SPEED = 2;
+        const BASE_SPAWN_RATE = 0.008;
+        const MIN_SPAWN_GAP = 90; // Minimum 1.5 seconds between spawns at 60fps
+        const SPEED_INCREASE_INTERVAL = 180; // Every 3 seconds
+        const SPEED_INCREASE_AMOUNT = 0.08; // Gradual speed increase
+        const LEVEL_UP_INTERVAL = 600; // Level up every 10 seconds (600 frames at 60fps)
+        let signalSpeed = BASE_SIGNAL_SPEED;
+        let spawnRate = BASE_SPAWN_RATE;
+        let maxMisses = 1;
+        let gameTime = 0;
+        let lastSpeedIncrease = 0;
+        let lastLevelUp = 0;
+        let currentLevel = 1;
+        let lastSpawnTime = -MIN_SPAWN_GAP;
+        let maxActiveSignals = 1; // Only 1 signal on screen at a time
+        
+        const COLORS = ['#FF0000', '#00FF00', '#0000FF'];
+        const TOWER_KEYS = ['a', 's', 'd'];
+
+        // Button references
+        const btnLeft = document.getElementById('btnLeft');
+        const btnCenter = document.getElementById('btnCenter');
+        const btnRight = document.getElementById('btnRight');
+
+        // Event listeners
+        startScreen.addEventListener('click', handleStartScreenClick);
+        startScreen.addEventListener('touchstart', handleStartScreenTouch);
+
+        // Keyboard controls
+        document.addEventListener('keydown', handleKeyDown);
+
+        // Button controls
+        btnLeft.addEventListener('touchstart', (e) => handleButtonPress(e, 0));
+        btnCenter.addEventListener('touchstart', (e) => handleButtonPress(e, 1));
+        btnRight.addEventListener('touchstart', (e) => handleButtonPress(e, 2));
+
+        btnLeft.addEventListener('mousedown', (e) => handleButtonPress(e, 0));
+        btnCenter.addEventListener('mousedown', (e) => handleButtonPress(e, 1));
+        btnRight.addEventListener('mousedown', (e) => handleButtonPress(e, 2));
+
+        function handleStartScreenClick(e) {
+            e.preventDefault();
+            startGame();
+        }
+
+        function handleStartScreenTouch(e) {
+            e.preventDefault();
+            startGame();
+        }
+
+        function startGame() {
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                initGame();
+                gameLoop();
+            } else if (gameOver) {
+                resetGame();
+            }
+        }
+
+        function handleKeyDown(e) {
+            if (!gameStarted) {
+                if (e.code === 'Space') {
+                    startGame();
+                }
+                return;
+            }
+
+            if (gameOver) {
+                if (e.code === 'Space') {
+                    startGame();
+                }
+                return;
+            }
+
+            const key = e.key.toLowerCase();
+            const towerIndex = TOWER_KEYS.indexOf(key);
+            
+            if (towerIndex !== -1) {
+                checkTowerHit(towerIndex);
+            }
+        }
+
+        function handleButtonPress(e, towerIndex) {
+            e.preventDefault();
+            
+            if (!gameStarted) {
+                startGame();
+                return;
+            }
+
+            if (gameOver) {
+                startGame();
+                return;
+            }
+
+            checkTowerHit(towerIndex);
+        }
+
+        function resetGame() {
+            gameOver = false;
+            score = 0;
+            combo = 0;
+            maxCombo = 0;
+            hits = 0;
+            misses = 0;
+            perfectHits = 0;
+            wrongButtonPresses = 0;
+            currentLevel = 1;
+            levelUpAnimation = 0;
+            gameTime = 0;
+            lastSpeedIncrease = 0;
+            lastLevelUp = 0;
+            signalSpeed = BASE_SIGNAL_SPEED;
+            spawnRate = BASE_SPAWN_RATE;
+            startScreen.classList.remove('hidden');
+            gameStarted = false;
+        }
+
+        function initGame() {
+            signals = [];
+            particles = [];
+            feedbackText = [];
+            combo = 0;
+            hits = 0;
+            misses = 0;
+            perfectHits = 0;
+            wrongButtonPresses = 0;
+            currentLevel = 1;
+            levelUpAnimation = 0;
+            gameTime = 0;
+            lastSpeedIncrease = 0;
+            lastLevelUp = 0;
+            lastSpawnTime = -MIN_SPAWN_GAP;
+            signalSpeed = BASE_SIGNAL_SPEED;
+            spawnRate = BASE_SPAWN_RATE;
+            maxMisses = 1;
+            maxWrongPresses = 3;
+            maxActiveSignals = 1;
+            
+            createTowers();
+        }
+
+        function createTowers() {
+            towers = [];
+            const spacing = (canvas.width - (NUM_TOWERS * TOWER_WIDTH)) / (NUM_TOWERS + 1);
+            
+            for (let i = 0; i < NUM_TOWERS; i++) {
+                towers.push({
+                    x: spacing + i * (TOWER_WIDTH + spacing),
+                    y: canvas.height - TOWER_HEIGHT - 10,
+                    width: TOWER_WIDTH,
+                    height: TOWER_HEIGHT,
+                    color: COLORS[i],
+                    hitZoneY: canvas.height - TOWER_HEIGHT - 10 - HIT_ZONE_HEIGHT,
+                    active: false,
+                    activeTimer: 0,
+                    key: TOWER_KEYS[i].toUpperCase()
+                });
+            }
+        }
+
+        function createSignal() {
+            // Don't spawn if we already have max signals active
+            const activeSignals = signals.filter(s => !s.hit && !s.missed).length;
+            if (activeSignals >= maxActiveSignals) return;
+            
+            // Enforce minimum gap between spawns
+            if (gameTime - lastSpawnTime < MIN_SPAWN_GAP) return;
+            
+            const towerIndex = Math.floor(Math.random() * NUM_TOWERS);
+            const tower = towers[towerIndex];
+            
+            signals.push({
+                x: tower.x + tower.width / 2 - SIGNAL_SIZE / 2,
+                y: -SIGNAL_SIZE,
+                size: SIGNAL_SIZE,
+                speed: signalSpeed,
+                towerIndex: towerIndex,
+                color: tower.color,
+                missed: false,
+                hit: false
+            });
+            
+            lastSpawnTime = gameTime;
+        }
+
+        function createParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8 - 3,
+                    size: 3 + Math.random() * 5,
+                    color: color,
+                    life: 1,
+                    decay: 0.015 + Math.random() * 0.015
+                });
+            }
+        }
+
+        function createFeedback(x, y, text, color) {
+            feedbackText.push({
+                x: x,
+                y: y,
+                text: text,
+                color: color,
+                life: 1,
+                decay: 0.02
+            });
+        }
+
+        function checkTowerHit(towerIndex) {
+            const tower = towers[towerIndex];
+            
+            // Find the closest signal for this tower in the hit zone (more generous)
+            let bestSignal = null;
+            let bestDistance = Infinity;
+            
+            for (let signal of signals) {
+                if (signal.towerIndex === towerIndex && !signal.missed && !signal.hit) {
+                    const hitZoneCenter = tower.hitZoneY + HIT_ZONE_HEIGHT / 2;
+                    const signalCenter = signal.y + signal.size / 2;
+                    const distance = Math.abs(signalCenter - hitZoneCenter);
+                    
+                    // More generous hit detection - 70% of hit zone height
+                    if (distance < HIT_ZONE_HEIGHT * 0.7 && distance < bestDistance) {
+                        bestSignal = signal;
+                        bestDistance = distance;
+                    }
+                }
+            }
+            
+            if (bestSignal) {
+                // Hit!
+                bestSignal.hit = true;
+                const hitQuality = 1 - (bestDistance / (HIT_ZONE_HEIGHT * 0.7));
+                let points = 0;
+                let feedback = '';
+                
+                // More generous scoring thresholds
+                if (hitQuality > 0.75) {
+                    points = 150;
+                    feedback = 'PERFECT!';
+                    perfectHits++;
+                    createParticles(bestSignal.x + bestSignal.size / 2, bestSignal.y + bestSignal.size / 2, '#FFD700', 25);
+                } else if (hitQuality > 0.55) {
+                    points = 100;
+                    feedback = 'GREAT!';
+                    createParticles(bestSignal.x + bestSignal.size / 2, bestSignal.y + bestSignal.size / 2, '#00FF00', 18);
+                } else if (hitQuality > 0.35) {
+                    points = 75;
+                    feedback = 'GOOD';
+                    createParticles(bestSignal.x + bestSignal.size / 2, bestSignal.y + bestSignal.size / 2, '#FFFF00', 12);
+                } else {
+                    points = 50;
+                    feedback = 'OK';
+                    createParticles(bestSignal.x + bestSignal.size / 2, bestSignal.y + bestSignal.size / 2, '#FFFFFF', 8);
+                }
+                
+                combo++;
+                maxCombo = Math.max(maxCombo, combo);
+                const comboMultiplier = Math.min(1 + (combo - 1) * 0.1, 3);
+                score += Math.floor(points * comboMultiplier);
+                hits++;
+                
+                createFeedback(bestSignal.x + bestSignal.size / 2, bestSignal.y, feedback, '#FFD700');
+                
+                // Remove signal
+                signals.splice(signals.indexOf(bestSignal), 1);
+                
+                // Activate tower
+                tower.active = true;
+                tower.activeTimer = 15;
+            } else {
+                // Wrong button press (no signal for this tower)
+                wrongButtonPresses++;
+                combo = 0;
+                createParticles(tower.x + tower.width / 2, tower.y, '#8B0000', 8);
+                createFeedback(tower.x + tower.width / 2, tower.y - 20, 'WRONG!', '#FF0000');
+                
+                // Game over if too many wrong presses
+                if (wrongButtonPresses > maxWrongPresses) {
+                    gameOver = true;
+                }
+            }
+        }
+
+        function update() {
+            if (gameOver) return;
+
+            gameTime++;
+
+            // Level up every 10 seconds - resets wrong button counter!
+            if (gameTime - lastLevelUp >= LEVEL_UP_INTERVAL) {
+                currentLevel++;
+                lastLevelUp = gameTime;
+                levelUpAnimation = 120; // 2 seconds animation
+                
+                // Reset wrong button presses on level up!
+                wrongButtonPresses = 0;
+                
+                // Bonus points for leveling up
+                score += 500;
+                
+                // Create celebration particles
+                for (let i = 0; i < 50; i++) {
+                    createParticles(canvas.width / 2, canvas.height / 2, '#FFD700', 1);
+                }
+            }
+
+            // Decrease level up animation
+            if (levelUpAnimation > 0) {
+                levelUpAnimation--;
+            }
+
+            // Gradual speed increase every 3 seconds
+            if (gameTime - lastSpeedIncrease >= SPEED_INCREASE_INTERVAL) {
+                signalSpeed += SPEED_INCREASE_AMOUNT;
+                spawnRate += 0.0005;
+                lastSpeedIncrease = gameTime;
+                
+                // Every 10 speed increases, allow more signals
+                const speedLevel = Math.floor((signalSpeed - BASE_SIGNAL_SPEED) / SPEED_INCREASE_AMOUNT);
+                if (speedLevel > 0 && speedLevel % 10 === 0) {
+                    maxActiveSignals = Math.min(2, maxActiveSignals + 1);
+                }
+            }
+
+            // Spawn signals - but respect the controlled rate
+            if (Math.random() < spawnRate) {
+                createSignal();
+            }
+
+            // Update towers
+            for (let tower of towers) {
+                if (tower.active) {
+                    tower.activeTimer--;
+                    if (tower.activeTimer <= 0) {
+                        tower.active = false;
+                    }
+                }
+            }
+
+            // Update signals
+            for (let i = signals.length - 1; i >= 0; i--) {
+                const signal = signals[i];
+                signal.y += signal.speed;
+                
+                // Check if signal passed the hit zone without being hit
+                const tower = towers[signal.towerIndex];
+                if (signal.y > tower.y + tower.height && !signal.missed && !signal.hit) {
+                    signal.missed = true;
+                    misses++;
+                    combo = 0;
+                    
+                    createParticles(signal.x + signal.size / 2, signal.y, '#FF0000', 10);
+                    createFeedback(signal.x + signal.size / 2, signal.y, 'MISSED!', '#FF0000');
+                    
+                    // Game over if more than maxMisses
+                    if (misses > maxMisses) {
+                        gameOver = true;
+                    }
+                }
+                
+                // Remove if way off screen
+                if (signal.y > canvas.height + 50) {
+                    signals.splice(i, 1);
+                }
+            }
+
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.25; // gravity
+                p.life -= p.decay;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // Update feedback text
+            for (let i = feedbackText.length - 1; i >= 0; i--) {
+                const f = feedbackText[i];
+                f.y -= 1;
+                f.life -= f.decay;
+                
+                if (f.life <= 0) {
+                    feedbackText.splice(i, 1);
+                }
+            }
+        }
+
+        function drawTower(tower) {
+            const x = tower.x;
+            const y = tower.y;
+            const w = tower.width;
+            const h = tower.height;
+            
+            // Tower base
+            const baseColor = tower.active ? '#FFD700' : '#0f380f';
+            ctx.fillStyle = baseColor;
+            ctx.fillRect(x + 10, y, w - 20, h);
+            
+            // Tower antenna
+            ctx.fillStyle = tower.color;
+            ctx.fillRect(x + w / 2 - 4, y - 25, 8, 25);
+            ctx.beginPath();
+            ctx.arc(x + w / 2, y - 25, 10, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Key label
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '16px "Press Start 2P"';
+            ctx.textAlign = 'center';
+            ctx.fillText(tower.key, x + w / 2, y + h / 2 + 6);
+            
+            // Hit zone indicator
+            ctx.strokeStyle = tower.color;
+            ctx.lineWidth = 3;
+            ctx.globalAlpha = 0.4;
+            ctx.strokeRect(x + 5, tower.hitZoneY, w - 10, HIT_ZONE_HEIGHT);
+            
+            // Perfect zone (inner)
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = 0.3;
+            const perfectZoneHeight = HIT_ZONE_HEIGHT * 0.3;
+            ctx.strokeRect(x + 5, tower.hitZoneY + (HIT_ZONE_HEIGHT - perfectZoneHeight) / 2, w - 10, perfectZoneHeight);
+            
+            ctx.globalAlpha = 1;
+        }
+
+        function drawSignal(signal) {
+            ctx.fillStyle = signal.color;
+            ctx.beginPath();
+            ctx.arc(signal.x + signal.size / 2, signal.y + signal.size / 2, signal.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Outer glow
+            ctx.strokeStyle = signal.color;
+            ctx.lineWidth = 3;
+            ctx.globalAlpha = 0.5;
+            ctx.beginPath();
+            ctx.arc(signal.x + signal.size / 2, signal.y + signal.size / 2, signal.size / 2 + 3, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Inner glow
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.beginPath();
+            ctx.arc(signal.x + signal.size / 2, signal.y + signal.size / 2, signal.size / 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawParticle(p) {
+            ctx.globalAlpha = p.life;
+            ctx.fillStyle = p.color;
+            ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+            ctx.globalAlpha = 1;
+        }
+
+        function drawFeedback(f) {
+            ctx.globalAlpha = f.life;
+            ctx.fillStyle = f.color;
+            ctx.font = '10px "Press Start 2P"';
+            ctx.textAlign = 'center';
+            ctx.fillText(f.text, f.x, f.y);
+            ctx.globalAlpha = 1;
+        }
+
+        function draw() {
+            ctx.fillStyle = '#9bbc0f';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (gameOver) {
+                ctx.fillStyle = '#0f380f';
+                ctx.font = '20px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('GAME OVER!', canvas.width / 2, canvas.height / 2 - 90);
+                ctx.font = '12px "Press Start 2P"';
+                ctx.fillText(`LEVEL: ${currentLevel}`, canvas.width / 2, canvas.height / 2 - 60);
+                const timeSeconds = Math.floor(gameTime / 60);
+                ctx.fillText(`TIME: ${timeSeconds}s`, canvas.width / 2, canvas.height / 2 - 35);
+                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 - 10);
+                ctx.fillText(`HITS: ${hits}`, canvas.width / 2, canvas.height / 2 + 15);
+                ctx.fillText(`MAX COMBO: ${maxCombo}`, canvas.width / 2, canvas.height / 2 + 40);
+                ctx.font = '10px "Press Start 2P"';
+                ctx.fillStyle = '#8b0000';
+                if (misses > maxMisses) {
+                    ctx.fillText(`MISSED ${misses} SIGNALS`, canvas.width / 2, canvas.height / 2 + 65);
+                } else if (wrongButtonPresses > maxWrongPresses) {
+                    ctx.fillText(`${wrongButtonPresses} WRONG BUTTONS`, canvas.width / 2, canvas.height / 2 + 65);
+                }
+                ctx.fillStyle = '#0f380f';
+                ctx.fillText('TAP TO RETRY', canvas.width / 2, canvas.height / 2 + 90);
+                return;
+            }
+
+            // HUD - Top Left
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '10px "Press Start 2P"';
+            ctx.textAlign = 'left';
+            ctx.fillText(`LEVEL:${currentLevel}`, 10, 22);
+            ctx.font = '9px "Press Start 2P"';
+            const timeSeconds = Math.floor(gameTime / 60);
+            ctx.fillText(`TIME:${timeSeconds}s`, 10, 38);
+            ctx.fillText(`SCORE:${score}`, 10, 54);
+            ctx.fillText(`HITS:${hits}`, 10, 70);
+            
+            // Speed indicator (center)
+            ctx.textAlign = 'center';
+            const speedLevel = Math.floor((signalSpeed - BASE_SIGNAL_SPEED) / SPEED_INCREASE_AMOUNT) + 1;
+            ctx.fillStyle = speedLevel > 15 ? '#ff0000' : (speedLevel > 10 ? '#ff6600' : (speedLevel > 5 ? '#ffd700' : '#0f380f'));
+            ctx.font = '10px "Press Start 2P"';
+            ctx.fillText(`SPEED x${speedLevel}`, canvas.width / 2, 22);
+            
+            // Combo display
+            if (combo > 1) {
+                const comboColor = combo >= 15 ? '#ff0000' : (combo >= 10 ? '#ff6600' : (combo >= 5 ? '#ffd700' : '#00ff00'));
+                ctx.fillStyle = comboColor;
+                ctx.font = combo >= 10 ? '14px "Press Start 2P"' : '12px "Press Start 2P"';
+                ctx.fillText(`COMBO x${combo}!`, canvas.width / 2, 45);
+            }
+            
+            // Misses counter (top right)
+            ctx.fillStyle = misses >= maxMisses ? '#ff0000' : '#0f380f';
+            ctx.font = '9px "Press Start 2P"';
+            ctx.textAlign = 'right';
+            ctx.fillText(`MISS:${misses}/${maxMisses}`, canvas.width - 10, 22);
+            
+            // Wrong button presses
+            ctx.fillStyle = wrongButtonPresses >= maxWrongPresses ? '#ff0000' : '#8b0000';
+            ctx.fillText(`WRONG:${wrongButtonPresses}/${maxWrongPresses}`, canvas.width - 10, 38);
+            
+            // Perfect hits
+            ctx.fillStyle = '#ffd700';
+            ctx.fillText(`★:${perfectHits}`, canvas.width - 10, 54);
+
+            // Draw game objects
+            towers.forEach(drawTower);
+            signals.forEach(drawSignal);
+            particles.forEach(drawParticle);
+            feedbackText.forEach(drawFeedback);
+            
+            // Warning when about to lose
+            if (misses === maxMisses || wrongButtonPresses === maxWrongPresses) {
+                ctx.fillStyle = '#ff0000';
+                ctx.font = '10px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                const alpha = (Math.floor(Date.now() / 400) % 2) ? 1 : 0.4;
+                ctx.globalAlpha = alpha;
+                if (misses === maxMisses && wrongButtonPresses === maxWrongPresses) {
+                    ctx.fillText('ONE MORE MISTAKE = GAME OVER!', canvas.width / 2, canvas.height - 15);
+                } else if (misses === maxMisses) {
+                    ctx.fillText('ONE MORE MISS = GAME OVER!', canvas.width / 2, canvas.height - 15);
+                } else {
+                    ctx.fillText('ONE MORE WRONG BUTTON = GAME OVER!', canvas.width / 2, canvas.height - 15);
+                }
+                ctx.globalAlpha = 1;
+            }
+            
+            // Speed milestone celebrations
+            if (speedLevel > 1 && speedLevel % 5 === 0 && gameTime - lastSpeedIncrease < 60) {
+                ctx.fillStyle = '#ffd700';
+                ctx.font = '12px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                const alpha = 1 - ((gameTime - lastSpeedIncrease) / 60);
+                ctx.globalAlpha = alpha;
+                ctx.fillText(`SPEED LEVEL ${speedLevel}!`, canvas.width / 2, canvas.height / 2);
+                ctx.globalAlpha = 1;
+            }
+            
+            // Level up animation
+            if (levelUpAnimation > 0) {
+                ctx.fillStyle = '#FFD700';
+                ctx.font = '18px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                const alpha = levelUpAnimation > 60 ? 1 : levelUpAnimation / 60;
+                ctx.globalAlpha = alpha;
+                ctx.fillText(`LEVEL ${currentLevel}!`, canvas.width / 2, canvas.height / 2 - 20);
+                ctx.font = '12px "Press Start 2P"';
+                ctx.fillStyle = '#00FF00';
+                ctx.fillText('WRONG RESETS!', canvas.width / 2, canvas.height / 2 + 10);
+                ctx.fillStyle = '#FFD700';
+                ctx.fillText('+500 BONUS!', canvas.width / 2, canvas.height / 2 + 35);
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        function gameLoop() {
+            if (!gameStarted) return;
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Canvas click handler for start/restart
+        canvas.addEventListener('click', (e) => {
+            if (!gameStarted || gameOver) {
+                startGame();
+            }
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!gameStarted || gameOver) {
+                startGame();
+            }
+        });
+    </script>
+</body>
+</html>

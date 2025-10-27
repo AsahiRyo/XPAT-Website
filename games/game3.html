@@ -3,311 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cloud Dodger - X'PAT Journey</title>
+    <title>Cloud Dodger - Shooter Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
 
         body {
             font-family: 'Press Start 2P', cursive;
-            background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            touch-action: none;
+            position: fixed;
+        }
+
+        .gameboy-container {
+            background: linear-gradient(135deg, #8B9DC3 0%, #6B7DA1 100%);
+            border-radius: 20px 20px 40px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+            width: 90vw;
+            max-width: 600px;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            padding: clamp(15px, 3vh, 30px);
+            overflow-y: auto;
+        }
+
+        .screen-bezel {
+            background: #2a2a2a;
+            padding: clamp(10px, 2vh, 20px);
+            border-radius: 10px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: clamp(15px, 3vh, 30px);
+            flex-shrink: 0;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: clamp(6px, 1.2vh, 8px);
+            margin-bottom: clamp(5px, 1vh, 10px);
+            padding: 0 5px;
+        }
+
+        .game-screen {
+            background: #9bbc0f;
+            width: 100%;
+            aspect-ratio: 4/3;
+            position: relative;
             overflow: hidden;
-            color: #fff;
+            border: 3px solid #1a1a1a;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            image-rendering: pixelated;
             touch-action: none;
         }
 
-        .game-wrapper {
-            width: 100%;
-            max-width: 800px;
-            height: 100vh;
+        .brand {
+            text-align: center;
+            color: #333;
+            font-size: clamp(10px, 2vh, 14px);
+            margin: clamp(10px, 2vh, 20px) 0;
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+        .controls-hint {
+            background: rgba(0, 0, 0, 0.2);
+            padding: clamp(10px, 2vh, 15px);
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+            font-size: clamp(6px, 1.2vh, 8px);
+            line-height: 1.8;
+            margin-bottom: clamp(15px, 2vh, 25px);
+            flex-shrink: 0;
+        }
+
+        .console-controls {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            gap: clamp(20px, 4vw, 40px);
+            padding: clamp(10px, 2vh, 20px) 0;
+            flex-shrink: 0;
         }
 
-        .game-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            background: #000;
-            border: 4px solid #FFD700;
-            border-radius: 12px;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
-            overflow: hidden;
+        .dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: clamp(3px, 0.5vh, 5px);
+            background: rgba(0, 0, 0, 0.3);
+            padding: clamp(8px, 1.5vh, 10px);
+            border-radius: 15px;
+            box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.4);
+            width: clamp(120px, 20vw, 160px);
+            height: clamp(120px, 20vw, 160px);
         }
 
-        #gameCanvas {
-            display: block;
-            width: 100%;
-            height: auto;
-            background: linear-gradient(180deg, #87CEEB 0%, #4A90E2 50%, #1e3a8a 100%);
-        }
-
-        .hud {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
+        .dpad-btn {
+            background: linear-gradient(145deg, #4a4a4a 0%, #2a2a2a 100%);
+            border: 2px solid #5a5a5a;
+            border-radius: clamp(8px, 1.5vh, 10px);
+            color: #fff;
+            font-size: clamp(16px, 3vh, 24px);
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .stat {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 2px solid #FFD700;
-            font-size: 10px;
-            text-shadow: 2px 2px 0 #000;
-        }
-
-        .stat-label {
-            color: #FFD700;
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            color: #FFF;
-            font-size: 14px;
-        }
-
-        .branding {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            cursor: pointer;
+            user-select: none;
+            touch-action: none;
+            transition: all 0.1s;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .dpad-btn:active {
+            background: linear-gradient(145deg, #666 0%, #444 100%);
+            transform: scale(0.95);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .dpad-btn.empty {
+            opacity: 0;
             pointer-events: none;
-            z-index: 10;
         }
 
-        .brand-tag {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 2px solid #0118D8;
-            font-size: 8px;
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000;
+        .fire-button {
+            width: clamp(80px, 15vw, 100px);
+            height: clamp(80px, 15vw, 100px);
+            border-radius: 50%;
+            background: linear-gradient(145deg, #cc0000 0%, #8b0000 100%);
+            border: 4px solid #ff3333;
+            color: #fff;
+            font-size: clamp(12px, 2.5vh, 16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            touch-action: none;
+            transition: all 0.1s;
+            box-shadow: 0 5px 15px rgba(204, 0, 0, 0.5),
+                        inset 0 -3px 10px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
         }
 
-        .overlay {
+        .fire-button:active {
+            background: linear-gradient(145deg, #ff0000 0%, #aa0000 100%);
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(255, 0, 0, 0.6),
+                        inset 0 -1px 5px rgba(0, 0, 0, 0.4);
+        }
+
+        .fire-button.ready {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 5px 15px rgba(204, 0, 0, 0.5),
+                            inset 0 -3px 10px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 5px 25px rgba(255, 215, 0, 0.8),
+                            inset 0 -3px 10px rgba(0, 0, 0, 0.3);
+                border-color: #ffd700;
+            }
+        }
+
+        .start-screen {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
+            width: 100%;
+            height: 100%;
+            background: #9bbc0f;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            z-index: 100;
-            padding: 20px;
+            color: #0f380f;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .start-screen.hidden {
+            display: none;
+        }
+
+        .game-title {
+            font-size: clamp(12px, 3vh, 18px);
+            margin-bottom: clamp(10px, 2vh, 15px);
             text-align: center;
-        }
-
-        .overlay.hidden {
-            display: none;
-        }
-
-        .title {
-            font-size: 24px;
-            color: #FFD700;
-            text-shadow: 3px 3px 0 #000;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 10px;
-            color: #FFF;
-            line-height: 1.8;
-            max-width: 300px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #000;
-            border: 3px solid #000;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Press Start 2P', cursive;
-            box-shadow: 0 4px 0 #8B4513;
-        }
-
-        .btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #8B4513;
-        }
-
-        .controls {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            left: 0;
-            right: 0;
             padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            pointer-events: none;
-            z-index: 1000;
-            max-width: 400px;
-            margin: 0 auto;
+            line-height: 1.5;
         }
 
-        .control-btn {
-            pointer-events: auto;
-            width: 50px;
-            height: 50px;
-            background: rgba(1, 24, 216, 0.6);
-            border: 2px solid rgba(255, 215, 0, 0.8);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            color: #FFF;
-            cursor: pointer;
-            user-select: none;
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
-            transition: all 0.1s;
+        .game-subtitle {
+            font-size: clamp(8px, 1.5vh, 10px);
+            margin-bottom: clamp(20px, 4vh, 30px);
+            color: #8b0000;
         }
 
-        .control-btn:active {
-            transform: scale(0.95) translateY(2px);
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
-            background: rgba(1, 24, 216, 1);
+        .start-instruction {
+            font-size: clamp(8px, 1.8vh, 11px);
+            animation: blink 1s infinite;
         }
 
-        @media (max-width: 600px) {
-            .title {
-                font-size: 18px;
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .gameboy-container {
+                flex-direction: row;
+                max-width: 95vw;
+                padding: 2vh 3vw;
             }
-            .subtitle {
-                font-size: 8px;
+
+            .screen-section {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
             }
-            .stat {
-                padding: 6px 8px;
-                font-size: 8px;
+
+            .controls-section {
+                flex: 0 0 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-left: 2vw;
             }
-            .stat-value {
-                font-size: 12px;
+
+            .screen-bezel {
+                margin-bottom: 1vh;
             }
-            .brand-tag {
-                font-size: 6px;
+
+            .brand {
+                margin: 1vh 0;
+                font-size: clamp(8px, 1.5vh, 12px);
             }
-            .control-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 18px;
+
+            .controls-hint {
+                margin-bottom: 1vh;
+                padding: 1vh;
+                font-size: clamp(5px, 1vh, 7px);
+            }
+
+            .console-controls {
+                padding: 0;
+                gap: 2vw;
+            }
+
+            .dpad {
+                width: clamp(100px, 15vw, 130px);
+                height: clamp(100px, 15vw, 130px);
+            }
+
+            .fire-button {
+                width: clamp(70px, 12vw, 90px);
+                height: clamp(70px, 12vw, 90px);
             }
         }
 
-        @media (max-height: 500px) and (orientation: landscape) {
-            .controls {
-                bottom: 5px;
+        @media (max-width: 360px) and (orientation: portrait) {
+            .dpad {
+                width: 110px;
+                height: 110px;
             }
-            
-            .control-btn {
-                width: 40px;
-                height: 40px;
+
+            .dpad-btn {
                 font-size: 16px;
             }
+
+            .fire-button {
+                width: 70px;
+                height: 70px;
+                font-size: 11px;
+            }
         }
 
-        .game-over-stats {
-            background: rgba(1, 24, 216, 0.3);
-            padding: 15px;
-            border-radius: 8px;
-            border: 2px solid #FFD700;
-            margin: 10px 0;
+        @media (min-width: 768px) and (orientation: portrait) {
+            .gameboy-container {
+                max-width: 500px;
+            }
         }
 
-        .game-over-stats div {
-            margin: 5px 0;
-            font-size: 10px;
+        .gameboy-container::-webkit-scrollbar {
+            width: 0;
+            display: none;
+        }
+
+        .gameboy-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 <body>
-    <div class="game-wrapper">
-        <div class="game-container">
-            <canvas id="gameCanvas" width="600" height="800"></canvas>
+    <div class="gameboy-container">
+        <div class="screen-section">
+            <div class="screen-bezel">
+                <div class="screen-header">
+                    <span>◄ POWER ON</span>
+                    <span>BATTERY FULL ►</span>
+                </div>
+                <div class="game-screen">
+                    <div class="start-screen" id="startScreen">
+                        <div class="game-title">CLOUD DODGER<br>SHOOTER</div>
+                        <div class="game-subtitle">⚡ INTENSE MODE ⚡</div>
+                        <div class="start-instruction">TAP TO START</div>
+                    </div>
+                    <canvas id="gameCanvas"></canvas>
+                </div>
+            </div>
             
-            <!-- HUD -->
-            <div class="hud">
-                <div class="stat">
-                    <div class="stat-label">ALTITUDE</div>
-                    <div class="stat-value" id="altitude">0m</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">LEVEL</div>
-                    <div class="stat-value" id="level">1</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-label">LIVES</div>
-                    <div class="stat-value" id="lives">❤️❤️❤️</div>
-                </div>
+            <div class="brand">GAME BOY ADVANCE SP</div>
+            
+            <div class="controls-hint">
+                DESKTOP: WASD + SPACE SHOOT<br>
+                MOBILE: D-PAD + FIRE BUTTON<br>
+                DESTROY ☁ DODGE ☁ COMBO!
             </div>
+        </div>
 
-            <!-- Branding -->
-            <div class="branding">
-                <div class="brand-tag">X'PAT</div>
-                <div class="brand-tag">TFP Solutions</div>
-                <div class="brand-tag">MobilityOne</div>
-                <div class="brand-tag">MiPAY</div>
-            </div>
-
-            <!-- Start Overlay -->
-            <div class="overlay" id="startOverlay">
-                <div class="title">☁️ CLOUD DODGER ☁️</div>
-                <div class="subtitle">
-                    Navigate through clouds<br>
-                    to reach Malaysia!<br><br>
-                    Avoid dark storm clouds ⚡<br>
-                    Collect white clouds ☁️<br>
-                    Reach higher altitudes!
+        <div class="controls-section">
+            <div class="console-controls">
+                <div class="dpad">
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="w">▲</div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="a">◄</div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="d">►</div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="s">▼</div>
+                    <div class="dpad-btn empty"></div>
                 </div>
-                <button class="btn" onclick="startGame()">START JOURNEY</button>
-            </div>
-
-            <!-- Game Over Overlay -->
-            <div class="overlay hidden" id="gameOverOverlay">
-                <div class="title">JOURNEY PAUSED</div>
-                <div class="game-over-stats">
-                    <div>ALTITUDE: <span id="finalAltitude">0</span>m</div>
-                    <div>LEVEL: <span id="finalLevel">0</span></div>
-                    <div>CLOUDS: <span id="finalClouds">0</span></div>
+                <div class="fire-button ready" id="fireButton">
+                    FIRE<br>🔥
                 </div>
-                <button class="btn" onclick="restartGame()">TRY AGAIN</button>
-            </div>
-
-            <!-- Mobile Controls -->
-            <div class="controls">
-                <div class="control-btn" id="leftBtn">◀</div>
-                <div class="control-btn" id="rightBtn">▶</div>
             </div>
         </div>
     </div>
@@ -315,362 +371,751 @@
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
+        const fireButton = document.getElementById('fireButton');
 
-        // Game state
-        let gameActive = false;
+        canvas.width = 480;
+        canvas.height = 360;
+
+        let gameStarted = false;
+        let gameOver = false;
+        let score = 0;
         let altitude = 0;
         let level = 1;
-        let lives = 3;
-        let cloudsCollected = 0;
-        let speed = 2;
-        let cloudSpawnRate = 0.02;
-        let animationId;
-
-        // Player (airplane)
-        const player = {
-            x: canvas.width / 2,
-            y: canvas.height - 150,
-            width: 40,
-            height: 30,
+        let combo = 0;
+        let comboTimer = 0;
+        let speedMultiplier = 1;
+        let screenShake = 0;
+        let bossesDefeated = 0;
+        let cloudsDestroyed = 0;
+        let bossSpawned = false;
+        const CLOUDS_PER_BOSS = 15; // Boss appears every 15 clouds destroyed
+        
+        let plane = {
+            x: canvas.width / 2 - 22.5,
+            y: canvas.height - 80,
+            width: 45,
+            height: 35,
+            baseSpeed: 6,
             speed: 6,
-            dx: 0
+            firepower: 1 // Damage per bullet
         };
 
-        // Clouds array
+        let bullets = [];
         let clouds = [];
-        let particles = [];
+        let goodClouds = [];
+        let explosions = [];
+        let keys = {};
+        let spawnRate = 0.025;
+        let baseCloudSpeed = 2.5;
+        let cloudSpeed = 2.5;
+        let canShoot = true;
+        let shootCooldown = 0;
+        let maxBullets = 3;
+        let baseBulletSpeed = 10;
+        let bulletSpeed = 10;
+        const BASE_SHOOT_DELAY = 15; // frames
+        let shootDelay = 15;
 
-        // Input handling
-        const keys = {};
-        let touchLeft = false;
-        let touchRight = false;
-
+        // Keyboard controls
         document.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
+            const key = e.key.toLowerCase();
+            keys[key] = true;
+            
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (!gameStarted) {
+                    gameStarted = true;
+                    startScreen.classList.add('hidden');
+                    gameLoop();
+                } else if (gameOver) {
+                    resetGame();
+                } else if (gameStarted && canShoot) {
+                    shoot();
+                }
+            }
         });
 
         document.addEventListener('keyup', (e) => {
-            keys[e.key] = false;
+            keys[e.key.toLowerCase()] = false;
         });
 
-        // Mobile controls
-        const leftBtn = document.getElementById('leftBtn');
-        const rightBtn = document.getElementById('rightBtn');
-
-        leftBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            touchLeft = true;
-        });
-
-        leftBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            touchLeft = false;
-        });
-
-        rightBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            touchRight = true;
-        });
-
-        rightBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            touchRight = false;
-        });
-
-        // Cloud class with Perlin-like movement
-        class Cloud {
-            constructor(x, y, type) {
-                this.x = x;
-                this.y = y;
-                this.width = type === 'bad' ? 60 : 50;
-                this.height = type === 'bad' ? 40 : 35;
-                this.type = type; // 'good' or 'bad'
-                this.speed = speed + Math.random() * 2;
-                this.wobble = Math.random() * Math.PI * 2;
-                this.wobbleSpeed = 0.02 + Math.random() * 0.03;
-                this.amplitude = 15 + Math.random() * 20;
-                this.hit = false;
-            }
-
-            update() {
-                this.y += this.speed;
-                this.wobble += this.wobbleSpeed;
-                this.x += Math.sin(this.wobble) * 0.5;
-            }
-
-            draw() {
-                if (this.type === 'bad') {
-                    // Dark storm cloud
-                    ctx.fillStyle = '#2C3E50';
-                    ctx.strokeStyle = '#1A252F';
-                    ctx.lineWidth = 2;
-                    
-                    // Cloud shape
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.width / 3, 0, Math.PI * 2);
-                    ctx.arc(this.x + this.width / 3, this.y, this.width / 3, 0, Math.PI * 2);
-                    ctx.arc(this.x + this.width / 6, this.y - this.height / 3, this.width / 3, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.stroke();
-
-                    // Lightning effect
-                    if (Math.random() > 0.9) {
-                        ctx.strokeStyle = '#FFD700';
-                        ctx.lineWidth = 3;
-                        ctx.beginPath();
-                        ctx.moveTo(this.x + this.width / 2, this.y);
-                        ctx.lineTo(this.x + this.width / 2 - 5, this.y + 15);
-                        ctx.lineTo(this.x + this.width / 2 + 5, this.y + 15);
-                        ctx.lineTo(this.x + this.width / 2, this.y + 30);
-                        ctx.stroke();
-                    }
-                } else {
-                    // White fluffy cloud
-                    ctx.fillStyle = '#FFFFFF';
-                    ctx.strokeStyle = '#E0E0E0';
-                    ctx.lineWidth = 2;
-                    
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.width / 3, 0, Math.PI * 2);
-                    ctx.arc(this.x + this.width / 3, this.y, this.width / 3, 0, Math.PI * 2);
-                    ctx.arc(this.x + this.width / 6, this.y - this.height / 3, this.width / 3, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.stroke();
-                }
-            }
-
-            isOffScreen() {
-                return this.y > canvas.height + 50;
-            }
-        }
-
-        // Particle class for effects
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.vx = (Math.random() - 0.5) * 4;
-                this.vy = (Math.random() - 0.5) * 4;
-                this.size = Math.random() * 4 + 2;
-                this.color = color;
-                this.life = 1;
-                this.decay = 0.02;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.life -= this.decay;
-                this.size *= 0.98;
-            }
-
-            draw() {
-                ctx.globalAlpha = this.life;
-                ctx.fillStyle = this.color;
-                ctx.fillRect(this.x, this.y, this.size, this.size);
-                ctx.globalAlpha = 1;
-            }
-
-            isDead() {
-                return this.life <= 0;
-            }
-        }
-
-        function spawnCloud() {
-            // Spawn rate increases with level
-            if (Math.random() < cloudSpawnRate * (1 + level * 0.1)) {
-                const x = Math.random() * (canvas.width - 100) + 50;
-                const y = -50;
-                // Bad clouds become more frequent as level increases
-                const badCloudChance = 0.3 + (level * 0.05);
-                const type = Math.random() < badCloudChance ? 'bad' : 'good';
-                clouds.push(new Cloud(x, y, type));
-            }
-        }
-
-        function createParticles(x, y, color, count = 10) {
-            for (let i = 0; i < count; i++) {
-                particles.push(new Particle(x, y, color));
-            }
-        }
-
-        function checkCollision(rect1, rect2) {
-            return rect1.x < rect2.x + rect2.width &&
-                   rect1.x + rect1.width > rect2.x &&
-                   rect1.y < rect2.y + rect2.height &&
-                   rect1.y + rect1.height > rect2.y;
-        }
-
-        function drawPlayer() {
-            // Airplane body
-            ctx.fillStyle = '#0118D8';
-            ctx.beginPath();
-            ctx.moveTo(player.x, player.y);
-            ctx.lineTo(player.x + player.width / 2, player.y - player.height);
-            ctx.lineTo(player.x + player.width, player.y);
-            ctx.closePath();
-            ctx.fill();
-
-            // Wings
-            ctx.fillStyle = '#FFD700';
-            ctx.fillRect(player.x - 10, player.y - player.height / 2, player.width + 20, 5);
-
-            // Window
-            ctx.fillStyle = '#87CEEB';
-            ctx.beginPath();
-            ctx.arc(player.x + player.width / 2, player.y - player.height / 2, 5, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        function updatePlayer() {
-            // Handle input
-            if (keys['ArrowLeft'] || keys['a'] || keys['A'] || touchLeft) {
-                player.dx = -player.speed;
-            } else if (keys['ArrowRight'] || keys['d'] || keys['D'] || touchRight) {
-                player.dx = player.speed;
-            } else {
-                player.dx = 0;
-            }
-
-            player.x += player.dx;
-
-            // Boundary collision
-            if (player.x < 0) player.x = 0;
-            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
-        }
-
-        function updateGame() {
-            if (!gameActive) return;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Update player
-            updatePlayer();
-
-            // Spawn clouds
-            spawnCloud();
-
-            // Update and draw clouds
-            clouds = clouds.filter(cloud => {
-                cloud.update();
-                cloud.draw();
-
-                // Check collision
-                if (!cloud.hit && checkCollision(player, cloud)) {
-                    cloud.hit = true;
-                    if (cloud.type === 'bad') {
-                        lives--;
-                        createParticles(cloud.x + cloud.width / 2, cloud.y, '#FF0000', 15);
-                        updateLives();
-                        if (lives <= 0) {
-                            gameOver();
-                        }
-                    } else {
-                        cloudsCollected++;
-                        altitude += 100;
-                        createParticles(cloud.x + cloud.width / 2, cloud.y, '#FFFFFF', 10);
-                        updateAltitude();
-                    }
-                }
-
-                return !cloud.isOffScreen();
+        // Touch controls for D-pad
+        const dpadButtons = document.querySelectorAll('.dpad-btn[data-key]');
+        
+        dpadButtons.forEach(btn => {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const key = btn.getAttribute('data-key');
+                keys[key] = true;
             });
-
-            // Update and draw particles
-            particles = particles.filter(particle => {
-                particle.update();
-                particle.draw();
-                return !particle.isDead();
-            });
-
-            // Draw player
-            drawPlayer();
-
-            // Passive altitude gain
-            altitude += 0.5;
-            updateAltitude();
-
-            // Level progression based on altitude
-            const newLevel = Math.floor(altitude / 1000) + 1;
-            if (newLevel > level) {
-                level = newLevel;
-                speed += 0.5;
-                updateLevel();
-            }
-
-            animationId = requestAnimationFrame(updateGame);
-        }
-
-        function updateAltitude() {
-            document.getElementById('altitude').textContent = Math.floor(altitude) + 'm';
-        }
-
-        function updateLevel() {
-            document.getElementById('level').textContent = level;
-        }
-
-        function updateLives() {
-            const hearts = '❤️'.repeat(lives);
-            document.getElementById('lives').textContent = hearts || '💀';
-        }
-
-        function startGame() {
-            document.getElementById('startOverlay').classList.add('hidden');
-            gameActive = true;
-            resetGame();
-            updateGame();
-        }
-
-        function gameOver() {
-            gameActive = false;
-            cancelAnimationFrame(animationId);
             
-            document.getElementById('finalAltitude').textContent = Math.floor(altitude);
-            document.getElementById('finalLevel').textContent = level;
-            document.getElementById('finalClouds').textContent = cloudsCollected;
-            document.getElementById('gameOverOverlay').classList.remove('hidden');
-        }
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                const key = btn.getAttribute('data-key');
+                keys[key] = false;
+            });
 
-        function restartGame() {
-            document.getElementById('gameOverOverlay').classList.add('hidden');
-            gameActive = true;
-            resetGame();
-            updateGame();
+            btn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                const key = btn.getAttribute('data-key');
+                keys[key] = true;
+            });
+            
+            btn.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                const key = btn.getAttribute('data-key');
+                keys[key] = false;
+            });
+
+            btn.addEventListener('mouseleave', (e) => {
+                const key = btn.getAttribute('data-key');
+                keys[key] = false;
+            });
+        });
+
+        // Fire button
+        fireButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameStarted && !gameOver && canShoot) {
+                shoot();
+            }
+        });
+
+        fireButton.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            if (gameStarted && !gameOver && canShoot) {
+                shoot();
+            }
+        });
+
+        // Start game
+        startScreen.addEventListener('click', () => {
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                gameLoop();
+            } else if (gameOver) {
+                resetGame();
+            }
+        });
+
+        startScreen.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                gameLoop();
+            } else if (gameOver) {
+                resetGame();
+            }
+        });
+
+        function shoot() {
+            if (bullets.length >= maxBullets) return;
+            
+            bullets.push({
+                x: plane.x + plane.width / 2 - 2,
+                y: plane.y - 5,
+                width: 4,
+                height: 12,
+                speed: bulletSpeed,
+                damage: plane.firepower
+            });
+            
+            canShoot = false;
+            shootCooldown = shootDelay;
         }
 
         function resetGame() {
+            gameOver = false;
+            score = 0;
             altitude = 0;
             level = 1;
-            lives = 3;
-            cloudsCollected = 0;
-            speed = 2;
+            combo = 0;
+            comboTimer = 0;
+            speedMultiplier = 1;
+            cloudSpeed = baseCloudSpeed;
+            screenShake = 0;
+            bossesDefeated = 0;
+            cloudsDestroyed = 0;
+            bossSpawned = false;
             clouds = [];
-            particles = [];
-            player.x = canvas.width / 2;
-            player.y = canvas.height - 150;
-            updateAltitude();
-            updateLevel();
-            updateLives();
+            goodClouds = [];
+            bullets = [];
+            explosions = [];
+            plane.x = canvas.width / 2 - 22.5;
+            plane.y = canvas.height - 80;
+            plane.speed = plane.baseSpeed;
+            plane.firepower = 1;
+            spawnRate = 0.025;
+            canShoot = true;
+            shootCooldown = 0;
+            maxBullets = 3;
+            bulletSpeed = baseBulletSpeed;
+            shootDelay = BASE_SHOOT_DELAY;
+            startScreen.classList.remove('hidden');
+            gameStarted = false;
         }
 
-        // Responsive canvas
-        function resizeCanvas() {
-            const container = canvas.parentElement;
-            const ratio = 600 / 800;
-            const containerWidth = container.clientWidth;
-            const containerHeight = container.clientHeight;
-            
-            if (containerWidth / containerHeight > ratio) {
-                canvas.style.height = '100%';
-                canvas.style.width = 'auto';
-            } else {
-                canvas.style.width = '100%';
-                canvas.style.height = 'auto';
+        function updateLevel() {
+            // Level up every 10 clouds destroyed
+            const newLevel = Math.floor(cloudsDestroyed / 10) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                
+                // Speed increases by 20% per level (more aggressive)
+                speedMultiplier = 1 + (level - 1) * 0.2;
+                cloudSpeed = baseCloudSpeed * speedMultiplier;
+                
+                // Increase spawn rate
+                spawnRate = Math.min(0.025 + (level - 1) * 0.008, 0.055);
+                
+                // Upgrade plane stats each level
+                plane.speed = plane.baseSpeed * (1 + (level - 1) * 0.12); // 12% speed boost per level
+                plane.firepower = 1 + Math.floor((level - 1) / 3); // +1 damage every 3 levels
+                
+                // Upgrade shooting capabilities
+                if (level >= 3 && maxBullets < 5) {
+                    maxBullets = Math.min(5, 3 + Math.floor((level - 3) / 2)); // Max 5 bullets
+                }
+                
+                // Faster shooting at higher levels
+                shootDelay = Math.max(10, BASE_SHOOT_DELAY - Math.floor((level - 1) / 2)); // Faster fire rate
+                
+                // Faster bullets
+                bulletSpeed = baseBulletSpeed * (1 + (level - 1) * 0.08); // 8% faster per level
+                
+                // Screen flash for level up
+                screenShake = 10;
             }
         }
 
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        function createCloud() {
+            // Check if it's time for a boss (every 15 clouds destroyed)
+            const shouldSpawnBoss = (cloudsDestroyed > 0 && cloudsDestroyed % CLOUDS_PER_BOSS === 0 && !bossSpawned);
+            
+            if (shouldSpawnBoss) {
+                // Boss appears!
+                const bossNumber = Math.floor(cloudsDestroyed / CLOUDS_PER_BOSS);
+                
+                // Boss health scales: 3 + (bossNumber * 2)
+                // Boss 1: 3 health
+                // Boss 2: 5 health  
+                // Boss 3: 7 health
+                // Boss 4: 9 health
+                // But player firepower also increases, so it's always beatable
+                const bossHealth = 3 + ((bossNumber - 1) * 2);
+                
+                // Boss speed relative to current game speed
+                const bossSpeed = cloudSpeed * 0.45;
+                
+                const boss = {
+                    x: Math.random() * (canvas.width - 130),
+                    y: -60,
+                    width: 120 + ((bossNumber - 1) * 8),
+                    height: 60 + ((bossNumber - 1) * 4),
+                    speed: bossSpeed,
+                    isBad: true,
+                    isBoss: true,
+                    health: bossHealth,
+                    maxHealth: bossHealth,
+                    bossLevel: bossNumber
+                };
+                
+                clouds.push(boss);
+                screenShake = 15;
+                bossSpawned = true;
+                return;
+            }
+            
+            const isBad = Math.random() < 0.65;
+            
+            const cloud = {
+                x: Math.random() * (canvas.width - 80),
+                y: -50,
+                width: 60 + Math.random() * 20,
+                height: 30 + Math.random() * 10,
+                speed: cloudSpeed * (0.85 + Math.random() * 0.3),
+                isBad: isBad,
+                isBoss: false,
+                health: 1,
+                maxHealth: 1
+            };
+            
+            if (isBad) {
+                clouds.push(cloud);
+            } else {
+                goodClouds.push(cloud);
+            }
+        }
+
+        function createExplosion(x, y, size) {
+            explosions.push({
+                x: x,
+                y: y,
+                size: size,
+                frame: 0,
+                maxFrames: 20
+            });
+        }
+
+        function drawPlane() {
+            const px = plane.x;
+            const py = plane.y;
+            
+            ctx.fillStyle = '#0f380f';
+            
+            // Main body (vertical fuselage)
+            ctx.fillRect(px + 18, py + 10, 9, 20);
+            
+            // Nose cone (pointing up)
+            ctx.beginPath();
+            ctx.moveTo(px + 22.5, py);
+            ctx.lineTo(px + 15, py + 10);
+            ctx.lineTo(px + 30, py + 10);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Wings (horizontal, spreading left-right)
+            ctx.fillRect(px, py + 15, 45, 8);
+            
+            // Tail wings
+            ctx.fillRect(px + 10, py + 28, 8, 7);
+            ctx.fillRect(px + 27, py + 28, 8, 7);
+            
+            // Cockpit window
+            ctx.fillStyle = '#306230';
+            ctx.fillRect(px + 20, py + 12, 5, 6);
+            
+            // Thruster flame (animated)
+            if (keys['w'] || keys['arrowup']) {
+                ctx.fillStyle = '#ff6600';
+                ctx.beginPath();
+                ctx.moveTo(px + 22.5, py + 35);
+                ctx.lineTo(px + 18, py + 30);
+                ctx.lineTo(px + 27, py + 30);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.fillStyle = '#ffd700';
+                ctx.beginPath();
+                ctx.moveTo(px + 22.5, py + 33);
+                ctx.lineTo(px + 20, py + 30);
+                ctx.lineTo(px + 25, py + 30);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        function drawBullet(bullet) {
+            // Bullet body
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            
+            // Bullet tip
+            ctx.fillStyle = '#ff6600';
+            ctx.fillRect(bullet.x, bullet.y, bullet.width, 3);
+            
+            // Trail effect
+            ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+            ctx.fillRect(bullet.x - 1, bullet.y + bullet.height, bullet.width + 2, 5);
+        }
+
+        function drawCloud(cloud) {
+            const x = cloud.x;
+            const y = cloud.y;
+            const w = cloud.width;
+            const h = cloud.height;
+            
+            if (cloud.isBoss) {
+                // Boss cloud - dark purple with lightning
+                ctx.fillStyle = '#4a0e4e';
+                
+                ctx.beginPath();
+                ctx.arc(x + w * 0.2, y + h * 0.5, h * 0.45, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.4, y + h * 0.3, h * 0.55, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.5, y + h * 0.35, h * 0.6, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.6, y + h * 0.3, h * 0.55, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.8, y + h * 0.5, h * 0.45, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Lightning bolts (more as boss gets stronger)
+                ctx.strokeStyle = '#ffd700';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x + w * 0.3, y + h * 0.6);
+                ctx.lineTo(x + w * 0.35, y + h * 0.8);
+                ctx.lineTo(x + w * 0.3, y + h * 0.85);
+                ctx.moveTo(x + w * 0.7, y + h * 0.6);
+                ctx.lineTo(x + w * 0.65, y + h * 0.75);
+                ctx.lineTo(x + w * 0.7, y + h * 0.8);
+                
+                if (cloud.maxHealth > 5) {
+                    // Extra lightning for stronger bosses
+                    ctx.moveTo(x + w * 0.5, y + h * 0.6);
+                    ctx.lineTo(x + w * 0.5, y + h * 0.8);
+                    ctx.lineTo(x + w * 0.48, y + h * 0.85);
+                }
+                ctx.stroke();
+                
+                // Health bar
+                const barWidth = w * 0.8;
+                const barHeight = 5;
+                const barX = x + w * 0.1;
+                const barY = y - 12;
+                
+                // Background
+                ctx.fillStyle = '#2a2a2a';
+                ctx.fillRect(barX, barY, barWidth, barHeight);
+                
+                // Health
+                const healthPercent = cloud.health / cloud.maxHealth;
+                const healthColor = healthPercent > 0.6 ? '#00ff00' : (healthPercent > 0.3 ? '#ff6600' : '#ff0000');
+                ctx.fillStyle = healthColor;
+                ctx.fillRect(barX, barY, barWidth * healthPercent, barHeight);
+                
+                // Boss level indicator
+                ctx.fillStyle = '#ffd700';
+                ctx.font = '8px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText(`BOSS LV${cloud.bossLevel}`, x + w / 2, barY - 5);
+                
+            } else if (cloud.isBad) {
+                // Bad cloud - dark red
+                ctx.fillStyle = '#8b0000';
+                
+                ctx.beginPath();
+                ctx.arc(x + w * 0.2, y + h * 0.5, h * 0.4, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.4, y + h * 0.3, h * 0.5, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.6, y + h * 0.3, h * 0.5, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.8, y + h * 0.5, h * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Angry eyes
+                ctx.fillStyle = '#5a0000';
+                ctx.fillRect(x + w * 0.35, y + h * 0.4, 4, 4);
+                ctx.fillRect(x + w * 0.6, y + h * 0.4, 4, 4);
+                
+            } else {
+                // Good cloud - light
+                ctx.fillStyle = '#e8f4f8';
+                
+                ctx.beginPath();
+                ctx.arc(x + w * 0.2, y + h * 0.5, h * 0.4, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.4, y + h * 0.3, h * 0.5, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.6, y + h * 0.3, h * 0.5, 0, Math.PI * 2);
+                ctx.arc(x + w * 0.8, y + h * 0.5, h * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawExplosion(explosion) {
+            const progress = explosion.frame / explosion.maxFrames;
+            const size = explosion.size * (1 + progress);
+            const alpha = 1 - progress;
+            
+            ctx.globalAlpha = alpha;
+            
+            // Orange outer ring
+            ctx.fillStyle = '#ff6600';
+            ctx.beginPath();
+            ctx.arc(explosion.x, explosion.y, size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Yellow middle ring
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.arc(explosion.x, explosion.y, size * 0.7, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // White center
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(explosion.x, explosion.y, size * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.globalAlpha = 1;
+        }
+
+        function checkCollision(obj1, obj2) {
+            return obj1.x < obj2.x + obj2.width - 10 &&
+                   obj1.x + obj1.width > obj2.x + 10 &&
+                   obj1.y < obj2.y + obj2.height - 10 &&
+                   obj1.y + obj1.height > obj2.y + 10;
+        }
+
+        function checkBulletCloudCollision(bullet, cloud) {
+            return bullet.x < cloud.x + cloud.width &&
+                   bullet.x + bullet.width > cloud.x &&
+                   bullet.y < cloud.y + cloud.height &&
+                   bullet.y + bullet.height > cloud.y;
+        }
+
+        function update() {
+            if (gameOver) return;
+
+            updateLevel();
+
+            // Update shoot cooldown
+            if (!canShoot) {
+                shootCooldown--;
+                if (shootCooldown <= 0) {
+                    canShoot = true;
+                }
+            }
+
+            // Update combo timer
+            if (combo > 0) {
+                comboTimer--;
+                if (comboTimer <= 0) {
+                    combo = 0;
+                }
+            }
+
+            // Update screen shake
+            if (screenShake > 0) {
+                screenShake--;
+            }
+
+            // Move plane
+            if ((keys['a'] || keys['arrowleft']) && plane.x > 0) {
+                plane.x -= plane.speed;
+            }
+            if ((keys['d'] || keys['arrowright']) && plane.x < canvas.width - plane.width) {
+                plane.x += plane.speed;
+            }
+            if ((keys['w'] || keys['arrowup']) && plane.y > 0) {
+                plane.y -= plane.speed;
+                altitude += 2;
+            }
+            if ((keys['s'] || keys['arrowdown']) && plane.y < canvas.height - plane.height) {
+                plane.y += plane.speed;
+            }
+
+            score = Math.floor(altitude / 10);
+
+            // Spawn clouds
+            if (Math.random() < spawnRate) {
+                createCloud();
+            }
+
+            // Update bullets
+            bullets.forEach((bullet, index) => {
+                bullet.y -= bullet.speed;
+                if (bullet.y + bullet.height < 0) {
+                    bullets.splice(index, 1);
+                }
+            });
+
+            // Update bad clouds and check bullet collisions
+            clouds.forEach((cloud, cloudIndex) => {
+                cloud.y += cloud.speed;
+                
+                if (cloud.y > canvas.height) {
+                    clouds.splice(cloudIndex, 1);
+                    // If boss escapes, allow new boss to spawn
+                    if (cloud.isBoss) {
+                        bossSpawned = false;
+                    }
+                    return;
+                }
+                
+                // Check bullet hits
+                bullets.forEach((bullet, bulletIndex) => {
+                    if (checkBulletCloudCollision(bullet, cloud)) {
+                        bullets.splice(bulletIndex, 1);
+                        
+                        // Apply damage based on plane's firepower
+                        cloud.health -= bullet.damage;
+                        
+                        if (cloud.health <= 0) {
+                            // Cloud destroyed
+                            const points = cloud.isBoss ? (50 + (cloud.bossLevel * 25)) : 15;
+                            const comboMultiplier = combo >= 5 ? 3 : (combo >= 3 ? 2 : 1);
+                            score += points * comboMultiplier;
+                            
+                            createExplosion(cloud.x + cloud.width / 2, cloud.y + cloud.height / 2, cloud.isBoss ? 35 : 20);
+                            
+                            if (cloud.isBoss) {
+                                screenShake = 20;
+                                bossesDefeated++;
+                                bossSpawned = false; // Allow next boss
+                                altitude += 100; // Bonus altitude
+                            } else {
+                                cloudsDestroyed++; // Count regular clouds
+                            }
+                            
+                            clouds.splice(cloudIndex, 1);
+                            
+                            // Update combo
+                            combo++;
+                            comboTimer = 120; // 2 seconds at 60fps
+                        } else {
+                            // Hit but not destroyed
+                            screenShake = cloud.isBoss ? 5 : 2;
+                            createExplosion(bullet.x, bullet.y, 8); // Small hit effect
+                        }
+                    }
+                });
+                
+                // Check plane collision
+                if (checkCollision(plane, cloud)) {
+                    gameOver = true;
+                }
+            });
+
+            // Update good clouds
+            goodClouds.forEach((cloud, index) => {
+                cloud.y += cloud.speed;
+                
+                if (cloud.y > canvas.height) {
+                    goodClouds.splice(index, 1);
+                    return;
+                }
+                
+                // Check if plane passes through
+                if (checkCollision(plane, cloud)) {
+                    score += 5;
+                    goodClouds.splice(index, 1);
+                }
+            });
+
+            // Update explosions
+            explosions.forEach((explosion, index) => {
+                explosion.frame++;
+                if (explosion.frame >= explosion.maxFrames) {
+                    explosions.splice(index, 1);
+                }
+            });
+        }
+
+        function draw() {
+            // Apply screen shake
+            let shakeX = 0;
+            let shakeY = 0;
+            if (screenShake > 0) {
+                shakeX = (Math.random() - 0.5) * screenShake;
+                shakeY = (Math.random() - 0.5) * screenShake;
+            }
+            
+            ctx.save();
+            ctx.translate(shakeX, shakeY);
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#9bbc0f');
+            gradient.addColorStop(1, '#7bac0f');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (gameOver) {
+                ctx.fillStyle = '#0f380f';
+                ctx.font = '20px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 30);
+                ctx.font = '14px "Press Start 2P"';
+                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
+                ctx.font = '10px "Press Start 2P"';
+                ctx.fillText('TAP TO RETRY', canvas.width / 2, canvas.height / 2 + 50);
+                ctx.restore();
+                return;
+            }
+
+            // Draw game objects
+            goodClouds.forEach(drawCloud);
+            clouds.forEach(drawCloud);
+            bullets.forEach(drawBullet);
+            explosions.forEach(drawExplosion);
+            drawPlane();
+
+            // HUD - Top Left
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '11px "Press Start 2P"';
+            ctx.textAlign = 'left';
+            ctx.fillText(`LV:${level}`, 10, 25);
+            ctx.fillText(`SCORE:${score}`, 10, 45);
+            ctx.font = '9px "Press Start 2P"';
+            ctx.fillText(`CLOUDS:${cloudsDestroyed}`, 10, 62);
+            
+            // Progress to next boss
+            const cloudsToNextBoss = CLOUDS_PER_BOSS - (cloudsDestroyed % CLOUDS_PER_BOSS);
+            ctx.fillStyle = cloudsToNextBoss <= 3 ? '#ff0000' : '#0f380f';
+            ctx.fillText(`BOSS IN:${cloudsToNextBoss}`, 10, 77);
+            
+            // Ammo indicator
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '9px "Press Start 2P"';
+            ctx.fillText(`AMMO:`, 10, 94);
+            for (let i = 0; i < maxBullets; i++) {
+                if (i < bullets.length) {
+                    ctx.fillStyle = '#8b0000';
+                } else {
+                    ctx.fillStyle = '#ffd700';
+                }
+                ctx.fillRect(55 + i * 11, 85, 8, 8);
+            }
+            
+            // Power indicator
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '9px "Press Start 2P"';
+            ctx.fillText(`POW:${plane.firepower}`, 10, 111);
+
+            // HUD - Top Right
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '11px "Press Start 2P"';
+            
+            // Boss counter
+            ctx.fillText(`BOSS:${bossesDefeated}`, canvas.width - 10, 25);
+            
+            if (combo > 0) {
+                const comboColor = combo >= 5 ? '#ff0000' : (combo >= 3 ? '#ff6600' : '#ffd700');
+                ctx.fillStyle = comboColor;
+                ctx.font = combo >= 3 ? '13px "Press Start 2P"' : '11px "Press Start 2P"';
+                ctx.fillText(`COMBO x${combo}`, canvas.width - 10, 50);
+                
+                // Combo multiplier indicator
+                if (combo >= 3) {
+                    ctx.font = '9px "Press Start 2P"';
+                    const multiplier = combo >= 5 ? '3X POINTS!' : '2X POINTS!';
+                    ctx.fillText(multiplier, canvas.width - 10, 68);
+                }
+            }
+
+            // Boss warning when close
+            if (cloudsToNextBoss <= 3 && !bossSpawned) {
+                ctx.fillStyle = '#ff0000';
+                ctx.font = '16px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                const alpha = (Math.floor(Date.now() / 300) % 2) ? 1 : 0.4;
+                ctx.globalAlpha = alpha;
+                ctx.fillText('BOSS INCOMING!', canvas.width / 2, canvas.height / 2);
+                ctx.globalAlpha = 1;
+            }
+
+            // Level up indicator
+            if (cloudsDestroyed > 0 && cloudsDestroyed % 10 < 2) {
+                ctx.fillStyle = '#ffd700';
+                ctx.font = '14px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('LEVEL UP!', canvas.width / 2, 100);
+                ctx.font = '9px "Press Start 2P"';
+                ctx.fillText('POWER BOOST!', canvas.width / 2, 118);
+            }
+
+            ctx.restore();
+        }
+
+        function gameLoop() {
+            if (!gameStarted || gameOver) {
+                if (gameOver) draw();
+                return;
+            }
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
     </script>
 </body>
 </html>

@@ -3,501 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dream Catcher - X'PAT</title>
+    <title>Dream Catcher - Game Boy Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         html, body {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            position: fixed;
-            touch-action: none;
         }
 
         body {
             font-family: 'Press Start 2P', cursive;
-            background: linear-gradient(135deg, #000814 0%, #001233 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #FFF;
+            touch-action: none;
+            position: fixed;
         }
 
-        .game-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100vh;
+        .gameboy-container {
+            background: linear-gradient(135deg, #8B9DC3 0%, #6B7DA1 100%);
+            border-radius: 20px 20px 40px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+            width: 90vw;
+            max-width: 600px;
+            max-height: 95vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow: hidden;
+            padding: clamp(15px, 3vh, 30px);
+            overflow-y: auto;
         }
 
-        .branding {
-            text-align: center;
-            padding: 8px;
-            background: rgba(0, 0, 0, 0.8);
-            animation: glow 2s ease-in-out infinite;
+        .screen-bezel {
+            background: #2a2a2a;
+            padding: clamp(10px, 2vh, 20px);
+            border-radius: 10px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: clamp(15px, 3vh, 30px);
             flex-shrink: 0;
         }
 
-        .brand-logos {
+        .screen-header {
             display: flex;
-            justify-content: center;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-bottom: 6px;
+            justify-content: space-between;
+            color: #666;
+            font-size: clamp(6px, 1.2vh, 8px);
+            margin-bottom: clamp(5px, 1vh, 10px);
+            padding: 0 5px;
         }
 
-        .brand-tag {
-            background: linear-gradient(135deg, #0118D8, #1B56FD);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 7px;
-            border: 2px solid #FFD700;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .game-title {
-            font-size: 14px;
-            color: #FFD700;
-            text-shadow: 2px 2px 0 #000;
-        }
-
-        @keyframes glow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        .game-container {
-            position: relative;
+        .game-screen {
+            background: #9bbc0f;
             width: 100%;
-            max-width: 800px;
-            aspect-ratio: 16/9;
-            margin: auto;
+            aspect-ratio: 4/3;
+            position: relative;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 0;
+            border: 3px solid #1a1a1a;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
         }
 
         canvas {
-            display: block;
-            max-width: 100%;
-            max-height: 100%;
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            background: linear-gradient(180deg, #001233 0%, #000814 100%);
-        }
-
-        .hud {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            right: 8px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 9px;
-            color: #FFD700;
-            text-shadow: 2px 2px 0 #000;
-            z-index: 10;
-            pointer-events: none;
-            gap: 4px;
-        }
-
-        .stat {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 5px 8px;
-            border-radius: 6px;
-            border: 2px solid #FFD700;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        /* Legend/Guide */
-        .game-legend {
-            position: absolute;
-            top: 50px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid #FFD700;
-            border-radius: 8px;
-            padding: 8px;
-            font-size: 7px;
-            color: #FFF;
-            z-index: 10;
-            pointer-events: none;
-            max-width: 120px;
-        }
-
-        .legend-title {
-            color: #FFD700;
-            margin-bottom: 6px;
-            text-align: center;
-            font-size: 8px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 6px;
-            line-height: 1.3;
-        }
-
-        .legend-icon {
-            flex-shrink: 0;
-        }
-
-        .legend-star {
-            width: 16px;
-            height: 16px;
-            position: relative;
-        }
-
-        .legend-obstacle {
-            width: 16px;
-            height: 16px;
-            background: #FF0000;
-            border: 2px solid #8B0000;
-            border-radius: 2px;
-        }
-
-        .legend-shield {
-            width: 16px;
-            height: 16px;
-            background: #00FF00;
-            border: 2px solid #00AA00;
-            border-radius: 50%;
-        }
-
-        .legend-bonus {
-            width: 16px;
-            height: 16px;
-            background: #FF1493;
-            border: 2px solid #C71585;
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .legend-bonus::before,
-        .legend-bonus::after {
-            content: '';
-            position: absolute;
-            background: #FF1493;
-            border-radius: 50%;
-        }
-
-        .legend-bonus::before {
-            width: 8px;
-            height: 8px;
-            top: -3px;
-            left: 1px;
-        }
-
-        .legend-bonus::after {
-            width: 8px;
-            height: 8px;
-            top: -3px;
-            right: 1px;
-        }
-
-        .legend-text {
-            flex: 1;
-        }
-
-        /* Mobile D-Pad Controls */
-        .mobile-controls {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 320px;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-            z-index: 1000;
-            pointer-events: auto;
-        }
-
-        .dpad-container {
-            display: flex;
-            gap: 20px;
-        }
-
-        .dpad-btn {
-            width: 60px;
-            height: 60px;
-            background: rgba(1, 24, 216, 0.7);
-            border: 2px solid #FFD700;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: #FFD700;
-            cursor: pointer;
-            user-select: none;
+            display: block;
+            image-rendering: pixelated;
             touch-action: none;
         }
 
-        /* Media queries for responsiveness */
-        @media (max-width: 768px) {
-            .mobile-controls {
-                bottom: 10px;
-            }
-
-            .dpad-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-            }
+        .brand {
+            text-align: center;
+            color: #333;
+            font-size: clamp(10px, 2vh, 14px);
+            margin: clamp(10px, 2vh, 20px) 0;
+            letter-spacing: 2px;
+            flex-shrink: 0;
         }
 
-        @media (max-height: 600px) and (orientation: landscape) {
-            .mobile-controls {
-                bottom: 5px;
-            }
-
-            .dpad-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
+        .controls-hint {
+            background: rgba(0, 0, 0, 0.2);
+            padding: clamp(10px, 2vh, 15px);
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+            font-size: clamp(6px, 1.2vh, 8px);
+            line-height: 1.8;
+            margin-bottom: clamp(15px, 2vh, 25px);
+            flex-shrink: 0;
         }
 
-        /* Show controls only on touch devices */
-        @media (hover: none) and (pointer: coarse) {
-            .mobile-controls {
-                display: flex;
-            }
+        /* D-PAD - Always visible, part of console */
+        .console-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: clamp(10px, 2vh, 20px) 0;
+            flex-shrink: 0;
         }
 
-        .game-over-screen, .start-screen {
+        .dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: clamp(3px, 0.5vh, 5px);
+            background: rgba(0, 0, 0, 0.3);
+            padding: clamp(8px, 1.5vh, 10px);
+            border-radius: 15px;
+            box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.4);
+            width: clamp(150px, 25vw, 190px);
+            height: clamp(150px, 25vw, 190px);
+        }
+
+        .dpad-btn {
+            background: linear-gradient(145deg, #4a4a4a 0%, #2a2a2a 100%);
+            border: 2px solid #5a5a5a;
+            border-radius: clamp(8px, 1.5vh, 10px);
+            color: #fff;
+            font-size: clamp(16px, 3vh, 24px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            touch-action: none;
+            transition: all 0.1s;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .dpad-btn:active {
+            background: linear-gradient(145deg, #666 0%, #444 100%);
+            transform: scale(0.95);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .dpad-btn.empty {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .start-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: #9bbc0f;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            padding: 20px;
-            z-index: 100;
+            color: #0f380f;
+            z-index: 10;
+            cursor: pointer;
         }
 
-        .game-over-screen.hidden, .start-screen.hidden {
+        .start-screen.hidden {
             display: none;
         }
 
-        .screen-title {
-            font-size: 22px;
-            color: #FFD700;
-            text-shadow: 3px 3px 0 #000;
-            margin-bottom: 12px;
-            animation: pulse 1s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .instructions {
-            font-size: 8px;
-            line-height: 1.8;
-            margin-bottom: 12px;
-            color: #FFF;
-            max-width: 90%;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #000;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
-            margin: 5px;
-            touch-action: manipulation;
-        }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .final-score {
-            font-size: 18px;
-            color: #FFD700;
-            margin-bottom: 12px;
-        }
-
-        .controls-hint {
-            margin-top: 8px;
-            font-size: 7px;
-            color: #AAA;
+        .game-title {
+            font-size: clamp(12px, 3vh, 18px);
+            margin-bottom: clamp(20px, 4vh, 30px);
             text-align: center;
+            padding: 0 20px;
+            line-height: 1.5;
         }
 
-        .level-up {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 28px;
-            color: #FFD700;
-            text-shadow: 3px 3px 0 #000;
-            animation: levelUpAnim 1s ease-out forwards;
-            pointer-events: none;
-            z-index: 50;
+        .start-instruction {
+            font-size: clamp(8px, 1.8vh, 11px);
+            animation: blink 1s infinite;
         }
 
-        @keyframes levelUpAnim {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
 
-        @media (max-width: 768px) {
-            .game-title { font-size: 11px; }
-            .brand-tag { font-size: 6px; padding: 3px 6px; }
-            .screen-title { font-size: 16px; }
-            .instructions { font-size: 7px; }
-            .btn { font-size: 9px; padding: 10px 20px; }
-            .hud { font-size: 8px; }
-            .stat { padding: 4px 6px; }
-            .dpad-container { width: 160px; height: 160px; }
-            .dpad-btn { width: 50px; height: 50px; font-size: 20px; }
-            .dpad-center { width: 40px; height: 40px; }
+        /* Landscape mode optimization */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .gameboy-container {
+                flex-direction: row;
+                max-width: 95vw;
+                padding: 2vh 3vw;
+            }
+
+            .screen-section {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .controls-section {
+                flex: 0 0 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-left: 2vw;
+            }
+
+            .screen-bezel {
+                margin-bottom: 1vh;
+            }
+
+            .brand {
+                margin: 1vh 0;
+                font-size: clamp(8px, 1.5vh, 12px);
+            }
+
+            .controls-hint {
+                margin-bottom: 1vh;
+                padding: 1vh;
+                font-size: clamp(5px, 1vh, 7px);
+            }
+
+            .console-controls {
+                padding: 0;
+            }
+
+            .dpad {
+                width: clamp(120px, 18vw, 160px);
+                height: clamp(120px, 18vw, 160px);
+            }
         }
 
-        @media (max-width: 480px) {
-            .branding { padding: 5px; }
-            .game-title { font-size: 9px; }
-            .brand-tag { font-size: 5px; padding: 2px 5px; }
-            .screen-title { font-size: 14px; }
-            .dpad-container { width: 140px; height: 140px; }
-            .dpad-btn { width: 45px; height: 45px; font-size: 18px; }
-            .dpad-center { width: 35px; height: 35px; }
-            .game-legend { font-size: 5px; padding: 6px; }
+        /* Very small screens */
+        @media (max-width: 360px) and (orientation: portrait) {
+            .dpad {
+                width: 140px;
+                height: 140px;
+            }
+
+            .dpad-btn {
+                font-size: 18px;
+            }
         }
 
-        @media (orientation: landscape) and (max-height: 500px) {
-            .branding { padding: 3px; }
-            .game-title { font-size: 8px; margin-bottom: 2px; }
-            .brand-logos { margin-bottom: 3px; gap: 4px; }
-            .brand-tag { font-size: 5px; padding: 2px 4px; }
-            .hud { font-size: 7px; top: 5px; }
-            .mobile-controls { bottom: 5px; left: 5px; transform: scale(0.6); }
-            .dpad-container { width: 80px; height: 80px; }
-            .dpad-btn { width: 25px; height: 25px; font-size: 10px; }
-            .dpad-center { width: 18px; height: 18px; }
-            .game-legend { font-size: 6px; padding: 5px; top: 40px; }
+        /* Tablets in portrait */
+        @media (min-width: 768px) and (orientation: portrait) {
+            .gameboy-container {
+                max-width: 500px;
+            }
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .gameboy-container::-webkit-scrollbar {
+            width: 0;
+            display: none;
+        }
+
+        .gameboy-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 <body>
-    <div class="game-wrapper">
-        <div class="branding">
-            <div class="brand-logos">
-                <div class="brand-tag">X'PAT</div>
-                <div class="brand-tag">TFP</div>
-                <div class="brand-tag">MobilityOne</div>
-                <div class="brand-tag">MiPAY</div>
+    <div class="gameboy-container">
+        <div class="screen-section">
+            <!-- Screen Section -->
+            <div class="screen-bezel">
+                <div class="screen-header">
+                    <span>◀ POWER ON</span>
+                    <span>BATTERY FULL ▶</span>
+                </div>
+                <div class="game-screen">
+                    <div class="start-screen" id="startScreen">
+                        <div class="game-title">DREAM<br>CATCHER</div>
+                        <div class="start-instruction">TAP TO START</div>
+                    </div>
+                    <canvas id="gameCanvas"></canvas>
+                </div>
             </div>
-            <div class="game-title">DREAM CATCHER</div>
+            
+            <!-- Branding -->
+            <div class="brand">GAME BOY ADVANCE SP</div>
+            
+            <!-- Controls Instructions -->
+            <div class="controls-hint">
+                DESKTOP: WASD / ARROWS<br>
+                MOBILE: TOUCH D-PAD<br>
+                CATCH STARS ★ AVOID ●
+            </div>
         </div>
 
-        <div class="game-container">
-            <canvas id="gameCanvas" width="600" height="800"></canvas>
-            
-            <div class="hud">
-                <div class="stat">SCORE: <span id="score">0</span></div>
-                <div class="stat">❤️ <span id="lives">3</span></div>
-                <div class="stat">LV: <span id="level">1</span></div>
-            </div>
-
-            <!-- Game Legend -->
-            <div class="game-legend">
-                <div class="legend-title">GUIDE</div>
-                <div class="legend-item">
-                    <div class="legend-icon">
-                        <svg class="legend-star" viewBox="0 0 16 16">
-                            <polygon points="8,2 10,6 14,7 11,10 12,14 8,12 4,14 5,10 2,7 6,6" fill="#FFD700" stroke="#FFA500" stroke-width="1"/>
-                        </svg>
-                    </div>
-                    <div class="legend-text">+10pts<br>Star</div>
+        <div class="controls-section">
+            <!-- D-PAD Controls - Always visible -->
+            <div class="console-controls">
+                <div class="dpad">
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="w">▲</div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="a">◀</div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="d">▶</div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="s">▼</div>
+                    <div class="dpad-btn empty"></div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-icon">
-                        <div class="legend-obstacle"></div>
-                    </div>
-                    <div class="legend-text">-1 Life<br>Danger</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-icon">
-                        <div class="legend-shield"></div>
-                    </div>
-                    <div class="legend-text">Shield<br>3 sec</div>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-icon">
-                        <div class="legend-bonus"></div>
-                    </div>
-                    <div class="legend-text">+1 Life<br>Heart</div>
-                </div>
-            </div>
-
-            <!-- Mobile D-Pad Controls -->
-            <div class="mobile-controls">
-                <div class="dpad-container">
-                    <div class="dpad-btn dpad-up" id="btnUp">▲</div>
-                    <div class="dpad-btn dpad-down" id="btnDown">▼</div>
-                    <div class="dpad-btn dpad-left" id="btnLeft">◄</div>
-                    <div class="dpad-btn dpad-right" id="btnRight">►</div>
-                    <div class="dpad-center"></div>
-                </div>
-            </div>
-
-            <div class="start-screen" id="startScreen">
-                <div class="screen-title">DREAM CATCHER</div>
-                <div class="instructions">
-                    ⭐ GOLD STAR = +10 Points<br>
-                    ⬛ RED SQUARE = Lose Life<br>
-                    🟢 GREEN CIRCLE = Shield<br>
-                    💗 PINK HEART = +1 Life<br><br>
-                    🎮 Desktop: WASD / Arrows<br>
-                    📱 Mobile: D-Pad Controls<br><br>
-                    Game speeds up each level!
-                </div>
-                <button class="btn" onclick="startGame()">START GAME</button>
-                <div class="controls-hint">Powered by X'PAT | Your Journey Starts Here</div>
-            </div>
-
-            <div class="game-over-screen hidden" id="gameOverScreen">
-                <div class="screen-title">GAME OVER</div>
-                <div class="final-score">SCORE: <span id="finalScore">0</span></div>
-                <button class="btn" onclick="restartGame()">PLAY AGAIN</button>
-                <div class="controls-hint">Keep dreaming with X'PAT!</div>
             </div>
         </div>
     </div>
@@ -505,432 +314,287 @@
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
 
-        // Responsive canvas
-        function resizeCanvas() {
-            const container = canvas.parentElement;
-            const rect = container.getBoundingClientRect();
-            const aspectRatio = 600 / 800;
-            
-            let width = rect.width;
-            let height = rect.height;
-            
-            if (width / height > aspectRatio) {
-                width = height * aspectRatio;
-            } else {
-                height = width / aspectRatio;
-            }
-            
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
-        }
-        
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        window.addEventListener('orientationchange', () => {
-            setTimeout(resizeCanvas, 100);
-        });
+        canvas.width = 480;
+        canvas.height = 360;
 
-        // Game state
-        let gameState = 'start';
+        let gameStarted = false;
+        let gameOver = false;
         let score = 0;
-        let lives = 3;
         let level = 1;
-        let baseSpeed = 2.5;
-        let gameSpeed = baseSpeed;
-
-        // Player
-        const player = {
-            x: 270,
-            y: 700,
-            width: 60,
-            height: 20,
-            speed: 7,
-            color: '#1B56FD'
+        let speedMultiplier = 1;
+        let player = {
+            x: canvas.width / 2 - 20,
+            y: canvas.height - 60,
+            width: 40,
+            height: 40,
+            baseSpeed: 5,
+            speed: 5
         };
 
-        // Input handling - keyboard
-        const keys = {};
+        let stars = [];
+        let obstacles = [];
+        let keys = {};
+        let spawnRate = {
+            star: 0.02,
+            obstacle: 0.015
+        };
 
+        // Keyboard controls
         document.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-            if (gameState === 'start' && (e.key === ' ' || e.key === 'Enter')) {
-                e.preventDefault();
-                startGame();
+            keys[e.key.toLowerCase()] = true;
+            if (e.code === 'Space' && !gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                gameLoop();
             }
-            if (gameState === 'gameOver' && (e.key === ' ' || e.key === 'Enter')) {
-                e.preventDefault();
-                restartGame();
+            if (e.code === 'Space' && gameOver) {
+                resetGame();
             }
         });
-        document.addEventListener('keyup', (e) => keys[e.key] = false);
 
-        // Mobile D-Pad Controls
-        const dpadButtons = {
-            up: false,
-            down: false,
-            left: false,
-            right: false
-        };
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
 
-        function setupDpadButton(id, direction) {
-            const btn = document.getElementById(id);
-            
+        // Touch controls for D-pad
+        const dpadButtons = document.querySelectorAll('.dpad-btn[data-key]');
+        
+        dpadButtons.forEach(btn => {
+            // Touch events
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
-                dpadButtons[direction] = true;
+                const key = btn.getAttribute('data-key');
+                keys[key] = true;
             });
             
             btn.addEventListener('touchend', (e) => {
                 e.preventDefault();
-                dpadButtons[direction] = false;
+                const key = btn.getAttribute('data-key');
+                keys[key] = false;
+            });
+
+            // Mouse events for desktop testing
+            btn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                const key = btn.getAttribute('data-key');
+                keys[key] = true;
             });
             
-            btn.addEventListener('touchcancel', (e) => {
+            btn.addEventListener('mouseup', (e) => {
                 e.preventDefault();
-                dpadButtons[direction] = false;
+                const key = btn.getAttribute('data-key');
+                keys[key] = false;
             });
+
+            btn.addEventListener('mouseleave', (e) => {
+                const key = btn.getAttribute('data-key');
+                keys[key] = false;
+            });
+        });
+
+        // Start game on tap/click
+        startScreen.addEventListener('click', () => {
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                gameLoop();
+            } else if (gameOver) {
+                resetGame();
+            }
+        });
+
+        startScreen.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                gameLoop();
+            } else if (gameOver) {
+                resetGame();
+            }
+        });
+
+        function resetGame() {
+            gameOver = false;
+            score = 0;
+            level = 1;
+            speedMultiplier = 1;
+            stars = [];
+            obstacles = [];
+            player.x = canvas.width / 2 - 20;
+            player.y = canvas.height - 60;
+            player.speed = player.baseSpeed;
+            spawnRate.star = 0.02;
+            spawnRate.obstacle = 0.015;
+            startScreen.classList.remove('hidden');
+            gameStarted = false;
         }
 
-        setupDpadButton('btnUp', 'up');
-        setupDpadButton('btnDown', 'down');
-        setupDpadButton('btnLeft', 'left');
-        setupDpadButton('btnRight', 'right');
-
-        // Game objects
-        let stars = [];
-        let obstacles = [];
-        let powerups = [];
-        let particles = [];
-
-        // Particle system
-        function createParticles(x, y, color, count = 10) {
-            for (let i = 0; i < count; i++) {
-                particles.push({
-                    x, y,
-                    vx: (Math.random() - 0.5) * 5,
-                    vy: (Math.random() - 0.5) * 5,
-                    life: 1,
-                    color
-                });
+        function updateLevel() {
+            const newLevel = Math.floor(score / 100) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                // Increase speed multiplier by 15% each level
+                speedMultiplier = 1 + (level - 1) * 0.15;
+                // Update player speed
+                player.speed = player.baseSpeed * speedMultiplier;
+                // Increase spawn rates
+                spawnRate.star = Math.min(0.02 + (level - 1) * 0.005, 0.05);
+                spawnRate.obstacle = Math.min(0.015 + (level - 1) * 0.004, 0.04);
             }
         }
 
-        // Spawn objects with scaled speed
-        function spawnStar() {
+        function createStar() {
             stars.push({
-                x: Math.random() * (canvas.width - 30) + 15,
-                y: -30,
-                size: 25,
-                speed: gameSpeed * (0.8 + Math.random() * 0.4)
+                x: Math.random() * (canvas.width - 20),
+                y: -20,
+                size: 20,
+                speed: (2 + Math.random() * 2) * speedMultiplier
             });
         }
 
-        function spawnObstacle() {
+        function createObstacle() {
             obstacles.push({
-                x: Math.random() * (canvas.width - 40) + 20,
-                y: -40,
-                width: 40,
-                height: 40,
-                speed: gameSpeed * (1 + Math.random() * 0.5)
-            });
-        }
-
-        function spawnPowerup() {
-            const type = Math.random() > 0.5 ? 'shield' : 'life';
-            powerups.push({
-                x: Math.random() * (canvas.width - 30) + 15,
+                x: Math.random() * (canvas.width - 30),
                 y: -30,
                 size: 30,
-                speed: gameSpeed * 0.7,
-                type: type
+                speed: (3 + Math.random() * 2) * speedMultiplier
             });
         }
 
-        // Game loop
-        let lastSpawn = { star: 0, obstacle: 0, powerup: 0 };
-        let shieldActive = false;
-        let shieldTime = 0;
+        function drawPlayer() {
+            // Simple basket/catcher
+            ctx.fillStyle = '#0f380f';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.fillStyle = '#306230';
+            ctx.fillRect(player.x + 5, player.y + 5, player.width - 10, player.height - 10);
+        }
+
+        function drawStar(star) {
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+                const x = star.x + Math.cos(angle) * star.size;
+                const y = star.y + Math.sin(angle) * star.size;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function drawObstacle(obstacle) {
+            ctx.fillStyle = '#8b0000';
+            ctx.beginPath();
+            ctx.arc(obstacle.x, obstacle.y, obstacle.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function checkCollision(obj1, obj2, obj2Size) {
+            return obj1.x < obj2.x + obj2Size &&
+                   obj1.x + obj1.width > obj2.x &&
+                   obj1.y < obj2.y + obj2Size &&
+                   obj1.y + obj1.height > obj2.y;
+        }
 
         function update() {
-            if (gameState !== 'playing') return;
+            if (gameOver) return;
 
-            // Keyboard controls
-            if (keys['ArrowLeft'] || keys['a'] || keys['A'] || dpadButtons.left) {
-                player.x = Math.max(0, player.x - player.speed);
-            }
-            if (keys['ArrowRight'] || keys['d'] || keys['D'] || dpadButtons.right) {
-                player.x = Math.min(canvas.width - player.width, player.x + player.speed);
-            }
-            if (keys['ArrowUp'] || keys['w'] || keys['W'] || dpadButtons.up) {
-                player.y = Math.max(0, player.y - player.speed);
-            }
-            if (keys['ArrowDown'] || keys['s'] || keys['S'] || dpadButtons.down) {
-                player.y = Math.min(canvas.height - player.height, player.y + player.speed);
-            }
+            // Update level based on score
+            updateLevel();
 
-            // Shield timer
-            if (shieldActive) {
-                shieldTime--;
-                if (shieldTime <= 0) shieldActive = false;
+            // Move player
+            if ((keys['a'] || keys['arrowleft']) && player.x > 0) {
+                player.x -= player.speed;
+            }
+            if ((keys['d'] || keys['arrowright']) && player.x < canvas.width - player.width) {
+                player.x += player.speed;
+            }
+            if ((keys['w'] || keys['arrowup']) && player.y > 0) {
+                player.y -= player.speed;
+            }
+            if ((keys['s'] || keys['arrowdown']) && player.y < canvas.height - player.height) {
+                player.y += player.speed;
             }
 
-            // Spawn objects with adjusted timing
-            const now = Date.now();
-            const starInterval = Math.max(600, 1000 - (level * 50));
-            const obstacleInterval = Math.max(800, 1500 - (level * 80));
-            
-            if (now - lastSpawn.star > starInterval) {
-                spawnStar();
-                lastSpawn.star = now;
-            }
-            if (now - lastSpawn.obstacle > obstacleInterval) {
-                spawnObstacle();
-                lastSpawn.obstacle = now;
-            }
-            if (now - lastSpawn.powerup > 8000) {
-                spawnPowerup();
-                lastSpawn.powerup = now;
-            }
+            // Spawn items with dynamic rates
+            if (Math.random() < spawnRate.star) createStar();
+            if (Math.random() < spawnRate.obstacle) createObstacle();
 
             // Update stars
-            stars = stars.filter(star => {
+            stars.forEach((star, index) => {
                 star.y += star.speed;
-                if (checkCollision(player, { x: star.x, y: star.y, width: star.size, height: star.size })) {
-                    score += 10 * level;
-                    createParticles(star.x + star.size/2, star.y + star.size/2, '#FFD700', 15);
-                    checkLevelUp();
-                    return false;
+                if (star.y > canvas.height) {
+                    stars.splice(index, 1);
                 }
-                return star.y < canvas.height + 50;
+                if (checkCollision(player, star, star.size * 2)) {
+                    score += 10;
+                    stars.splice(index, 1);
+                }
             });
 
             // Update obstacles
-            obstacles = obstacles.filter(obs => {
-                obs.y += obs.speed;
-                if (checkCollision(player, obs)) {
-                    if (!shieldActive) {
-                        lives--;
-                        createParticles(player.x + player.width/2, player.y + player.height/2, '#FF0000', 20);
-                        if (lives <= 0) {
-                            gameOver();
-                        }
-                    } else {
-                        createParticles(obs.x + obs.width/2, obs.y + obs.height/2, '#00FF00', 15);
-                    }
-                    return false;
+            obstacles.forEach((obstacle, index) => {
+                obstacle.y += obstacle.speed;
+                if (obstacle.y > canvas.height) {
+                    obstacles.splice(index, 1);
                 }
-                return obs.y < canvas.height + 50;
-            });
-
-            // Update powerups
-            powerups = powerups.filter(pu => {
-                pu.y += pu.speed;
-                if (checkCollision(player, { x: pu.x, y: pu.y, width: pu.size, height: pu.size })) {
-                    if (pu.type === 'shield') {
-                        shieldActive = true;
-                        shieldTime = 180;
-                        createParticles(pu.x + pu.size/2, pu.y + pu.size/2, '#00FF00', 15);
-                    } else {
-                        lives = Math.min(lives + 1, 9); // Max 9 lives
-                        createParticles(pu.x + pu.size/2, pu.y + pu.size/2, '#FF1493', 15);
-                    }
-                    return false;
+                if (checkCollision(player, obstacle, obstacle.size)) {
+                    gameOver = true;
                 }
-                return pu.y < canvas.height + 50;
             });
-
-            // Update particles
-            particles = particles.filter(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-                p.life -= 0.02;
-                return p.life > 0;
-            });
-
-            updateHUD();
-        }
-
-        function checkCollision(a, b) {
-            return a.x < b.x + b.width &&
-                   a.x + a.width > b.x &&
-                   a.y < b.y + b.height &&
-                   a.y + a.height > b.y;
-        }
-
-        let lastLevel = 1;
-        function checkLevelUp() {
-            const newLevel = Math.floor(score / 100) + 1;
-            if (newLevel > lastLevel) {
-                level = newLevel;
-                lastLevel = level;
-                gameSpeed = baseSpeed + (level - 1) * 0.8;
-                showLevelUp();
-            }
-        }
-
-        function showLevelUp() {
-            const levelUpDiv = document.createElement('div');
-            levelUpDiv.className = 'level-up';
-            levelUpDiv.textContent = `LEVEL ${level}!`;
-            document.querySelector('.game-container').appendChild(levelUpDiv);
-            setTimeout(() => levelUpDiv.remove(), 1000);
         }
 
         function draw() {
-            // Clear with gradient
-            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, '#001233');
-            gradient.addColorStop(1, '#000814');
-            ctx.fillStyle = gradient;
+            // Game Boy green background
+            ctx.fillStyle = '#9bbc0f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Animated stars background
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-            for (let i = 0; i < 80; i++) {
-                const x = (i * 137.5 + Date.now() * 0.01) % canvas.width;
-                const y = (i * 47.3) % canvas.height;
-                ctx.fillRect(x, y, 2, 2);
+            if (gameOver) {
+                ctx.fillStyle = '#0f380f';
+                ctx.font = '20px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 30);
+                ctx.font = '14px "Press Start 2P"';
+                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
+                ctx.font = '10px "Press Start 2P"';
+                ctx.fillText('TAP TO RETRY', canvas.width / 2, canvas.height / 2 + 50);
+                return;
             }
 
-            if (gameState !== 'playing') return;
+            // Draw game objects
+            stars.forEach(drawStar);
+            obstacles.forEach(drawObstacle);
+            drawPlayer();
 
-            // Draw particles
-            particles.forEach(p => {
-                ctx.globalAlpha = p.life;
-                ctx.fillStyle = p.color;
-                ctx.fillRect(p.x, p.y, 4, 4);
-            });
-            ctx.globalAlpha = 1;
-
-            // Draw stars (gold 5-pointed stars)
-            stars.forEach(star => {
-                ctx.fillStyle = '#FFD700';
-                ctx.beginPath();
-                for (let i = 0; i < 5; i++) {
-                    const angle = (i * 144 - 90) * Math.PI / 180;
-                    const x = star.x + star.size/2 + Math.cos(angle) * star.size/2;
-                    const y = star.y + star.size/2 + Math.sin(angle) * star.size/2;
-                    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-                }
-                ctx.closePath();
-                ctx.fill();
-                ctx.strokeStyle = '#FFA500';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            });
-
-            // Draw obstacles (red squares)
-            obstacles.forEach(obs => {
-                ctx.fillStyle = '#FF0000';
-                ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
-                ctx.strokeStyle = '#8B0000';
-                ctx.lineWidth = 3;
-                ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
-            });
-
-            // Draw powerups (circles with indicators)
-            powerups.forEach(pu => {
-                // Circle
-                if (pu.type === 'shield') {
-                    // Green circle for shield
-                    ctx.fillStyle = '#00FF00';
-                    ctx.beginPath();
-                    ctx.arc(pu.x + pu.size/2, pu.y + pu.size/2, pu.size/2, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.strokeStyle = '#00AA00';
-                    ctx.lineWidth = 3;
-                    ctx.stroke();
-                } else {
-                    // Pink heart for extra life
-                    ctx.fillStyle = '#FF1493';
-                    ctx.beginPath();
-                    // Draw heart shape
-                    const cx = pu.x + pu.size/2;
-                    const cy = pu.y + pu.size/2;
-                    const size = pu.size/2.5;
-                    
-                    ctx.moveTo(cx, cy + size/4);
-                    ctx.bezierCurveTo(cx, cy - size/4, cx - size, cy - size/4, cx - size, cy + size/4);
-                    ctx.bezierCurveTo(cx - size, cy + size/2, cx, cy + size, cx, cy + size);
-                    ctx.bezierCurveTo(cx, cy + size, cx + size, cy + size/2, cx + size, cy + size/4);
-                    ctx.bezierCurveTo(cx + size, cy - size/4, cx, cy - size/4, cx, cy + size/4);
-                    ctx.fill();
-                    
-                    ctx.strokeStyle = '#C71585';
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                }
-            });
-
-            // Draw player with shield
-            if (shieldActive) {
-                ctx.strokeStyle = '#00FF00';
-                ctx.lineWidth = 4;
-                ctx.beginPath();
-                ctx.arc(player.x + player.width/2, player.y + player.height/2, 35, 0, Math.PI * 2);
-                ctx.stroke();
+            // Draw score and level
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '14px "Press Start 2P"';
+            ctx.textAlign = 'left';
+            ctx.fillText(`LV:${level}`, 10, 30);
+            ctx.fillText(`SCORE:${score}`, 10, 55);
+            
+            // Show level up indicator
+            if (score > 0 && score % 100 < 20) {
+                ctx.fillStyle = '#ffd700';
+                ctx.font = '10px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('SPEED UP!', canvas.width / 2, 30);
             }
-            
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            ctx.fillStyle = '#0118D8';
-            ctx.fillRect(player.x + 5, player.y + 5, player.width - 10, player.height - 10);
-            
-            ctx.fillStyle = '#FFD700';
-            ctx.fillRect(player.x + 15, player.y + 7, 8, 8);
-            ctx.fillRect(player.x + 37, player.y + 7, 8, 8);
         }
 
         function gameLoop() {
+            if (!gameStarted || gameOver) {
+                if (gameOver) draw();
+                return;
+            }
             update();
             draw();
             requestAnimationFrame(gameLoop);
         }
-
-        function updateHUD() {
-            document.getElementById('score').textContent = score;
-            document.getElementById('lives').textContent = lives;
-            document.getElementById('level').textContent = level;
-        }
-
-        function startGame() {
-            gameState = 'playing';
-            document.getElementById('startScreen').classList.add('hidden');
-            resetGame();
-        }
-
-        function resetGame() {
-            score = 0;
-            lives = 3;
-            level = 1;
-            lastLevel = 1;
-            gameSpeed = baseSpeed;
-            stars = [];
-            obstacles = [];
-            powerups = [];
-            particles = [];
-            shieldActive = false;
-            player.x = 270;
-            player.y = 700;
-            lastSpawn = { star: 0, obstacle: 0, powerup: 0 };
-            updateHUD();
-        }
-
-        function gameOver() {
-            gameState = 'gameOver';
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('gameOverScreen').classList.remove('hidden');
-        }
-
-        function restartGame() {
-            document.getElementById('gameOverScreen').classList.add('hidden');
-            gameState = 'playing';
-            resetGame();
-        }
-
-        // Start game loop
-        gameLoop();
     </script>
 </body>
 </html>

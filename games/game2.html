@@ -3,723 +3,646 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Airport Rush - X'PAT</title>
+    <title>Airport Rush - Game Boy Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
         }
 
         body {
             font-family: 'Press Start 2P', cursive;
-            background: linear-gradient(135deg, #000814 0%, #001233 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-            color: #FFD700;
-            padding: 10px;
-        }
-
-        .game-wrapper {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .game-title {
-            font-size: clamp(16px, 4vw, 24px);
-            color: #FFD700;
-            text-shadow: 3px 3px 0 #000;
-            margin-bottom: 10px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .brand-row {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: clamp(8px, 2vw, 15px);
-            flex-wrap: wrap;
-            font-size: clamp(8px, 1.5vw, 12px);
-            color: #1B56FD;
-            text-shadow: 1px 1px 0 #000;
+            touch-action: none;
+            position: fixed;
         }
 
-        .brand-separator {
-            color: #FFD700;
-        }
-
-        .score-board {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
+        .gameboy-container {
+            background: linear-gradient(135deg, #8B9DC3 0%, #6B7DA1 100%);
+            border-radius: 20px 20px 40px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+            width: 90vw;
             max-width: 600px;
-            padding: 10px;
-            background: rgba(0, 8, 20, 0.8);
-            border: 3px solid #FFD700;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            padding: clamp(15px, 3vh, 30px);
+            overflow-y: auto;
+        }
+
+        .screen-bezel {
+            background: #2a2a2a;
+            padding: clamp(10px, 2vh, 20px);
             border-radius: 10px;
-            margin-bottom: 5px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: clamp(15px, 3vh, 30px);
+            flex-shrink: 0;
         }
 
-        .score-item {
-            text-align: center;
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: clamp(6px, 1.2vh, 8px);
+            margin-bottom: clamp(5px, 1vh, 10px);
+            padding: 0 5px;
         }
 
-        .score-label {
-            font-size: clamp(8px, 1.8vw, 10px);
-            color: #1B56FD;
-            margin-bottom: 5px;
-        }
-
-        .score-value {
-            font-size: clamp(12px, 2.5vw, 16px);
-            color: #FFD700;
-        }
-
-        .game-container {
+        .game-screen {
+            background: #9bbc0f;
+            width: 100%;
+            aspect-ratio: 4/3;
             position: relative;
-            width: 100%;
-            max-width: 600px;
-            aspect-ratio: 4 / 3;
-            background: #000814;
-            border: 4px solid #FFD700;
-            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+            border: 3px solid #1a1a1a;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
         }
 
         canvas {
-            display: block;
             width: 100%;
             height: 100%;
+            display: block;
             image-rendering: pixelated;
-            image-rendering: crisp-edges;
+            touch-action: none;
         }
 
-        .game-over-screen, .start-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+        .brand {
+            text-align: center;
+            color: #333;
+            font-size: clamp(10px, 2vh, 14px);
+            margin: clamp(10px, 2vh, 20px) 0;
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+        .controls-hint {
+            background: rgba(0, 0, 0, 0.2);
+            padding: clamp(10px, 2vh, 15px);
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+            font-size: clamp(6px, 1.2vh, 8px);
+            line-height: 1.8;
+            margin-bottom: clamp(15px, 2vh, 25px);
+            flex-shrink: 0;
+        }
+
+        .console-controls {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            padding: 20px;
-            z-index: 10;
+            padding: clamp(10px, 2vh, 20px) 0;
+            flex-shrink: 0;
         }
 
-        .screen-title {
-            font-size: clamp(20px, 5vw, 32px);
-            color: #FFD700;
-            text-shadow: 3px 3px 0 #1B56FD;
-            margin-bottom: 20px;
-        }
-
-        .screen-text {
-            font-size: clamp(10px, 2vw, 14px);
-            color: #FFF;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .play-button {
-            padding: clamp(12px, 3vw, 15px) clamp(25px, 5vw, 40px);
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #000;
-            font-family: 'Press Start 2P', cursive;
-            font-size: clamp(12px, 2.5vw, 14px);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .play-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
-        }
-
-        .play-button:active {
-            transform: translateY(0);
-        }
-
-        /* Mobile Controls */
-        .mobile-controls {
-            display: none;
-            justify-content: center;
-            gap: 20px;
-            width: 100%;
-            max-width: 400px;
-            margin-top: 10px;
-        }
-
-        .control-btn {
-            width: clamp(60px, 15vw, 80px);
-            height: clamp(60px, 15vw, 80px);
-            background: linear-gradient(135deg, #1B56FD 0%, #0118D8 100%);
-            border: 3px solid #FFD700;
+        .dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: clamp(3px, 0.5vh, 5px);
+            background: rgba(0, 0, 0, 0.3);
+            padding: clamp(8px, 1.5vh, 10px);
             border-radius: 15px;
-            color: #FFD700;
-            font-size: clamp(24px, 6vw, 32px);
+            box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.4);
+            width: clamp(150px, 25vw, 190px);
+            height: clamp(150px, 25vw, 190px);
+        }
+
+        .dpad-btn {
+            background: linear-gradient(145deg, #4a4a4a 0%, #2a2a2a 100%);
+            border: 2px solid #5a5a5a;
+            border-radius: clamp(8px, 1.5vh, 10px);
+            color: #fff;
+            font-size: clamp(16px, 3vh, 24px);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             user-select: none;
-            touch-action: manipulation;
-            box-shadow: 0 5px 15px rgba(27, 86, 253, 0.4);
-            transition: all 0.1s ease;
+            touch-action: none;
+            transition: all 0.1s;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .control-btn:active {
+        .dpad-btn:active {
+            background: linear-gradient(145deg, #666 0%, #444 100%);
             transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(27, 86, 253, 0.6);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
         }
 
-        @media (max-width: 768px) {
-            .mobile-controls {
+        .dpad-btn.empty {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #9bbc0f;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #0f380f;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .start-screen.hidden {
+            display: none;
+        }
+
+        .game-title {
+            font-size: clamp(12px, 3vh, 18px);
+            margin-bottom: clamp(20px, 4vh, 30px);
+            text-align: center;
+            padding: 0 20px;
+            line-height: 1.5;
+        }
+
+        .start-instruction {
+            font-size: clamp(8px, 1.8vh, 11px);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .gameboy-container {
+                flex-direction: row;
+                max-width: 95vw;
+                padding: 2vh 3vw;
+            }
+
+            .screen-section {
+                flex: 1;
                 display: flex;
+                flex-direction: column;
             }
-            
-            body {
-                padding: 5px;
+
+            .controls-section {
+                flex: 0 0 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-left: 2vw;
             }
-            
-            .game-wrapper {
-                gap: 10px;
+
+            .screen-bezel {
+                margin-bottom: 1vh;
+            }
+
+            .brand {
+                margin: 1vh 0;
+                font-size: clamp(8px, 1.5vh, 12px);
+            }
+
+            .controls-hint {
+                margin-bottom: 1vh;
+                padding: 1vh;
+                font-size: clamp(5px, 1vh, 7px);
+            }
+
+            .console-controls {
+                padding: 0;
+            }
+
+            .dpad {
+                width: clamp(120px, 18vw, 160px);
+                height: clamp(120px, 18vw, 160px);
             }
         }
 
-        @media (max-height: 700px) and (orientation: landscape) {
-            .header {
-                margin-bottom: 5px;
+        @media (max-width: 360px) and (orientation: portrait) {
+            .dpad {
+                width: 140px;
+                height: 140px;
             }
-            
-            .score-board {
-                padding: 5px;
-                margin-bottom: 5px;
-            }
-            
-            .mobile-controls {
-                margin-top: 5px;
+
+            .dpad-btn {
+                font-size: 18px;
             }
         }
 
-        .hidden {
-            display: none !important;
+        @media (min-width: 768px) and (orientation: portrait) {
+            .gameboy-container {
+                max-width: 500px;
+            }
+        }
+
+        .gameboy-container::-webkit-scrollbar {
+            width: 0;
+            display: none;
+        }
+
+        .gameboy-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 <body>
-    <div class="game-wrapper">
-        <div class="header">
-            <div class="game-title">✈️ AIRPORT RUSH ✈️</div>
-            <div class="brand-row">
-                <span>X'PAT</span>
-                <span class="brand-separator">×</span>
-                <span>TFP</span>
-                <span class="brand-separator">×</span>
-                <span>MobilityOne</span>
-                <span class="brand-separator">×</span>
-                <span>MiPAY</span>
+    <div class="gameboy-container">
+        <div class="screen-section">
+            <div class="screen-bezel">
+                <div class="screen-header">
+                    <span>◄ POWER ON</span>
+                    <span>BATTERY FULL ►</span>
+                </div>
+                <div class="game-screen">
+                    <div class="start-screen" id="startScreen">
+                        <div class="game-title">AIRPORT<br>RUSH</div>
+                        <div class="start-instruction">TAP TO START</div>
+                    </div>
+                    <canvas id="gameCanvas"></canvas>
+                </div>
             </div>
-        </div>
-
-        <div class="score-board">
-            <div class="score-item">
-                <div class="score-label">SCORE</div>
-                <div class="score-value" id="scoreDisplay">0</div>
-            </div>
-            <div class="score-item">
-                <div class="score-label">HIGH</div>
-                <div class="score-value" id="highScoreDisplay">0</div>
-            </div>
-            <div class="score-item">
-                <div class="score-label">LEVEL</div>
-                <div class="score-value" id="levelDisplay">1</div>
-            </div>
-            <div class="score-item">
-                <div class="score-label">TICKETS</div>
-                <div class="score-value" id="ticketsDisplay">0</div>
-            </div>
-        </div>
-
-        <div class="game-container">
-            <canvas id="gameCanvas" width="800" height="600"></canvas>
             
-            <div class="start-screen" id="startScreen">
-                <div class="screen-title">AIRPORT RUSH</div>
-                <div class="screen-text">
-                    Navigate through security!<br><br>
-                    Collect boarding passes 🎫<br>
-                    Avoid security gates 🚧<br><br>
-                    Desktop: ↑↓ or WS<br>
-                    Mobile: Use buttons below
-                </div>
-                <button class="play-button" id="startButton">START GAME</button>
-            </div>
-
-            <div class="game-over-screen hidden" id="gameOverScreen">
-                <div class="screen-title">FLIGHT DELAYED!</div>
-                <div class="screen-text">
-                    Final Score: <span id="finalScore">0</span><br>
-                    Tickets Collected: <span id="finalTickets">0</span><br>
-                    Level Reached: <span id="finalLevel">1</span>
-                </div>
-                <button class="play-button" id="restartButton">TRY AGAIN</button>
+            <div class="brand">GAME BOY ADVANCE SP</div>
+            
+            <div class="controls-hint">
+                DESKTOP: WS / ↑↓ ARROWS<br>
+                MOBILE: TOUCH ↑↓ BUTTONS<br>
+                DODGE 🧳 COLLECT 🎫
             </div>
         </div>
 
-        <div class="mobile-controls" id="mobileControls">
-            <div class="control-btn" id="upBtn">▲</div>
-            <div class="control-btn" id="downBtn">▼</div>
+        <div class="controls-section">
+            <div class="console-controls">
+                <div class="dpad">
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="w">▲</div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn empty"></div>
+                    <div class="dpad-btn" data-key="s">▼</div>
+                    <div class="dpad-btn empty"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        
-        // Game state
-        let gameRunning = false;
+        const startScreen = document.getElementById('startScreen');
+
+        canvas.width = 480;
+        canvas.height = 360;
+
+        let gameStarted = false;
+        let gameOver = false;
         let score = 0;
-        let highScore = 0;
         let level = 1;
-        let tickets = 0;
-        let gameSpeed = 2.5;
-        let frameCount = 0;
+        let speedMultiplier = 1;
         
-        // Difficulty settings
-        const BASE_SPEED = 2.5;
-        const MAX_GAP_SIZE = 220;
-        const MIN_GAP_SIZE = 80; // Minimum safe gap (player height is 40)
-        const PLAYER_BUFFER = 40; // Extra space for comfortable gameplay
-
-        // Player
-        const player = {
-            x: 100,
-            y: canvas.height / 2,
-            width: 40,
+        const LANES = [90, 180, 270];
+        let currentLane = 1;
+        
+        let player = {
+            x: 60,
+            y: LANES[currentLane],
+            width: 30,
             height: 40,
-            speed: 8,
-            dy: 0
+            targetY: LANES[currentLane],
+            laneChangeSpeed: 15
         };
-        
-        // Calculate gap size based on level
-        function getGapSize() {
-            if (level <= 30) {
-                // Gradually narrow from 220 to minimum over 30 levels
-                const gapReduction = (MAX_GAP_SIZE - (MIN_GAP_SIZE + PLAYER_BUFFER)) / 30;
-                const currentGap = MAX_GAP_SIZE - (gapReduction * (level - 1));
-                return Math.max(currentGap, MIN_GAP_SIZE + PLAYER_BUFFER);
-            } else {
-                // After level 30, keep minimum gap size
-                return MIN_GAP_SIZE + PLAYER_BUFFER;
-            }
-        }
-        
-        // Calculate game speed based on level
-        function getGameSpeed() {
-            if (level <= 30) {
-                // Keep base speed for first 30 levels
-                return BASE_SPEED;
-            } else {
-                // After level 30, increase by 10% every 5 levels
-                const levelsAfter30 = level - 30;
-                const speedIncrements = Math.floor(levelsAfter30 / 5);
-                const speedMultiplier = 1 + (speedIncrements * 0.1);
-                return BASE_SPEED * speedMultiplier;
-            }
-        }
 
-        // Game objects
-        let gates = [];
-        let ticketItems = [];
-        let particles = [];
+        let obstacles = [];
+        let tickets = [];
+        let keys = {};
+        let scrollSpeed = 3;
+        let spawnRate = {
+            obstacle: 0.02,
+            ticket: 0.015
+        };
+        let lastLaneChange = 0;
+        const LANE_CHANGE_COOLDOWN = 200;
 
-        // Controls
-        const keys = {};
-        let mobileUp = false;
-        let mobileDown = false;
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadHighScore();
-            updateDisplays();
-        });
-
-        // Event listeners
-        document.getElementById('startButton').addEventListener('click', startGame);
-        document.getElementById('restartButton').addEventListener('click', restartGame);
-
+        // Keyboard controls
         document.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-            if (e.key === ' ' || e.key === 'Enter') {
-                e.preventDefault();
-                if (!gameRunning && document.getElementById('startScreen').classList.contains('hidden')) {
-                    restartGame();
+            const key = e.key.toLowerCase();
+            keys[key] = true;
+            
+            if (e.code === 'Space' && !gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                gameLoop();
+            }
+            if (e.code === 'Space' && gameOver) {
+                resetGame();
+            }
+            
+            if (gameStarted && !gameOver) {
+                const now = Date.now();
+                if (now - lastLaneChange > LANE_CHANGE_COOLDOWN) {
+                    if ((key === 'w' || key === 'arrowup') && currentLane > 0) {
+                        currentLane--;
+                        player.targetY = LANES[currentLane];
+                        lastLaneChange = now;
+                    }
+                    if ((key === 's' || key === 'arrowdown') && currentLane < 2) {
+                        currentLane++;
+                        player.targetY = LANES[currentLane];
+                        lastLaneChange = now;
+                    }
                 }
             }
         });
 
         document.addEventListener('keyup', (e) => {
-            keys[e.key] = false;
+            keys[e.key.toLowerCase()] = false;
         });
 
-        // Mobile controls
-        document.getElementById('upBtn').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            mobileUp = true;
+        // Touch controls
+        const dpadButtons = document.querySelectorAll('.dpad-btn[data-key]');
+        
+        dpadButtons.forEach(btn => {
+            const handlePress = (e) => {
+                e.preventDefault();
+                const key = btn.getAttribute('data-key');
+                
+                if (gameStarted && !gameOver) {
+                    const now = Date.now();
+                    if (now - lastLaneChange > LANE_CHANGE_COOLDOWN) {
+                        if (key === 'w' && currentLane > 0) {
+                            currentLane--;
+                            player.targetY = LANES[currentLane];
+                            lastLaneChange = now;
+                        }
+                        if (key === 's' && currentLane < 2) {
+                            currentLane++;
+                            player.targetY = LANES[currentLane];
+                            lastLaneChange = now;
+                        }
+                    }
+                }
+            };
+
+            btn.addEventListener('touchstart', handlePress);
+            btn.addEventListener('mousedown', handlePress);
         });
 
-        document.getElementById('upBtn').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            mobileUp = false;
+        // Start game
+        startScreen.addEventListener('click', () => {
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                gameLoop();
+            } else if (gameOver) {
+                resetGame();
+            }
         });
 
-        document.getElementById('downBtn').addEventListener('touchstart', (e) => {
+        startScreen.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            mobileDown = true;
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                gameLoop();
+            } else if (gameOver) {
+                resetGame();
+            }
         });
-
-        document.getElementById('downBtn').addEventListener('touchend', (e) => {
-            e.preventDefault();
-            mobileDown = false;
-        });
-
-        // Prevent scrolling on mobile
-        document.body.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-
-        function startGame() {
-            document.getElementById('startScreen').classList.add('hidden');
-            resetGame();
-            gameRunning = true;
-            gameLoop();
-        }
-
-        function restartGame() {
-            document.getElementById('gameOverScreen').classList.add('hidden');
-            resetGame();
-            gameRunning = true;
-            gameLoop();
-        }
 
         function resetGame() {
-            player.y = canvas.height / 2;
-            player.dy = 0;
-            gates = [];
-            ticketItems = [];
-            particles = [];
+            gameOver = false;
             score = 0;
             level = 1;
-            tickets = 0;
-            gameSpeed = 2.5;
-            frameCount = 0;
-            updateDisplays();
+            speedMultiplier = 1;
+            scrollSpeed = 3;
+            obstacles = [];
+            tickets = [];
+            currentLane = 1;
+            player.y = LANES[currentLane];
+            player.targetY = LANES[currentLane];
+            spawnRate.obstacle = 0.02;
+            spawnRate.ticket = 0.015;
+            startScreen.classList.remove('hidden');
+            gameStarted = false;
         }
 
-        function gameLoop() {
-            if (!gameRunning) return;
+        function updateLevel() {
+            const newLevel = Math.floor(score / 100) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                speedMultiplier = 1 + (level - 1) * 0.15;
+                scrollSpeed = 3 * speedMultiplier;
+                spawnRate.obstacle = Math.min(0.02 + (level - 1) * 0.005, 0.04);
+                spawnRate.ticket = Math.min(0.015 + (level - 1) * 0.003, 0.03);
+            }
+        }
 
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
+        function createObstacle() {
+            const type = Math.floor(Math.random() * 3);
+            const lane = Math.floor(Math.random() * 3);
+            obstacles.push({
+                x: canvas.width,
+                y: LANES[lane],
+                width: 40,
+                height: 35,
+                type: type,
+                lane: lane
+            });
+        }
+
+        function createTicket() {
+            const lane = Math.floor(Math.random() * 3);
+            tickets.push({
+                x: canvas.width,
+                y: LANES[lane],
+                width: 30,
+                height: 20,
+                lane: lane
+            });
+        }
+
+        function drawPlayer() {
+            // Smooth lane transition
+            if (player.y !== player.targetY) {
+                const diff = player.targetY - player.y;
+                player.y += Math.sign(diff) * Math.min(Math.abs(diff), player.laneChangeSpeed);
+            }
+
+            // Body
+            ctx.fillStyle = '#0f380f';
+            ctx.fillRect(player.x + 10, player.y - 15, 10, 20);
+            
+            // Head
+            ctx.beginPath();
+            ctx.arc(player.x + 15, player.y - 25, 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Arms
+            ctx.fillRect(player.x + 5, player.y - 10, 5, 10);
+            ctx.fillRect(player.x + 20, player.y - 10, 5, 10);
+            
+            // Legs
+            ctx.fillRect(player.x + 10, player.y + 5, 4, 10);
+            ctx.fillRect(player.x + 16, player.y + 5, 4, 10);
+        }
+
+        function drawObstacle(obstacle) {
+            ctx.fillStyle = '#8b0000';
+            
+            if (obstacle.type === 0) {
+                // Luggage
+                ctx.fillRect(obstacle.x, obstacle.y - 15, 35, 30);
+                ctx.fillStyle = '#5a0000';
+                ctx.fillRect(obstacle.x + 5, obstacle.y - 10, 25, 20);
+                ctx.fillStyle = '#306230';
+                ctx.fillRect(obstacle.x + 15, obstacle.y - 20, 5, 5);
+            } else if (obstacle.type === 1) {
+                // Barrier
+                ctx.fillStyle = '#ffd700';
+                ctx.fillRect(obstacle.x, obstacle.y - 20, 8, 40);
+                ctx.fillStyle = '#8b0000';
+                for (let i = 0; i < 3; i++) {
+                    ctx.fillRect(obstacle.x + 8, obstacle.y - 15 + i * 15, 25, 8);
+                }
+            } else {
+                // Cart
+                ctx.fillRect(obstacle.x, obstacle.y - 10, 40, 20);
+                ctx.fillStyle = '#306230';
+                ctx.beginPath();
+                ctx.arc(obstacle.x + 10, obstacle.y + 12, 5, 0, Math.PI * 2);
+                ctx.arc(obstacle.x + 30, obstacle.y + 12, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawTicket(ticket) {
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(ticket.x, ticket.y - 10, 30, 20);
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '10px "Press Start 2P"';
+            ctx.textAlign = 'center';
+            ctx.fillText('TKT', ticket.x + 15, ticket.y + 3);
+        }
+
+        function drawLanes() {
+            ctx.strokeStyle = '#306230';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 10]);
+            
+            for (let i = 0; i < LANES.length - 1; i++) {
+                const y = (LANES[i] + LANES[i + 1]) / 2;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            
+            ctx.setLineDash([]);
+        }
+
+        function checkCollision(obj1, obj2) {
+            return obj1.x < obj2.x + obj2.width &&
+                   obj1.x + obj1.width > obj2.x &&
+                   Math.abs(obj1.y - obj2.y) < 30;
         }
 
         function update() {
-            frameCount++;
+            if (gameOver) return;
 
-            // Player movement
-            player.dy = 0;
-            if (keys['ArrowUp'] || keys['w'] || keys['W'] || mobileUp) {
-                player.dy = -player.speed;
-            }
-            if (keys['ArrowDown'] || keys['s'] || keys['S'] || mobileDown) {
-                player.dy = player.speed;
-            }
+            updateLevel();
 
-            player.y += player.dy;
+            // Spawn items
+            if (Math.random() < spawnRate.obstacle) createObstacle();
+            if (Math.random() < spawnRate.ticket) createTicket();
 
-            // Keep player in bounds
-            if (player.y < 0) player.y = 0;
-            if (player.y + player.height > canvas.height) {
-                player.y = canvas.height - player.height;
-            }
-
-            // Spawn gates
-            if (frameCount % 80 === 0) {
-                const gateHeight = Math.random() * 80 + 60;
-                const gapSize = getGapSize(); // Dynamic gap based on level
-                const gateY = Math.random() * (canvas.height - gapSize - gateHeight);
+            // Update obstacles
+            obstacles.forEach((obstacle, index) => {
+                obstacle.x -= scrollSpeed;
                 
-                gates.push({
-                    x: canvas.width,
-                    topHeight: gateY,
-                    bottomY: gateY + gapSize,
-                    bottomHeight: canvas.height - (gateY + gapSize),
-                    gapStart: gateY,
-                    gapEnd: gateY + gapSize,
-                    width: 60,
-                    passed: false
-                });
-            }
-
-            // Spawn tickets ONLY when there's space and never inside gates
-            if (frameCount % 120 === 0) {
-                let safeY = null;
-                let attempts = 0;
-                const maxAttempts = 10;
-                
-                // Try to find a safe Y position
-                while (attempts < maxAttempts && safeY === null) {
-                    const testY = Math.random() * (canvas.height - 80) + 40; // Keep away from edges
-                    let isSafe = true;
-                    
-                    // Check if this position will collide with any gate
-                    for (let gate of gates) {
-                        // Calculate where this ticket will be when it reaches the gate
-                        const ticketX = canvas.width;
-                        const gateX = gate.x;
-                        const distanceToGate = ticketX - gateX;
-                        
-                        // If gate is nearby (within reasonable distance)
-                        if (distanceToGate < 400 && distanceToGate > -200) {
-                            // Check if ticket Y position is inside the gate (collision zone)
-                            const ticketTop = testY;
-                            const ticketBottom = testY + 30;
-                            
-                            // Ticket collides if it's NOT in the gap
-                            if (ticketTop < gate.gapStart || ticketBottom > gate.gapEnd) {
-                                isSafe = false;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if (isSafe) {
-                        safeY = testY;
-                    }
-                    attempts++;
+                if (obstacle.x + obstacle.width < 0) {
+                    obstacles.splice(index, 1);
+                    score += 5;
                 }
                 
-                // Only spawn ticket if we found a safe position
-                if (safeY !== null) {
-                    ticketItems.push({
-                        x: canvas.width,
-                        y: safeY,
-                        width: 30,
-                        height: 30,
-                        collected: false
-                    });
-                }
-            }
-
-            // Update gates
-            gates.forEach((gate, index) => {
-                gate.x -= gameSpeed;
-
-                // Check if passed
-                if (!gate.passed && gate.x + gate.width < player.x) {
-                    gate.passed = true;
-                    score += 10;
-                    updateDisplays();
-                }
-
-                // Check collision
-                if (player.x < gate.x + gate.width &&
-                    player.x + player.width > gate.x) {
-                    if (player.y < gate.topHeight ||
-                        player.y + player.height > gate.bottomY) {
-                        gameOver();
-                    }
-                }
-
-                // Remove off-screen gates
-                if (gate.x + gate.width < 0) {
-                    gates.splice(index, 1);
+                if (checkCollision(player, obstacle)) {
+                    gameOver = true;
                 }
             });
 
             // Update tickets
-            ticketItems.forEach((ticket, index) => {
-                ticket.x -= gameSpeed;
-
-                // Check collection
-                if (!ticket.collected &&
-                    player.x < ticket.x + ticket.width &&
-                    player.x + player.width > ticket.x &&
-                    player.y < ticket.y + ticket.height &&
-                    player.y + player.height > ticket.y) {
-                    ticket.collected = true;
-                    tickets++;
-                    score += 50;
-                    createParticles(ticket.x, ticket.y);
-                    updateDisplays();
-                    ticketItems.splice(index, 1);
-                }
-
-                // Remove off-screen tickets
+            tickets.forEach((ticket, index) => {
+                ticket.x -= scrollSpeed;
+                
                 if (ticket.x + ticket.width < 0) {
-                    ticketItems.splice(index, 1);
+                    tickets.splice(index, 1);
+                }
+                
+                if (checkCollision(player, ticket)) {
+                    score += 20;
+                    tickets.splice(index, 1);
                 }
             });
-
-            // Update particles
-            particles.forEach((particle, index) => {
-                particle.x += particle.vx;
-                particle.y += particle.vy;
-                particle.life--;
-                if (particle.life <= 0) {
-                    particles.splice(index, 1);
-                }
-            });
-
-            // Level up (adjust difficulty)
-            if (score > 0 && score % 200 === 0 && score !== level * 200) {
-                level++;
-                gameSpeed = getGameSpeed(); // Update speed after level 30
-                updateDisplays();
-            }
         }
 
         function draw() {
-            // Background
-            ctx.fillStyle = '#000814';
+            ctx.fillStyle = '#9bbc0f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw grid
-            ctx.strokeStyle = 'rgba(27, 86, 253, 0.2)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < canvas.width; i += 40) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, canvas.height);
-                ctx.stroke();
+            if (gameOver) {
+                ctx.fillStyle = '#0f380f';
+                ctx.font = '20px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 30);
+                ctx.font = '14px "Press Start 2P"';
+                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
+                ctx.font = '10px "Press Start 2P"';
+                ctx.fillText('TAP TO RETRY', canvas.width / 2, canvas.height / 2 + 50);
+                return;
             }
 
-            // Draw player (plane)
-            ctx.fillStyle = '#FFD700';
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            ctx.fillStyle = '#1B56FD';
-            ctx.fillRect(player.x + 5, player.y + 10, 30, 20);
-            // Wings
-            ctx.fillStyle = '#FFD700';
-            ctx.fillRect(player.x + 15, player.y - 5, 10, 10);
-            ctx.fillRect(player.x + 15, player.y + 35, 10, 10);
+            drawLanes();
+            obstacles.forEach(drawObstacle);
+            tickets.forEach(drawTicket);
+            drawPlayer();
 
-            // Draw gates
-            ctx.fillStyle = '#FF6B6B';
-            gates.forEach(gate => {
-                // Top gate
-                ctx.fillRect(gate.x, 0, gate.width, gate.topHeight);
-                // Bottom gate
-                ctx.fillRect(gate.x, gate.bottomY, gate.width, gate.bottomHeight);
-                
-                // Gate border
-                ctx.strokeStyle = '#FF0000';
-                ctx.lineWidth = 3;
-                ctx.strokeRect(gate.x, 0, gate.width, gate.topHeight);
-                ctx.strokeRect(gate.x, gate.bottomY, gate.width, gate.bottomHeight);
-            });
-
-            // Draw tickets
-            ctx.fillStyle = '#00FF00';
-            ticketItems.forEach(ticket => {
-                ctx.fillRect(ticket.x, ticket.y, ticket.width, ticket.height);
-                ctx.strokeStyle = '#FFD700';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(ticket.x, ticket.y, ticket.width, ticket.height);
-                
-                // Ticket details
-                ctx.fillStyle = '#000';
-                ctx.fillRect(ticket.x + 5, ticket.y + 5, 20, 4);
-                ctx.fillRect(ticket.x + 5, ticket.y + 12, 20, 4);
-                ctx.fillRect(ticket.x + 5, ticket.y + 19, 20, 4);
-            });
-
-            // Draw particles
-            particles.forEach(particle => {
-                ctx.fillStyle = `rgba(255, 215, 0, ${particle.life / 30})`;
-                ctx.fillRect(particle.x, particle.y, 4, 4);
-            });
-        }
-
-        function createParticles(x, y) {
-            for (let i = 0; i < 10; i++) {
-                particles.push({
-                    x: x + 15,
-                    y: y + 15,
-                    vx: (Math.random() - 0.5) * 4,
-                    vy: (Math.random() - 0.5) * 4,
-                    life: 30
-                });
-            }
-        }
-
-        function gameOver() {
-            gameRunning = false;
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '14px "Press Start 2P"';
+            ctx.textAlign = 'left';
+            ctx.fillText(`LV:${level}`, 10, 30);
+            ctx.fillText(`SCORE:${score}`, 10, 55);
             
-            if (score > highScore) {
-                highScore = score;
-                saveHighScore();
-            }
-
-            document.getElementById('finalScore').textContent = score;
-            document.getElementById('finalTickets').textContent = tickets;
-            document.getElementById('finalLevel').textContent = level;
-            document.getElementById('gameOverScreen').classList.remove('hidden');
-        }
-
-        function updateDisplays() {
-            document.getElementById('scoreDisplay').textContent = score;
-            document.getElementById('highScoreDisplay').textContent = highScore;
-            document.getElementById('levelDisplay').textContent = level;
-            document.getElementById('ticketsDisplay').textContent = tickets;
-        }
-
-        function saveHighScore() {
-            try {
-                localStorage.setItem('airportRushHighScore', highScore.toString());
-            } catch (e) {
-                console.log('Could not save high score');
+            if (score > 0 && score % 100 < 20) {
+                ctx.fillStyle = '#ffd700';
+                ctx.font = '10px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('SPEED UP!', canvas.width / 2, 30);
             }
         }
 
-        function loadHighScore() {
-            try {
-                const saved = localStorage.getItem('airportRushHighScore');
-                if (saved) {
-                    highScore = parseInt(saved);
-                }
-            } catch (e) {
-                console.log('Could not load high score');
+        function gameLoop() {
+            if (!gameStarted || gameOver) {
+                if (gameOver) draw();
+                return;
             }
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
         }
     </script>
 </body>
