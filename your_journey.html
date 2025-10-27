@@ -371,73 +371,6 @@
             box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
         }
 
-        /* Modal for game iframe */
-        .game-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .game-modal.active {
-            display: flex;
-        }
-
-        .game-modal-content {
-            position: relative;
-            width: 90%;
-            max-width: 900px;
-            height: 90vh;
-            background: #000;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
-        }
-
-        .game-modal-header {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .game-modal-title {
-            font-family: 'Press Start 2P', cursive;
-            color: #FFD700;
-            font-size: 16px;
-        }
-
-        .close-modal {
-            background: #FF0000;
-            color: #FFF;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .close-modal:hover {
-            background: #CC0000;
-            transform: scale(1.05);
-        }
-
-        .game-iframe {
-            width: 100%;
-            height: calc(100% - 60px);
-            border: none;
-        }
-
         @media (max-width: 768px) {
             .story-stage {
                 grid-template-columns: 1fr;
@@ -492,7 +425,7 @@
                     <h3 class="story-title">Dreaming of Malaysia</h3>
                     <p class="story-description">Catch falling stars while avoiding obstacles. Each star represents a dream of a better future in Malaysia!</p>
                 </div>
-                <div class="game-container" onclick="openGame('games/game1.html', 'Dream Catcher')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">⭐</div>
                         <div class="game-title">DREAM CATCHER</div>
@@ -501,7 +434,7 @@
                             Catch stars!<br>
                             Avoid obstacles!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game1.html', 'Dream Catcher')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -516,7 +449,7 @@
                         ✈️ X'PAT Air Tickets
                     </a>
                 </div>
-                <div class="game-container" onclick="openGame('games/game2.html', 'Airport Rush')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">✈️</div>
                         <div class="game-title">AIRPORT RUSH</div>
@@ -525,7 +458,7 @@
                             Navigate gates!<br>
                             Collect tickets!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game2.html', 'Airport Rush')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -537,7 +470,7 @@
                     <h3 class="story-title">Journey Through The Clouds</h3>
                     <p class="story-description">Fly vertically and dodge bad clouds! Navigate carefully to reach Malaysia safely.</p>
                 </div>
-                <div class="game-container" onclick="openGame('games/game3.html', 'Cloud Dodger')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">☁️</div>
                         <div class="game-title">CLOUD DODGER</div>
@@ -546,7 +479,7 @@
                             Avoid bad clouds!<br>
                             Fly upward safely!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game3.html', 'Cloud Dodger')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -561,7 +494,7 @@
                         📋 X'PAT Visa Renewal
                     </a>
                 </div>
-                <div class="game-container" onclick="openGame('games/game4.html', 'Visa Puzzle')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">🛂</div>
                         <div class="game-title">VISA PUZZLE</div>
@@ -570,7 +503,7 @@
                             Memory game!<br>
                             Match all pairs!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game4.html', 'Visa Puzzle')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -585,7 +518,7 @@
                         📱 X'PAT S4S Mobile
                     </a>
                 </div>
-                <div class="game-container" onclick="openGame('games/game5.html', 'Signal Connect')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">📡</div>
                         <div class="game-title">SIGNAL CONNECT</div>
@@ -594,7 +527,7 @@
                             Connect towers!<br>
                             Build the path!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game5.html', 'Signal Connect')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -609,7 +542,7 @@
                         💼 X'PAT E-Wages
                     </a>
                 </div>
-                <div class="game-container" onclick="openGame('games/game6.html', 'Builder Challenge')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">🏗️</div>
                         <div class="game-title">BUILDER CHALLENGE</div>
@@ -618,7 +551,7 @@
                             Stack perfectly!<br>
                             Build high!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game6.html', 'Builder Challenge')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -633,7 +566,7 @@
                         💸 X'PAT Remittance
                     </a>
                 </div>
-                <div class="game-container" onclick="openGame('games/game7.html', 'Money Runner')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">🏃</div>
                         <div class="game-title">MONEY RUNNER</div>
@@ -642,7 +575,7 @@
                             Collect coins!<br>
                             Avoid obstacles!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game7.html', 'Money Runner')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -657,7 +590,7 @@
                         💰 X'PAT MiPay
                     </a>
                 </div>
-                <div class="game-container" onclick="openGame('games/game8.html', 'Coin Collector')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">💰</div>
                         <div class="game-title">COIN COLLECTOR</div>
@@ -666,7 +599,7 @@
                             30 seconds!<br>
                             Build savings!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game8.html', 'Coin Collector')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -681,7 +614,7 @@
                         🎉 Download X'PAT Now
                     </a>
                 </div>
-                <div class="game-container" onclick="openGame('games/game9.html', 'Celebration')">
+                <div class="game-container">
                     <div class="game-preview">
                         <div class="game-icon">🎆</div>
                         <div class="game-title">CELEBRATION!</div>
@@ -690,44 +623,17 @@
                             Celebrate success!<br>
                             You made it!
                         </div>
-                        <button class="play-button">PLAY NOW</button>
+                        <button class="play-button" onclick="openGame('games/game9.html', 'Celebration')">PLAY NOW</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Game Modal -->
-    <div class="game-modal" id="gameModal">
-        <div class="game-modal-content">
-            <div class="game-modal-header">
-                <div class="game-modal-title" id="modalTitle">Game</div>
-                <button class="close-modal" onclick="closeGame()">CLOSE</button>
-            </div>
-            <iframe class="game-iframe" id="gameIframe" src=""></iframe>
-        </div>
-    </div>
-
     <script>
         // ===== GAME MODAL FUNCTIONALITY =====
         function openGame(gameUrl, gameTitle) {
-            const modal = document.getElementById('gameModal');
-            const iframe = document.getElementById('gameIframe');
-            const title = document.getElementById('modalTitle');
-            
-            iframe.src = gameUrl;
-            title.textContent = gameTitle;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeGame() {
-            const modal = document.getElementById('gameModal');
-            const iframe = document.getElementById('gameIframe');
-            
-            iframe.src = '';
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
+            window.location.href = gameUrl;
         }
 
         // Close modal with ESC key

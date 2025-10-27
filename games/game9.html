@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Celebration! - Fireworks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            position: fixed;
+        }
+
+        .gameboy-container {
+            background: linear-gradient(135deg, #8B9DC3 0%, #6B7DA1 100%);
+            border-radius: 20px 20px 40px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+            width: 90vw;
+            max-width: 600px;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            padding: clamp(15px, 3vh, 30px);
+            overflow-y: auto;
+        }
+
+        .screen-bezel {
+            background: #2a2a2a;
+            padding: clamp(10px, 2vh, 20px);
+            border-radius: 10px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: clamp(15px, 3vh, 30px);
+            flex-shrink: 0;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: clamp(6px, 1.2vh, 8px);
+            margin-bottom: clamp(5px, 1vh, 10px);
+            padding: 0 5px;
+        }
+
+        .game-screen {
+            background: #000814;
+            width: 100%;
+            aspect-ratio: 4/3;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #1a1a1a;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            image-rendering: pixelated;
+            touch-action: none;
+            cursor: pointer;
+        }
+
+        .brand {
+            text-align: center;
+            color: #333;
+            font-size: clamp(10px, 2vh, 14px);
+            margin: clamp(10px, 2vh, 20px) 0;
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+        .controls-hint {
+            background: rgba(0, 0, 0, 0.2);
+            padding: clamp(10px, 2vh, 15px);
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+            font-size: clamp(6px, 1.2vh, 8px);
+            line-height: 1.8;
+            flex-shrink: 0;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000814 0%, #001233 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #FFD700;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .start-screen.hidden {
+            display: none;
+        }
+
+        .game-title {
+            font-size: clamp(18px, 4vh, 28px);
+            margin-bottom: clamp(15px, 3vh, 25px);
+            text-align: center;
+            padding: 0 20px;
+            line-height: 1.5;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .game-subtitle {
+            font-size: clamp(10px, 2vh, 14px);
+            margin-bottom: clamp(20px, 4vh, 30px);
+            color: #FFF;
+            text-align: center;
+            padding: 0 20px;
+            line-height: 1.6;
+        }
+
+        .start-instruction {
+            font-size: clamp(8px, 1.8vh, 11px);
+            animation: blink 1s infinite;
+            color: #FFD700;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                            0 0 40px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 30px rgba(255, 215, 0, 1),
+                            0 0 60px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .gameboy-container {
+                max-width: 95vw;
+                padding: 2vh 3vw;
+            }
+
+            .brand {
+                margin: 1vh 0;
+                font-size: clamp(8px, 1.5vh, 12px);
+            }
+
+            .controls-hint {
+                padding: 1vh;
+                font-size: clamp(5px, 1vh, 7px);
+            }
+        }
+
+        @media (min-width: 768px) and (orientation: portrait) {
+            .gameboy-container {
+                max-width: 500px;
+            }
+        }
+
+        .gameboy-container::-webkit-scrollbar {
+            width: 0;
+            display: none;
+        }
+
+        .gameboy-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="gameboy-container">
+        <div class="screen-bezel">
+            <div class="screen-header">
+                <span>◄ POWER ON</span>
+                <span>BATTERY FULL ►</span>
+            </div>
+            <div class="game-screen">
+                <div class="start-screen" id="startScreen">
+                    <div class="game-title">🎉 YOU MADE IT! 🎉</div>
+                    <div class="game-subtitle">
+                        FROM DREAMS TO REALITY<br>
+                        YOUR JOURNEY IS COMPLETE!<br>
+                        CELEBRATE YOUR SUCCESS!
+                    </div>
+                    <div class="start-instruction">CLICK ANYWHERE TO CELEBRATE</div>
+                </div>
+                <canvas id="gameCanvas"></canvas>
+            </div>
+        </div>
+        
+        <div class="brand">GAME BOY ADVANCE SP</div>
+        
+        <div class="controls-hint">
+            CLICK OR TAP ANYWHERE!<br>
+            CELEBRATE YOUR JOURNEY!<br>
+            YOU ARE A CHAMPION! 🏆
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
+
+        canvas.width = 480;
+        canvas.height = 360;
+
+        let gameStarted = false;
+        let fireworks = [];
+        let particles = [];
+        let stars = [];
+        let messages = [];
+        let messageIndex = 0;
+        let lastMessageTime = 0;
+        let totalFireworks = 0;
+        let autoFireworkTimer = 0;
+
+        const CELEBRATION_MESSAGES = [
+            "CONGRATULATIONS!",
+            "YOU DID IT!",
+            "AMAZING JOURNEY!",
+            "FROM DREAMS...",
+            "...TO REALITY!",
+            "YOU'RE A STAR!",
+            "CHAMPION!",
+            "INCREDIBLE!",
+            "WELL DONE!",
+            "PROUD OF YOU!",
+            "KEEP SHINING!",
+            "SUCCESS!",
+            "BRAVO!",
+            "OUTSTANDING!",
+            "REMARKABLE!"
+        ];
+
+        const COLORS = [
+            '#FF0000', '#FF6600', '#FFD700', '#00FF00', 
+            '#0000FF', '#8B00FF', '#FF1493', '#00FFFF',
+            '#FF69B4', '#32CD32', '#FF4500', '#1E90FF'
+        ];
+
+        // Audio context
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playFireworkSound(pitch = 1) {
+            const gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.value = 0.03;
+
+            const oscillator = audioContext.createOscillator();
+            oscillator.connect(gainNode);
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(200 * pitch, audioContext.currentTime);
+            oscillator.start();
+            oscillator.frequency.exponentialRampToValueAtTime(600 * pitch, audioContext.currentTime + 0.1);
+            oscillator.stop(audioContext.currentTime + 0.2);
+
+            // Add noise for realistic explosion
+            const noise = audioContext.createOscillator();
+            const noiseGain = audioContext.createGain();
+            noise.type = 'sawtooth';
+            noise.connect(noiseGain);
+            noiseGain.connect(audioContext.destination);
+            noiseGain.gain.value = 0.01;
+            noise.frequency.setValueAtTime(100, audioContext.currentTime);
+            noise.start();
+            noise.stop(audioContext.currentTime + 0.15);
+        }
+
+        function playCelebrationSound() {
+            const gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.value = 0.04;
+
+            // Happy melody
+            const notes = [523, 659, 784, 1047]; // C, E, G, C (major chord)
+            
+            notes.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                osc.connect(gainNode);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioContext.currentTime + i * 0.1);
+                osc.start(audioContext.currentTime + i * 0.1);
+                osc.stop(audioContext.currentTime + i * 0.1 + 0.3);
+            });
+        }
+
+        // Event listeners
+        startScreen.addEventListener('click', handleStart);
+        startScreen.addEventListener('touchstart', handleStartTouch);
+        canvas.addEventListener('click', handleCanvasClick);
+        canvas.addEventListener('touchstart', handleCanvasTouch);
+
+        function handleStart(e) {
+            e.preventDefault();
+            startGame();
+        }
+
+        function handleStartTouch(e) {
+            e.preventDefault();
+            startGame();
+        }
+
+        function handleCanvasClick(e) {
+            if (!gameStarted) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+            
+            launchFirework(x, y);
+        }
+
+        function handleCanvasTouch(e) {
+            e.preventDefault();
+            if (!gameStarted) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const touch = e.touches[0];
+            const x = (touch.clientX - rect.left) * scaleX;
+            const y = (touch.clientY - rect.top) * scaleY;
+            
+            launchFirework(x, y);
+        }
+
+        function startGame() {
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                initGame();
+                playCelebrationSound();
+                gameLoop();
+            }
+        }
+
+        function initGame() {
+            // Create twinkling stars in background
+            for (let i = 0; i < 50; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: 1 + Math.random() * 2,
+                    twinkle: Math.random() * Math.PI * 2,
+                    twinkleSpeed: 0.02 + Math.random() * 0.03
+                });
+            }
+            
+            // Launch initial fireworks
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    launchFirework(
+                        canvas.width * (0.2 + i * 0.3),
+                        canvas.height * 0.4
+                    );
+                }, i * 300);
+            }
+        }
+
+        function launchFirework(targetX, targetY) {
+            const startX = Math.random() * canvas.width;
+            const startY = canvas.height;
+            
+            fireworks.push({
+                x: startX,
+                y: startY,
+                targetX: targetX,
+                targetY: targetY,
+                speed: 3 + Math.random() * 2,
+                color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                trail: [],
+                exploded: false
+            });
+            
+            totalFireworks++;
+            playFireworkSound(0.8 + Math.random() * 0.4);
+        }
+
+        function explodeFirework(firework) {
+            const particleCount = 60 + Math.floor(Math.random() * 40);
+            const color = firework.color;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const angle = (Math.PI * 2 * i) / particleCount;
+                const velocity = 2 + Math.random() * 3;
+                
+                particles.push({
+                    x: firework.x,
+                    y: firework.y,
+                    vx: Math.cos(angle) * velocity,
+                    vy: Math.sin(angle) * velocity,
+                    color: color,
+                    size: 2 + Math.random() * 3,
+                    life: 1,
+                    decay: 0.008 + Math.random() * 0.008,
+                    gravity: 0.05 + Math.random() * 0.05
+                });
+            }
+            
+            // Add some sparkle particles
+            for (let i = 0; i < 20; i++) {
+                particles.push({
+                    x: firework.x,
+                    y: firework.y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    color: '#FFFFFF',
+                    size: 1 + Math.random() * 2,
+                    life: 1,
+                    decay: 0.02,
+                    gravity: 0.02
+                });
+            }
+            
+            playFireworkSound(1 + Math.random() * 0.5);
+            
+            // Add celebration message occasionally
+            const now = Date.now();
+            if (now - lastMessageTime > 2000 && Math.random() < 0.3) {
+                messages.push({
+                    text: CELEBRATION_MESSAGES[messageIndex % CELEBRATION_MESSAGES.length],
+                    x: firework.x,
+                    y: firework.y - 30,
+                    life: 1,
+                    decay: 0.01,
+                    color: color
+                });
+                messageIndex++;
+                lastMessageTime = now;
+            }
+        }
+
+        function update() {
+            // Update auto firework timer
+            autoFireworkTimer++;
+            if (autoFireworkTimer > 120) { // Every 2 seconds
+                autoFireworkTimer = 0;
+                launchFirework(
+                    Math.random() * canvas.width,
+                    100 + Math.random() * 150
+                );
+            }
+
+            // Update stars
+            stars.forEach(star => {
+                star.twinkle += star.twinkleSpeed;
+            });
+
+            // Update fireworks
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                const fw = fireworks[i];
+                
+                if (!fw.exploded) {
+                    const dx = fw.targetX - fw.x;
+                    const dy = fw.targetY - fw.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < fw.speed * 2) {
+                        fw.exploded = true;
+                        explodeFirework(fw);
+                        fireworks.splice(i, 1);
+                    } else {
+                        const angle = Math.atan2(dy, dx);
+                        fw.x += Math.cos(angle) * fw.speed;
+                        fw.y += Math.sin(angle) * fw.speed;
+                        
+                        // Add trail
+                        fw.trail.push({ x: fw.x, y: fw.y });
+                        if (fw.trail.length > 10) {
+                            fw.trail.shift();
+                        }
+                    }
+                }
+            }
+
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += p.gravity;
+                p.life -= p.decay;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // Update messages
+            for (let i = messages.length - 1; i >= 0; i--) {
+                const msg = messages[i];
+                msg.y -= 0.5;
+                msg.life -= msg.decay;
+                
+                if (msg.life <= 0) {
+                    messages.splice(i, 1);
+                }
+            }
+        }
+
+        function draw() {
+            // Dark night sky background with gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#000814');
+            gradient.addColorStop(1, '#001233');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw twinkling stars
+            stars.forEach(star => {
+                const alpha = 0.3 + Math.sin(star.twinkle) * 0.7;
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+
+            // Draw firework trails
+            fireworks.forEach(fw => {
+                if (fw.trail.length > 1) {
+                    ctx.strokeStyle = fw.color;
+                    ctx.lineWidth = 3;
+                    ctx.globalAlpha = 0.8;
+                    ctx.beginPath();
+                    ctx.moveTo(fw.trail[0].x, fw.trail[0].y);
+                    for (let i = 1; i < fw.trail.length; i++) {
+                        ctx.lineTo(fw.trail[i].x, fw.trail[i].y);
+                    }
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                }
+                
+                // Draw firework rocket
+                ctx.fillStyle = fw.color;
+                ctx.beginPath();
+                ctx.arc(fw.x, fw.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Glow
+                ctx.fillStyle = fw.color;
+                ctx.globalAlpha = 0.3;
+                ctx.beginPath();
+                ctx.arc(fw.x, fw.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            });
+
+            // Draw particles
+            particles.forEach(p => {
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Glow effect
+                if (p.life > 0.7) {
+                    ctx.globalAlpha = p.life * 0.3;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size * 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+            ctx.globalAlpha = 1;
+
+            // Draw celebration messages
+            messages.forEach(msg => {
+                ctx.globalAlpha = msg.life;
+                ctx.fillStyle = msg.color;
+                ctx.font = '12px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // Text shadow for better visibility
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowBlur = 10;
+                ctx.fillText(msg.text, msg.x, msg.y);
+                ctx.shadowBlur = 0;
+            });
+            ctx.globalAlpha = 1;
+
+            // Draw HUD - celebration counter
+            ctx.fillStyle = '#FFD700';
+            ctx.font = '10px "Press Start 2P"';
+            ctx.textAlign = 'left';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+            ctx.shadowBlur = 5;
+            ctx.fillText(`FIREWORKS: ${totalFireworks}`, 10, 25);
+            
+            // Title at top
+            ctx.textAlign = 'center';
+            ctx.font = '14px "Press Start 2P"';
+            const titleAlpha = 0.7 + Math.sin(Date.now() / 500) * 0.3;
+            ctx.globalAlpha = titleAlpha;
+            ctx.fillText('CELEBRATION!', canvas.width / 2, 30);
+            ctx.globalAlpha = 1;
+            
+            // Bottom message
+            ctx.font = '8px "Press Start 2P"';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText('CLICK ANYWHERE FOR MORE!', canvas.width / 2, canvas.height - 20);
+            
+            ctx.shadowBlur = 0;
+        }
+
+        function gameLoop() {
+            if (!gameStarted) return;
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+</html>

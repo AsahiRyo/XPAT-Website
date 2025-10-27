@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Coin Collector - Click Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            position: fixed;
+        }
+
+        .gameboy-container {
+            background: linear-gradient(135deg, #8B9DC3 0%, #6B7DA1 100%);
+            border-radius: 20px 20px 40px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                        inset 0 -5px 20px rgba(0, 0, 0, 0.2);
+            width: 90vw;
+            max-width: 600px;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            padding: clamp(15px, 3vh, 30px);
+            overflow-y: auto;
+        }
+
+        .screen-bezel {
+            background: #2a2a2a;
+            padding: clamp(10px, 2vh, 20px);
+            border-radius: 10px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: clamp(15px, 3vh, 30px);
+            flex-shrink: 0;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: clamp(6px, 1.2vh, 8px);
+            margin-bottom: clamp(5px, 1vh, 10px);
+            padding: 0 5px;
+        }
+
+        .game-screen {
+            background: #9bbc0f;
+            width: 100%;
+            aspect-ratio: 4/3;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #1a1a1a;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            image-rendering: pixelated;
+            touch-action: none;
+            cursor: pointer;
+        }
+
+        .brand {
+            text-align: center;
+            color: #333;
+            font-size: clamp(10px, 2vh, 14px);
+            margin: clamp(10px, 2vh, 20px) 0;
+            letter-spacing: 2px;
+            flex-shrink: 0;
+        }
+
+        .controls-hint {
+            background: rgba(0, 0, 0, 0.2);
+            padding: clamp(10px, 2vh, 15px);
+            border-radius: 10px;
+            text-align: center;
+            color: #333;
+            font-size: clamp(6px, 1.2vh, 8px);
+            line-height: 1.8;
+            flex-shrink: 0;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #9bbc0f;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #0f380f;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .start-screen.hidden {
+            display: none;
+        }
+
+        .game-title {
+            font-size: clamp(14px, 3vh, 20px);
+            margin-bottom: clamp(10px, 2vh, 15px);
+            text-align: center;
+            padding: 0 20px;
+            line-height: 1.5;
+        }
+
+        .game-subtitle {
+            font-size: clamp(8px, 1.5vh, 10px);
+            margin-bottom: clamp(20px, 4vh, 30px);
+            color: #8b0000;
+        }
+
+        .start-instruction {
+            font-size: clamp(8px, 1.8vh, 11px);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .gameboy-container {
+                max-width: 95vw;
+                padding: 2vh 3vw;
+            }
+
+            .brand {
+                margin: 1vh 0;
+                font-size: clamp(8px, 1.5vh, 12px);
+            }
+
+            .controls-hint {
+                padding: 1vh;
+                font-size: clamp(5px, 1vh, 7px);
+            }
+        }
+
+        @media (min-width: 768px) and (orientation: portrait) {
+            .gameboy-container {
+                max-width: 500px;
+            }
+        }
+
+        .gameboy-container::-webkit-scrollbar {
+            width: 0;
+            display: none;
+        }
+
+        .gameboy-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="gameboy-container">
+        <div class="screen-bezel">
+            <div class="screen-header">
+                <span>◄ POWER ON</span>
+                <span>BATTERY FULL ►</span>
+            </div>
+            <div class="game-screen">
+                <div class="start-screen" id="startScreen">
+                    <div class="game-title">COIN COLLECTOR<br>CLICKER</div>
+                    <div class="game-subtitle">⚡ CLICK FAST ⚡</div>
+                    <div class="start-instruction">TAP TO START</div>
+                </div>
+                <canvas id="gameCanvas"></canvas>
+            </div>
+        </div>
+        
+        <div class="brand">GAME BOY ADVANCE SP</div>
+        
+        <div class="controls-hint">
+            CLICK OR TAP COINS FAST!<br>
+            30 SECONDS TO GET RICH!<br>
+            COLLECT 💰 BUILD WEALTH 💰
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startScreen = document.getElementById('startScreen');
+
+        canvas.width = 480;
+        canvas.height = 360;
+
+        let gameStarted = false;
+        let gameOver = false;
+        let score = 0;
+        let coinsCollected = 0;
+        let timeRemaining = 30;
+        let lastTime = 0;
+        let combo = 0;
+        let maxCombo = 0;
+        let totalClicks = 0;
+        let missedClicks = 0;
+        
+        let coins = [];
+        let particles = [];
+        let feedbackText = [];
+        
+        const GAME_DURATION = 30; // 30 seconds
+        const COIN_SIZE = 25;
+        const SPAWN_RATE = 0.03; // Increased spawn rate
+        const COIN_LIFETIME = 3000; // 3 seconds before coin disappears
+        
+        // Audio context
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            const gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.value = 0.05;
+
+            const oscillator = audioContext.createOscillator();
+            oscillator.connect(gainNode);
+
+            switch (type) {
+                case 'coin':
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(660, audioContext.currentTime);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.08);
+                    break;
+                case 'combo':
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    break;
+                case 'miss':
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(110, audioContext.currentTime);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                    break;
+                case 'gameover':
+                    const o1 = audioContext.createOscillator();
+                    const o2 = audioContext.createOscillator();
+                    o1.type = 'square';
+                    o2.type = 'square';
+                    o1.connect(gainNode);
+                    o2.connect(gainNode);
+                    o1.frequency.setValueAtTime(523, audioContext.currentTime);
+                    o2.frequency.setValueAtTime(659, audioContext.currentTime);
+                    o1.start();
+                    o2.start(audioContext.currentTime + 0.1);
+                    o1.stop(audioContext.currentTime + 0.2);
+                    o2.stop(audioContext.currentTime + 0.3);
+                    break;
+            }
+        }
+
+        // Event listeners
+        startScreen.addEventListener('click', handleStart);
+        startScreen.addEventListener('touchstart', handleStartTouch);
+        canvas.addEventListener('click', handleCanvasClick);
+        canvas.addEventListener('touchstart', handleCanvasTouch);
+
+        function handleStart(e) {
+            e.preventDefault();
+            startGame();
+        }
+
+        function handleStartTouch(e) {
+            e.preventDefault();
+            startGame();
+        }
+
+        function handleCanvasClick(e) {
+            if (!gameStarted) {
+                startGame();
+            } else if (gameOver) {
+                resetGame();
+            } else {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+                handleClick(x, y);
+            }
+        }
+
+        function handleCanvasTouch(e) {
+            e.preventDefault();
+            if (!gameStarted) {
+                startGame();
+            } else if (gameOver) {
+                resetGame();
+            } else {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const touch = e.touches[0];
+                const x = (touch.clientX - rect.left) * scaleX;
+                const y = (touch.clientY - rect.top) * scaleY;
+                handleClick(x, y);
+            }
+        }
+
+        function handleClick(x, y) {
+            totalClicks++;
+            let hit = false;
+            
+            // Check if clicked on a coin
+            for (let i = coins.length - 1; i >= 0; i--) {
+                const coin = coins[i];
+                const distance = Math.sqrt(Math.pow(x - coin.x, 2) + Math.pow(y - coin.y, 2));
+                
+                if (distance < COIN_SIZE) {
+                    hit = true;
+                    collectCoin(coin, i);
+                    break;
+                }
+            }
+            
+            if (!hit) {
+                missedClicks++;
+                combo = 0;
+                playSound('miss');
+                createFeedback(x, y, 'MISS!', '#FF0000');
+            }
+        }
+
+        function collectCoin(coin, index) {
+            coins.splice(index, 1);
+            coinsCollected++;
+            combo++;
+            maxCombo = Math.max(maxCombo, combo);
+            
+            // Score calculation with combo multiplier
+            const comboMultiplier = Math.min(combo, 10);
+            const points = 10 * comboMultiplier;
+            score += points;
+            
+            // Sound and effects
+            if (combo > 1) {
+                playSound('combo');
+            } else {
+                playSound('coin');
+            }
+            
+            createParticles(coin.x, coin.y, '#FFD700', 15);
+            
+            let feedback = `+${points}`;
+            if (combo >= 5) {
+                feedback = `COMBO x${combo}!`;
+            }
+            createFeedback(coin.x, coin.y, feedback, '#FFD700');
+        }
+
+        function startGame() {
+            if (!gameStarted) {
+                gameStarted = true;
+                startScreen.classList.add('hidden');
+                initGame();
+                lastTime = Date.now();
+                gameLoop();
+            }
+        }
+
+        function resetGame() {
+            gameOver = false;
+            score = 0;
+            coinsCollected = 0;
+            timeRemaining = GAME_DURATION;
+            combo = 0;
+            maxCombo = 0;
+            totalClicks = 0;
+            missedClicks = 0;
+            coins = [];
+            particles = [];
+            feedbackText = [];
+            startScreen.classList.remove('hidden');
+            gameStarted = false;
+        }
+
+        function initGame() {
+            coins = [];
+            particles = [];
+            feedbackText = [];
+        }
+
+        function createCoin() {
+            const padding = COIN_SIZE + 10;
+            coins.push({
+                x: padding + Math.random() * (canvas.width - padding * 2),
+                y: padding + 50 + Math.random() * (canvas.height - padding * 2 - 100),
+                size: COIN_SIZE,
+                spawnTime: Date.now(),
+                pulse: Math.random() * Math.PI * 2
+            });
+        }
+
+        function createParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6 - 2,
+                    size: 2 + Math.random() * 4,
+                    color: color,
+                    life: 1,
+                    decay: 0.02
+                });
+            }
+        }
+
+        function createFeedback(x, y, text, color) {
+            feedbackText.push({
+                x: x,
+                y: y,
+                text: text,
+                color: color,
+                life: 1,
+                decay: 0.02
+            });
+        }
+
+        function drawCoin(coin) {
+            const now = Date.now();
+            const age = now - coin.spawnTime;
+            const lifetimePercent = age / COIN_LIFETIME;
+            
+            // Pulse effect
+            coin.pulse += 0.1;
+            const pulse = Math.sin(coin.pulse) * 3;
+            
+            // Warning flash when about to disappear
+            let alpha = 1;
+            if (lifetimePercent > 0.7) {
+                alpha = Math.sin((now / 100)) * 0.5 + 0.5;
+            }
+            
+            ctx.globalAlpha = alpha;
+            
+            // Outer glow
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(coin.x, coin.y, coin.size + pulse, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Inner coin
+            ctx.fillStyle = '#FFA500';
+            ctx.beginPath();
+            ctx.arc(coin.x, coin.y, coin.size - 5 + pulse, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dollar sign
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '16px "Press Start 2P"';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('$', coin.x, coin.y + 1);
+            
+            ctx.globalAlpha = 1;
+        }
+
+        function update() {
+            if (gameOver) return;
+
+            // Update timer
+            const now = Date.now();
+            const delta = (now - lastTime) / 1000;
+            lastTime = now;
+            timeRemaining -= delta;
+
+            if (timeRemaining <= 0) {
+                timeRemaining = 0;
+                gameOver = true;
+                playSound('gameover');
+            }
+
+            // Spawn coins
+            if (Math.random() < SPAWN_RATE && coins.length < 8) {
+                createCoin();
+            }
+
+            // Update coins - remove expired ones
+            coins = coins.filter(coin => {
+                const age = Date.now() - coin.spawnTime;
+                if (age > COIN_LIFETIME) {
+                    combo = 0;
+                    return false;
+                }
+                return true;
+            });
+
+            // Update particles
+            particles = particles.filter(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2;
+                p.life -= p.decay;
+                return p.life > 0;
+            });
+
+            // Update feedback text
+            feedbackText = feedbackText.filter(f => {
+                f.y -= 0.5;
+                f.life -= f.decay;
+                return f.life > 0;
+            });
+        }
+
+        function draw() {
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#9bbc0f');
+            gradient.addColorStop(1, '#7bac0f');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (gameOver) {
+                ctx.fillStyle = '#0f380f';
+                ctx.font = '20px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText('TIME UP!', canvas.width / 2, canvas.height / 2 - 90);
+                ctx.font = '14px "Press Start 2P"';
+                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 - 55);
+                ctx.font = '12px "Press Start 2P"';
+                ctx.fillText(`COINS: ${coinsCollected}`, canvas.width / 2, canvas.height / 2 - 25);
+                ctx.fillText(`MAX COMBO: ${maxCombo}`, canvas.width / 2, canvas.height / 2 + 5);
+                
+                // Accuracy
+                const accuracy = totalClicks > 0 ? Math.floor((coinsCollected / totalClicks) * 100) : 0;
+                ctx.fillText(`ACCURACY: ${accuracy}%`, canvas.width / 2, canvas.height / 2 + 35);
+                
+                ctx.font = '10px "Press Start 2P"';
+                ctx.fillText('TAP TO RETRY', canvas.width / 2, canvas.height / 2 + 70);
+                return;
+            }
+
+            // Draw coins
+            coins.forEach(drawCoin);
+
+            // Draw particles
+            particles.forEach(p => {
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+            });
+            ctx.globalAlpha = 1;
+
+            // Draw feedback text
+            feedbackText.forEach(f => {
+                ctx.globalAlpha = f.life;
+                ctx.fillStyle = f.color;
+                ctx.font = '10px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText(f.text, f.x, f.y);
+            });
+            ctx.globalAlpha = 1;
+
+            // HUD - Top
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '12px "Press Start 2P"';
+            ctx.textAlign = 'left';
+            ctx.fillText(`SCORE:${score}`, 10, 25);
+            
+            // Timer (center)
+            ctx.textAlign = 'center';
+            const timeColor = timeRemaining <= 10 ? '#ff0000' : '#0f380f';
+            ctx.fillStyle = timeColor;
+            ctx.font = '14px "Press Start 2P"';
+            ctx.fillText(`TIME:${Math.ceil(timeRemaining)}`, canvas.width / 2, 25);
+            
+            // Coins collected (right)
+            ctx.fillStyle = '#0f380f';
+            ctx.font = '11px "Press Start 2P"';
+            ctx.textAlign = 'right';
+            ctx.fillText(`COINS:${coinsCollected}`, canvas.width - 10, 25);
+
+            // Combo display
+            if (combo > 1) {
+                const comboColor = combo >= 7 ? '#ff0000' : (combo >= 4 ? '#ff6600' : '#ffd700');
+                ctx.fillStyle = comboColor;
+                ctx.font = combo >= 5 ? '16px "Press Start 2P"' : '14px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText(`COMBO x${combo}!`, canvas.width / 2, 50);
+            }
+        }
+
+        function gameLoop() {
+            if (!gameStarted) return;
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+</html>
