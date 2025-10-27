@@ -26,6 +26,10 @@
             align-items: center;
             touch-action: none;
             position: fixed;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         .gameboy-container {
@@ -76,6 +80,9 @@
             display: block;
             image-rendering: pixelated;
             touch-action: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .brand {
@@ -99,7 +106,6 @@
             flex-shrink: 0;
         }
 
-        /* D-PAD - Always visible, part of console */
         .console-controls {
             display: flex;
             justify-content: center;
@@ -131,10 +137,17 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            user-select: none;
-            touch-action: none;
             transition: all 0.1s;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            
+            /* Prevent text selection and iOS menu */
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            touch-action: manipulation;
         }
 
         .dpad-btn:active {
@@ -146,6 +159,43 @@
         .dpad-btn.empty {
             opacity: 0;
             pointer-events: none;
+        }
+
+        /* Arrow styling using CSS borders instead of text */
+        .arrow-up::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 15px solid #fff;
+        }
+
+        .arrow-down::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid #fff;
+        }
+
+        .arrow-left::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 15px solid #fff;
+        }
+
+        .arrow-right::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 15px solid #fff;
         }
 
         .start-screen {
@@ -169,7 +219,7 @@
         }
 
         .game-title {
-            font-size: clamp(12px, 3vh, 18px);
+            font-size: clamp(14px, 3.5vh, 20px);
             margin-bottom: clamp(20px, 4vh, 30px);
             text-align: center;
             padding: 0 20px;
@@ -186,7 +236,6 @@
             51%, 100% { opacity: 0; }
         }
 
-        /* Landscape mode optimization */
         @media (orientation: landscape) and (max-height: 600px) {
             .gameboy-container {
                 flex-direction: row;
@@ -233,26 +282,19 @@
             }
         }
 
-        /* Very small screens */
         @media (max-width: 360px) and (orientation: portrait) {
             .dpad {
                 width: 140px;
                 height: 140px;
             }
-
-            .dpad-btn {
-                font-size: 18px;
-            }
         }
 
-        /* Tablets in portrait */
         @media (min-width: 768px) and (orientation: portrait) {
             .gameboy-container {
                 max-width: 500px;
             }
         }
 
-        /* Hide scrollbar but keep functionality */
         .gameboy-container::-webkit-scrollbar {
             width: 0;
             display: none;
@@ -267,11 +309,10 @@
 <body>
     <div class="gameboy-container">
         <div class="screen-section">
-            <!-- Screen Section -->
             <div class="screen-bezel">
                 <div class="screen-header">
-                    <span>◀ POWER ON</span>
-                    <span>BATTERY FULL ▶</span>
+                    <span>&#9664; POWER ON</span>
+                    <span>BATTERY FULL &#9654;</span>
                 </div>
                 <div class="game-screen">
                     <div class="start-screen" id="startScreen">
@@ -282,29 +323,26 @@
                 </div>
             </div>
             
-            <!-- Branding -->
             <div class="brand">GAME BOY ADVANCE SP</div>
             
-            <!-- Controls Instructions -->
             <div class="controls-hint">
                 DESKTOP: WASD / ARROWS<br>
                 MOBILE: TOUCH D-PAD<br>
-                CATCH STARS ★ AVOID ●
+                CATCH STARS - AVOID BOMBS
             </div>
         </div>
 
         <div class="controls-section">
-            <!-- D-PAD Controls - Always visible -->
             <div class="console-controls">
                 <div class="dpad">
                     <div class="dpad-btn empty"></div>
-                    <div class="dpad-btn" data-key="w">▲</div>
+                    <div class="dpad-btn arrow-up" data-key="w"></div>
                     <div class="dpad-btn empty"></div>
-                    <div class="dpad-btn" data-key="a">◀</div>
+                    <div class="dpad-btn arrow-left" data-key="a"></div>
                     <div class="dpad-btn empty"></div>
-                    <div class="dpad-btn" data-key="d">▶</div>
+                    <div class="dpad-btn arrow-right" data-key="d"></div>
                     <div class="dpad-btn empty"></div>
-                    <div class="dpad-btn" data-key="s">▼</div>
+                    <div class="dpad-btn arrow-down" data-key="s"></div>
                     <div class="dpad-btn empty"></div>
                 </div>
             </div>
@@ -322,24 +360,46 @@
         let gameStarted = false;
         let gameOver = false;
         let score = 0;
+        let highScore = 0;
         let level = 1;
         let speedMultiplier = 1;
+        let combo = 0;
+        let comboTimer = 0;
+        
         let player = {
             x: canvas.width / 2 - 20,
             y: canvas.height - 60,
             width: 40,
             height: 40,
-            baseSpeed: 5,
-            speed: 5
+            baseSpeed: 6,
+            speed: 6
         };
 
         let stars = [];
         let obstacles = [];
+        let particles = [];
         let keys = {};
         let spawnRate = {
             star: 0.02,
-            obstacle: 0.015
+            obstacle: 0.012
         };
+
+        // Prevent context menu and selection on all D-pad buttons
+        document.addEventListener('DOMContentLoaded', () => {
+            const dpadButtons = document.querySelectorAll('.dpad-btn');
+            
+            dpadButtons.forEach(btn => {
+                btn.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    return false;
+                });
+                
+                btn.addEventListener('selectstart', (e) => {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        });
 
         // Keyboard controls
         document.addEventListener('keydown', (e) => {
@@ -362,20 +422,20 @@
         const dpadButtons = document.querySelectorAll('.dpad-btn[data-key]');
         
         dpadButtons.forEach(btn => {
-            // Touch events
             btn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 const key = btn.getAttribute('data-key');
                 keys[key] = true;
-            });
+            }, { passive: false });
             
             btn.addEventListener('touchend', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 const key = btn.getAttribute('data-key');
                 keys[key] = false;
-            });
+            }, { passive: false });
 
-            // Mouse events for desktop testing
             btn.addEventListener('mousedown', (e) => {
                 e.preventDefault();
                 const key = btn.getAttribute('data-key');
@@ -394,7 +454,7 @@
             });
         });
 
-        // Start game on tap/click
+        // Start game
         startScreen.addEventListener('click', () => {
             if (!gameStarted) {
                 gameStarted = true;
@@ -421,13 +481,16 @@
             score = 0;
             level = 1;
             speedMultiplier = 1;
+            combo = 0;
+            comboTimer = 0;
             stars = [];
             obstacles = [];
+            particles = [];
             player.x = canvas.width / 2 - 20;
             player.y = canvas.height - 60;
             player.speed = player.baseSpeed;
             spawnRate.star = 0.02;
-            spawnRate.obstacle = 0.015;
+            spawnRate.obstacle = 0.012;
             startScreen.classList.remove('hidden');
             gameStarted = false;
         }
@@ -436,75 +499,155 @@
             const newLevel = Math.floor(score / 100) + 1;
             if (newLevel > level) {
                 level = newLevel;
-                // Increase speed multiplier by 15% each level
                 speedMultiplier = 1 + (level - 1) * 0.15;
-                // Update player speed
-                player.speed = player.baseSpeed * speedMultiplier;
-                // Increase spawn rates
+                player.speed = player.baseSpeed * (1 + (level - 1) * 0.08);
                 spawnRate.star = Math.min(0.02 + (level - 1) * 0.005, 0.05);
-                spawnRate.obstacle = Math.min(0.015 + (level - 1) * 0.004, 0.04);
+                spawnRate.obstacle = Math.min(0.012 + (level - 1) * 0.004, 0.035);
             }
         }
 
         function createStar() {
             stars.push({
-                x: Math.random() * (canvas.width - 20),
-                y: -20,
-                size: 20,
-                speed: (2 + Math.random() * 2) * speedMultiplier
+                x: Math.random() * (canvas.width - 30) + 15,
+                y: -25,
+                size: 18,
+                speed: (2.5 + Math.random() * 2) * speedMultiplier,
+                rotation: 0,
+                rotationSpeed: 0.1 + Math.random() * 0.1
             });
         }
 
         function createObstacle() {
             obstacles.push({
-                x: Math.random() * (canvas.width - 30),
-                y: -30,
-                size: 30,
-                speed: (3 + Math.random() * 2) * speedMultiplier
+                x: Math.random() * (canvas.width - 35) + 17.5,
+                y: -35,
+                size: 28,
+                speed: (3 + Math.random() * 2) * speedMultiplier,
+                pulse: 0
             });
         }
 
+        function createParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 5,
+                    vy: (Math.random() - 0.5) * 5 - 2,
+                    size: 2 + Math.random() * 3,
+                    color: color,
+                    life: 1,
+                    decay: 0.015 + Math.random() * 0.015
+                });
+            }
+        }
+
         function drawPlayer() {
-            // Simple basket/catcher
             ctx.fillStyle = '#0f380f';
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            ctx.fillStyle = '#306230';
-            ctx.fillRect(player.x + 5, player.y + 5, player.width - 10, player.height - 10);
+            
+            // Body
+            ctx.fillRect(player.x + 10, player.y + 10, 20, 25);
+            
+            // Head
+            ctx.beginPath();
+            ctx.arc(player.x + 20, player.y + 7, 9, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Arms
+            ctx.fillRect(player.x + 4, player.y + 15, 6, 12);
+            ctx.fillRect(player.x + 30, player.y + 15, 6, 12);
+            
+            // Legs
+            ctx.fillRect(player.x + 12, player.y + 35, 6, 5);
+            ctx.fillRect(player.x + 22, player.y + 35, 6, 5);
+            
+            // Basket/Net
+            ctx.strokeStyle = '#306230';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(player.x + 20, player.y + 22, 16, 0, Math.PI);
+            ctx.stroke();
         }
 
         function drawStar(star) {
-            ctx.fillStyle = '#ffd700';
+            ctx.save();
+            ctx.translate(star.x, star.y);
+            ctx.rotate(star.rotation);
+            
+            // Outer glow
+            ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
             ctx.beginPath();
             for (let i = 0; i < 5; i++) {
                 const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
-                const x = star.x + Math.cos(angle) * star.size;
-                const y = star.y + Math.sin(angle) * star.size;
+                const x = Math.cos(angle) * (star.size + 4);
+                const y = Math.sin(angle) * (star.size + 4);
                 if (i === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
             ctx.closePath();
             ctx.fill();
+            
+            // Star
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+                const x = Math.cos(angle) * star.size;
+                const y = Math.sin(angle) * star.size;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.restore();
+            
+            star.rotation += star.rotationSpeed;
         }
 
         function drawObstacle(obstacle) {
+            obstacle.pulse += 0.1;
+            const pulseFactor = 1 + Math.sin(obstacle.pulse) * 0.1;
+            
+            // Outer glow
+            ctx.fillStyle = 'rgba(139, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.arc(obstacle.x, obstacle.y, (obstacle.size / 2 + 4) * pulseFactor, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Main body
             ctx.fillStyle = '#8b0000';
             ctx.beginPath();
-            ctx.arc(obstacle.x, obstacle.y, obstacle.size / 2, 0, Math.PI * 2);
+            ctx.arc(obstacle.x, obstacle.y, (obstacle.size / 2) * pulseFactor, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Inner detail
+            ctx.fillStyle = '#5a0000';
+            ctx.beginPath();
+            ctx.arc(obstacle.x, obstacle.y, (obstacle.size / 3) * pulseFactor, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function checkCollision(obj1, obj2, obj2Size) {
-            return obj1.x < obj2.x + obj2Size &&
-                   obj1.x + obj1.width > obj2.x &&
-                   obj1.y < obj2.y + obj2Size &&
-                   obj1.y + obj1.height > obj2.y;
+            const centerDist = Math.sqrt(
+                Math.pow(obj1.x + obj1.width / 2 - obj2.x, 2) +
+                Math.pow(obj1.y + obj1.height / 2 - obj2.y, 2)
+            );
+            return centerDist < (obj1.width / 2 + obj2Size);
         }
 
         function update() {
             if (gameOver) return;
 
-            // Update level based on score
             updateLevel();
+
+            // Update combo timer
+            if (combo > 0) {
+                comboTimer--;
+                if (comboTimer <= 0) {
+                    combo = 0;
+                }
+            }
 
             // Move player
             if ((keys['a'] || keys['arrowleft']) && player.x > 0) {
@@ -520,18 +663,22 @@
                 player.y += player.speed;
             }
 
-            // Spawn items with dynamic rates
+            // Spawn items
             if (Math.random() < spawnRate.star) createStar();
             if (Math.random() < spawnRate.obstacle) createObstacle();
 
             // Update stars
             stars.forEach((star, index) => {
                 star.y += star.speed;
-                if (star.y > canvas.height) {
+                if (star.y > canvas.height + 30) {
                     stars.splice(index, 1);
                 }
-                if (checkCollision(player, star, star.size * 2)) {
-                    score += 10;
+                if (checkCollision(player, star, star.size)) {
+                    const points = 10 + (combo * 5);
+                    score += points;
+                    combo++;
+                    comboTimer = 120;
+                    createParticles(star.x, star.y, '#ffd700', 15);
                     stars.splice(index, 1);
                 }
             });
@@ -539,17 +686,29 @@
             // Update obstacles
             obstacles.forEach((obstacle, index) => {
                 obstacle.y += obstacle.speed;
-                if (obstacle.y > canvas.height) {
+                if (obstacle.y > canvas.height + 35) {
                     obstacles.splice(index, 1);
                 }
-                if (checkCollision(player, obstacle, obstacle.size)) {
+                if (checkCollision(player, obstacle, obstacle.size / 2)) {
                     gameOver = true;
+                    highScore = Math.max(score, highScore);
+                    createParticles(player.x + player.width / 2, player.y + player.height / 2, '#ff0000', 30);
+                }
+            });
+
+            // Update particles
+            particles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.2;
+                p.life -= p.decay;
+                if (p.life <= 0) {
+                    particles.splice(index, 1);
                 }
             });
         }
 
         function draw() {
-            // Game Boy green background
             ctx.fillStyle = '#9bbc0f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -557,32 +716,54 @@
                 ctx.fillStyle = '#0f380f';
                 ctx.font = '20px "Press Start 2P"';
                 ctx.textAlign = 'center';
-                ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 30);
+                ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 50);
                 ctx.font = '14px "Press Start 2P"';
-                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
+                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 - 15);
+                ctx.font = '12px "Press Start 2P"';
+                ctx.fillText(`LEVEL: ${level}`, canvas.width / 2, canvas.height / 2 + 15);
+                if (highScore > 0) {
+                    ctx.font = '10px "Press Start 2P"';
+                    ctx.fillStyle = '#ffd700';
+                    ctx.fillText(`BEST: ${highScore}`, canvas.width / 2, canvas.height / 2 + 40);
+                }
+                ctx.fillStyle = '#0f380f';
                 ctx.font = '10px "Press Start 2P"';
-                ctx.fillText('TAP TO RETRY', canvas.width / 2, canvas.height / 2 + 50);
+                ctx.fillText('TAP TO RETRY', canvas.width / 2, canvas.height / 2 + 65);
                 return;
             }
+
+            // Draw particles
+            particles.forEach(p => {
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+            });
+            ctx.globalAlpha = 1;
 
             // Draw game objects
             stars.forEach(drawStar);
             obstacles.forEach(drawObstacle);
             drawPlayer();
 
-            // Draw score and level
+            // HUD
             ctx.fillStyle = '#0f380f';
-            ctx.font = '14px "Press Start 2P"';
+            ctx.font = '12px "Press Start 2P"';
             ctx.textAlign = 'left';
-            ctx.fillText(`LV:${level}`, 10, 30);
-            ctx.fillText(`SCORE:${score}`, 10, 55);
+            ctx.fillText(`LV:${level}`, 10, 25);
+            ctx.fillText(`SCORE:${score}`, 10, 45);
             
-            // Show level up indicator
+            if (combo > 1) {
+                ctx.fillStyle = combo >= 5 ? '#ff6600' : '#ffd700';
+                ctx.font = '10px "Press Start 2P"';
+                ctx.textAlign = 'center';
+                ctx.fillText(`COMBO x${combo}!`, canvas.width / 2, 25);
+            }
+            
             if (score > 0 && score % 100 < 20) {
                 ctx.fillStyle = '#ffd700';
                 ctx.font = '10px "Press Start 2P"';
                 ctx.textAlign = 'center';
-                ctx.fillText('SPEED UP!', canvas.width / 2, 30);
+                ctx.fillText('LEVEL UP!', canvas.width / 2, canvas.height - 15);
             }
         }
 
