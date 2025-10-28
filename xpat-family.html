@@ -1242,8 +1242,7 @@
 
         function toggleMobileMenu() {
             const mobileNav = document.getElementById('mobileNav');
-            const isActive = mobileNav.classList.toggle('active');
-            document.body.style.overflow = isActive ? 'hidden' : '';
+            mobileNav.classList.toggle('active');
         }
 
         function closeMobileMenu() {
