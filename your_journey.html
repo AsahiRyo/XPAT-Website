@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Your Journey - X'PAT</title>
     <meta name="description" content="From dreams to reality - Play through your journey in Malaysia with X'PAT.">
     
@@ -22,25 +22,33 @@
             --glass-border: rgba(233, 223, 195, 0.3);
             --glass-strong: rgba(27, 86, 253, 0.25);
             --shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-            --radius: 24px;
+            --shadow-light: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --shadow-strong: 0 25px 60px rgba(1, 24, 216, 0.4);
+            --radius: clamp(16px, 3vw, 24px);
             --blur: blur(30px);
+            --blur-strong: blur(40px);
             --container-padding: clamp(16px, 4vw, 48px);
-            --section-spacing: clamp(60px, 8vw, 100px);
+            --section-spacing: clamp(60px, 10vh, 100px);
+            --arcade-gold: #FFD700;
+            --arcade-red: #FF0000;
+            --arcade-green: #00FF00;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         html {
             scroll-behavior: smooth;
             font-size: 16px;
+            overflow-x: hidden;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: #000814;
             color: var(--text-primary);
             line-height: 1.6;
@@ -49,6 +57,8 @@
             padding: 0;
             min-height: 100vh;
             position: relative;
+            width: 100%;
+            max-width: 100vw;
         }
 
         /* Animated Liquid Background */
@@ -61,38 +71,42 @@
             z-index: -1;
             overflow: hidden;
             background: linear-gradient(135deg, #000814 0%, #001233 50%, #000814 100%);
+            will-change: transform;
         }
 
         .liquid-blob {
             position: absolute;
             border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            filter: blur(80px);
+            filter: blur(clamp(60px, 15vw, 80px));
             opacity: 0.5;
             mix-blend-mode: screen;
             animation: morph 15s ease-in-out infinite, float 20s ease-in-out infinite;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         .blob-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, #0118D8, #1B56FD);
+            width: clamp(300px, 80vw, 600px);
+            height: clamp(300px, 80vw, 600px);
+            background: radial-gradient(circle at 30% 50%, #0118D8, #1B56FD);
             top: 10%;
             left: -15%;
+            animation-delay: 0s;
         }
 
         .blob-2 {
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, #1B56FD, #0118D8);
+            width: clamp(350px, 90vw, 700px);
+            height: clamp(350px, 90vw, 700px);
+            background: radial-gradient(circle at 70% 50%, #1B56FD, #0118D8);
             top: 40%;
             right: -20%;
             animation-delay: -5s;
         }
 
         .blob-3 {
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, #0118D8, #1B56FD);
+            width: clamp(280px, 70vw, 550px);
+            height: clamp(280px, 70vw, 550px);
+            background: radial-gradient(circle at 50% 50%, #0118D8, #1B56FD);
             bottom: 5%;
             left: 25%;
             animation-delay: -10s;
@@ -101,17 +115,80 @@
         @keyframes morph {
             0%, 100% {
                 border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-                transform: rotate(0deg) scale(1);
+                transform: rotate(0deg) scale(1) translateZ(0);
+            }
+            25% {
+                border-radius: 70% 30% 50% 50% / 30% 60% 40% 60%;
+                transform: rotate(90deg) scale(1.1) translateZ(0);
             }
             50% {
                 border-radius: 50% 50% 30% 70% / 50% 40% 60% 40%;
-                transform: rotate(180deg) scale(0.9);
+                transform: rotate(180deg) scale(0.9) translateZ(0);
+            }
+            75% {
+                border-radius: 30% 70% 60% 40% / 60% 30% 70% 40%;
+                transform: rotate(270deg) scale(1.05) translateZ(0);
             }
         }
 
         @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-40px, 40px); }
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) translateZ(0);
+            }
+            25% {
+                transform: translate(clamp(30px, 8vw, 60px), clamp(-30px, -8vw, -60px)) rotate(90deg) translateZ(0);
+            }
+            50% {
+                transform: translate(clamp(-20px, -5vw, -40px), clamp(20px, 5vw, 40px)) rotate(180deg) translateZ(0);
+            }
+            75% {
+                transform: translate(clamp(20px, 5vw, 40px), clamp(30px, 8vw, 60px)) rotate(270deg) translateZ(0);
+            }
+        }
+
+        .mesh-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.2;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(1, 24, 216, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(27, 86, 253, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(233, 223, 195, 0.1) 0%, transparent 50%);
+            animation: meshPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes meshPulse {
+            0%, 100% {
+                opacity: 0.2;
+                filter: hue-rotate(0deg);
+            }
+            50% {
+                opacity: 0.3;
+                filter: hue-rotate(15deg);
+            }
+        }
+
+        .glass-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: rgba(0, 8, 20, 0.3);
+            backdrop-filter: blur(2px);
+        }
+
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: inherit;
         }
 
         .container {
@@ -121,35 +198,152 @@
             width: 100%;
         }
 
-        /* Hero Section */
-        .hero-section {
+        /* Navigation - Hide on Scroll */
+        nav {
             position: fixed;
-            top: 30px;
-            left: 30px;
-            z-index: 999;
+            top: clamp(12px, 2vh, 30px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 8, 20, 0.85);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: clamp(40px, 8vw, 60px);
+            z-index: 1000;
+            padding: clamp(8px, 1.5vw, 16px) clamp(16px, 3vw, 40px);
+            box-shadow: 0 20px 60px rgba(1, 24, 216, 0.3);
+            width: calc(100% - clamp(16px, 4vw, 60px));
+            max-width: 1100px;
+            transition: transform 0.3s ease, background 0.3s ease, opacity 0.3s ease;
         }
 
-        .btn {
-            display: inline-flex;
+        nav.nav-hidden {
+            transform: translateX(-50%) translateY(-150%);
+            opacity: 0;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: auto;
+            min-height: clamp(60px, 10vw, 105px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: clamp(60px, 12vw, 105px);
+            width: auto;
+            object-fit: contain;
+            max-width: 100%;
+        }
+
+        .nav-links {
+            display: none;
+            list-style: none;
+            gap: clamp(12px, 2vw, 32px);
+        }
+
+        .nav-links a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: clamp(13px, 1.8vw, 15px);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+            padding: clamp(6px, 1vw, 8px) clamp(12px, 2vw, 16px);
+            border-radius: clamp(12px, 2vw, 20px);
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: var(--off-white);
+            background: var(--glass-strong);
+            backdrop-filter: var(--blur);
+        }
+
+        .nav-links a.active {
+            background: var(--glass-strong);
+            color: var(--off-white);
+        }
+
+        .menu-btn {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            color: var(--off-white);
+            font-size: clamp(14px, 3vw, 16px);
+            cursor: pointer;
+            padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
+            border-radius: clamp(12px, 2vw, 16px);
+            transition: all 0.2s ease;
+            width: clamp(36px, 8vw, 40px);
+            height: clamp(36px, 8vw, 40px);
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: clamp(14px, 3vw, 18px) clamp(28px, 5vw, 36px);
-            border-radius: 20px;
-            font-size: clamp(15px, 3vw, 17px);
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: var(--off-white);
-            box-shadow: 0 10px 30px rgba(1, 24, 216, 0.4);
+            flex-shrink: 0;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(27, 86, 253, 0.5);
+        .menu-btn:hover {
+            background: var(--glass-strong);
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 8, 20, 0.98);
+            backdrop-filter: var(--blur-strong);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(20px, 4vw, 32px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: clamp(20px, 5vw, 40px);
+        }
+
+        .mobile-nav.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-nav a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: clamp(17px, 4vw, 22px);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            padding: clamp(10px, 2vw, 14px) clamp(20px, 4vw, 28px);
+            border-radius: clamp(14px, 3vw, 18px);
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .mobile-nav a:hover, .mobile-nav a:active {
+            color: var(--off-white);
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-color: var(--secondary-blue);
+        }
+
+        .mobile-nav a.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-color: var(--secondary-blue);
         }
 
         /* Progress Bar */
@@ -191,36 +385,25 @@
         }
 
         .progress-dot.active {
-            background: #1B56FD;
-            border-color: #1B56FD;
+            background: var(--secondary-blue);
+            border-color: var(--secondary-blue);
             box-shadow: 0 0 20px rgba(27, 86, 253, 0.6);
         }
 
         .progress-dot.completed {
-            background: #FFD700;
-            border-color: #FFD700;
-        }
-
-        @media (max-width: 768px) {
-            .story-progress-bar {
-                right: 10px;
-                gap: 8px;
-            }
-            .progress-dot {
-                width: 16px;
-                height: 16px;
-            }
+            background: var(--arcade-gold);
+            border-color: var(--arcade-gold);
         }
 
         /* Story Section */
         .story-section {
-            padding: clamp(100px, 15vh, 150px) 0 var(--section-spacing);
+            padding: clamp(120px, 18vh, 180px) 0 var(--section-spacing);
             position: relative;
         }
 
         .story-stage {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: clamp(40px, 6vw, 80px);
             align-items: center;
             margin-bottom: clamp(80px, 10vw, 120px);
@@ -229,37 +412,33 @@
             margin-right: auto;
         }
 
-        .story-stage:nth-child(even) {
-            direction: rtl;
-        }
-
-        .story-stage:nth-child(even) > * {
-            direction: ltr;
-        }
-
         .story-content {
             padding: clamp(20px, 4vw, 40px);
         }
 
         .stage-label {
-            font-size: clamp(14px, 2.5vw, 16px);
-            color: #FFD700;
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(12px, 2.5vw, 14px);
+            color: var(--arcade-gold);
             font-weight: 700;
             margin-bottom: clamp(12px, 2vw, 16px);
             text-transform: uppercase;
             letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
         .story-title {
-            font-size: clamp(28px, 5vw, 48px);
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(20px, 4vw, 36px);
             font-weight: 800;
             margin-bottom: clamp(16px, 3vw, 24px);
             color: var(--off-white);
-            line-height: 1.2;
+            line-height: 1.4;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .story-description {
-            font-size: clamp(16px, 3vw, 20px);
+            font-size: clamp(14px, 3vw, 18px);
             color: var(--cream);
             line-height: 1.6;
             margin-bottom: clamp(24px, 4vw, 32px);
@@ -285,11 +464,11 @@
             box-shadow: 0 15px 40px rgba(27, 86, 253, 0.6);
         }
 
-        /* Game Container */
+        /* Game Container - Arcade Style */
         .game-container {
             background: rgba(0, 8, 20, 0.9);
             backdrop-filter: var(--blur);
-            border: 2px solid var(--glass-border);
+            border: 3px solid var(--arcade-gold);
             border-radius: var(--radius);
             padding: 20px;
             display: flex;
@@ -297,15 +476,42 @@
             align-items: center;
             justify-content: center;
             min-height: 500px;
-            box-shadow: 0 20px 60px rgba(1, 24, 216, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3),
+                        0 0 40px rgba(27, 86, 253, 0.2);
             position: relative;
             cursor: pointer;
             transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--arcade-gold), var(--secondary-blue), var(--arcade-gold));
+            border-radius: var(--radius);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .game-container:hover::before {
+            opacity: 1;
         }
 
         .game-container:hover {
-            border-color: #FFD700;
-            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 25px 70px rgba(255, 215, 0, 0.4),
+                        0 0 60px rgba(27, 86, 253, 0.4);
         }
 
         .game-preview {
@@ -315,7 +521,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 3px solid #FFD700;
+            border: 3px solid rgba(27, 86, 253, 0.5);
             border-radius: 8px;
             background: linear-gradient(135deg, #000814 0%, #001233 100%);
             position: relative;
@@ -325,64 +531,150 @@
         .game-icon {
             font-size: 80px;
             margin-bottom: 20px;
-            animation: bounce 2s ease-in-out infinite;
+            animation: arcadeBounce 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @keyframes arcadeBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.1); }
         }
 
         .game-title {
             font-family: 'Press Start 2P', cursive;
-            color: #FFD700;
-            font-size: 18px;
+            color: var(--arcade-gold);
+            font-size: clamp(16px, 3.5vw, 20px);
             margin-bottom: 15px;
             text-align: center;
-            text-shadow: 2px 2px 0 #000;
+            text-shadow: 2px 2px 0 #000, 0 0 20px rgba(255, 215, 0, 0.8);
+            animation: arcadeGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes arcadeGlow {
+            0%, 100% { text-shadow: 2px 2px 0 #000, 0 0 20px rgba(255, 215, 0, 0.8); }
+            50% { text-shadow: 2px 2px 0 #000, 0 0 30px rgba(255, 215, 0, 1); }
         }
 
         .game-instructions {
             font-family: 'Press Start 2P', cursive;
-            color: #FFF;
-            font-size: 12px;
+            color: var(--cream);
+            font-size: clamp(10px, 2vw, 12px);
             text-align: center;
             padding: 0 20px;
-            line-height: 1.8;
-            text-shadow: 2px 2px 0 #000;
+            line-height: 2;
+            text-shadow: 1px 1px 0 #000;
         }
 
         .play-button {
             margin-top: 30px;
             padding: 15px 40px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            background: linear-gradient(135deg, var(--arcade-gold) 0%, #FFA500 100%);
             color: #000;
             font-family: 'Press Start 2P', cursive;
-            font-size: 14px;
+            font-size: clamp(12px, 2.5vw, 16px);
             border: none;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+            text-transform: uppercase;
         }
 
         .play-button:hover {
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.05);
             box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
+            background: linear-gradient(135deg, #FFA500 0%, var(--arcade-gold) 100%);
         }
 
-        @media (max-width: 768px) {
+        .play-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* Arcade pixel decoration */
+        .game-preview::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(27, 86, 253, 0.03) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(27, 86, 253, 0.03) 3px
+                );
+            pointer-events: none;
+        }
+
+        /* Media Queries */
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: none;
+            }
+
             .story-stage {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
 
             .story-stage:nth-child(even) {
+                direction: rtl;
+            }
+
+            .story-stage:nth-child(even) > * {
                 direction: ltr;
             }
 
-            .game-modal-content {
-                width: 95%;
-                height: 85vh;
+            .story-progress-bar {
+                right: 40px;
+            }
+
+            .progress-dot {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .story-progress-bar {
+                right: 10px;
+                gap: 8px;
+            }
+            
+            .progress-dot {
+                width: 16px;
+                height: 16px;
+            }
+
+            .story-title {
+                font-size: clamp(18px, 5vw, 24px);
+            }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .story-section {
+                padding: clamp(80px, 15vh, 100px) 0 clamp(40px, 8vh, 60px);
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .liquid-blob {
+                animation: none;
             }
         }
     </style>
@@ -394,13 +686,39 @@
         <div class="liquid-blob blob-2"></div>
         <div class="liquid-blob blob-3"></div>
     </div>
+    <div class="mesh-overlay"></div>
+    <div class="glass-layer"></div>
 
-    <!-- Return Home Button -->
-    <section class="hero-section">
-        <div class="container">
-            <a href="index.html" class="btn">← Return Home</a>
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="s4slogo.png" alt="X'PAT Logo">
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <ul class="nav-links">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#services">All Services</a></li>
+                <li><a href="your_journey.html" class="active">Your Journey</a></li>
+                <li><a href="xpat-family.html">X'PAT Family</a></li>
+                <li><a href="s4s_plans.html">Sim Card</a></li>
+                <li><a href="index.html#support">Support</a></li>
+            </ul>
+
+            <button class="menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
         </div>
-    </section>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html#home" onclick="closeMobileMenu()">Home</a>
+        <a href="index.html#services" onclick="closeMobileMenu()">All Services</a>
+        <a href="your_journey.html" class="active" onclick="closeMobileMenu()">Your Journey</a>
+        <a href="xpat-family.html" onclick="closeMobileMenu()">X'PAT Family</a>
+        <a href="s4s_plans.html" onclick="closeMobileMenu()">Sim Card</a>
+        <a href="index.html#support" onclick="closeMobileMenu()">Support</a>
+    </div>
 
     <!-- Story Section -->
     <section class="story-section" id="story">
@@ -421,20 +739,21 @@
             <!-- Stage 01: Dream Catcher -->
             <div class="story-stage" data-stage="0">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 01</div>
+                    <div class="stage-label">🎮 STAGE 01 - ARCADE</div>
                     <h3 class="story-title">Dreaming of Malaysia</h3>
-                    <p class="story-description">Catch falling stars while avoiding obstacles. Each star represents a dream of a better future in Malaysia!</p>
+                    <p class="story-description">Catch falling stars while dodging dangerous obstacles! Each star you collect brings you closer to your dream of a better future in Malaysia. Move fast and stay sharp!</p>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game1.html')">
                     <div class="game-preview">
                         <div class="game-icon">⭐</div>
                         <div class="game-title">DREAM CATCHER</div>
                         <div class="game-instructions">
-                            WASD or Arrow Keys<br>
-                            Catch stars!<br>
-                            Avoid obstacles!
+                            🕹️ WASD or Arrow Keys<br>
+                            💫 Catch golden stars!<br>
+                            💣 Dodge red bombs!<br>
+                            🏆 Build combos for points!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game1.html', 'Dream Catcher')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -442,23 +761,24 @@
             <!-- Stage 02: Airport Rush -->
             <div class="story-stage" data-stage="1">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 02</div>
+                    <div class="stage-label">🎮 STAGE 02 - ARCADE</div>
                     <h3 class="story-title">Taking Flight</h3>
-                    <p class="story-description">Navigate through airport security! Dodge obstacles and collect boarding passes to reach your gate.</p>
+                    <p class="story-description">Race through the airport terminal! Switch lanes to dodge luggage carts and security barriers. Collect boarding passes for bonus points. Speed increases as you progress!</p>
                     <a href="https://linktr.ee/tfpsolutionsofficial" target="_blank" class="story-cta">
                         ✈️ X'PAT Air Tickets
                     </a>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game2.html')">
                     <div class="game-preview">
                         <div class="game-icon">✈️</div>
                         <div class="game-title">AIRPORT RUSH</div>
                         <div class="game-instructions">
-                            WS or Up/Down Arrows<br>
-                            Navigate gates!<br>
-                            Collect tickets!
+                            🕹️ WS or Up/Down Keys<br>
+                            🎫 Collect boarding passes!<br>
+                            🧳 Dodge obstacles!<br>
+                            ⚡ Speed up each level!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game2.html', 'Airport Rush')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -466,20 +786,21 @@
             <!-- Stage 03: Cloud Dodger -->
             <div class="story-stage" data-stage="2">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 03</div>
+                    <div class="stage-label">🎮 STAGE 03 - ARCADE</div>
                     <h3 class="story-title">Journey Through The Clouds</h3>
-                    <p class="story-description">Fly vertically and dodge bad clouds! Navigate carefully to reach Malaysia safely.</p>
+                    <p class="story-description">Pilot your plane vertically through dangerous storm clouds! Shoot down bad clouds and pass through good ones safely. Face powerful boss clouds every 15 victories!</p>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game3.html')">
                     <div class="game-preview">
                         <div class="game-icon">☁️</div>
                         <div class="game-title">CLOUD DODGER</div>
                         <div class="game-instructions">
-                            AD or Left/Right<br>
-                            Avoid bad clouds!<br>
-                            Fly upward safely!
+                            🕹️ WASD to Move<br>
+                            🔥 SPACE to Shoot!<br>
+                            ☁️ Destroy red clouds!<br>
+                            👾 Defeat boss clouds!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game3.html', 'Cloud Dodger')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -487,23 +808,24 @@
             <!-- Stage 04: Visa Puzzle -->
             <div class="story-stage" data-stage="3">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 04</div>
+                    <div class="stage-label">🎮 STAGE 04 - ARCADE</div>
                     <h3 class="story-title">Welcome to Malaysia</h3>
-                    <p class="story-description">Match passport stamps in this memory game! Complete your documentation to enter Malaysia.</p>
+                    <p class="story-description">Match passport stamps in this intense memory challenge! Flip cards to find matching pairs before time runs out. Use power-ups wisely to complete harder levels!</p>
                     <a href="https://linktr.ee/tfpsolutionsofficial" target="_blank" class="story-cta">
                         📋 X'PAT Visa Renewal
                     </a>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game4.html')">
                     <div class="game-preview">
                         <div class="game-icon">🛂</div>
                         <div class="game-title">VISA PUZZLE</div>
                         <div class="game-instructions">
-                            Click to Match<br>
-                            Memory game!<br>
-                            Match all pairs!
+                            🕹️ Click to Flip Cards<br>
+                            🧩 Match all pairs!<br>
+                            ⏱️ Beat the timer!<br>
+                            ⚡ Use power-ups!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game4.html', 'Visa Puzzle')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -511,23 +833,24 @@
             <!-- Stage 05: Signal Connect -->
             <div class="story-stage" data-stage="4">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 05</div>
+                    <div class="stage-label">🎮 STAGE 05 - ARCADE</div>
                     <h3 class="story-title">Staying Connected</h3>
-                    <p class="story-description">Create a path to connect the signal towers! Stay connected with your loved ones back home.</p>
-                    <a href="https://linktr.ee/tfpsolutionsofficial" target="_blank" class="story-cta">
+                    <p class="story-description">Hit the rhythm! Tap the correct tower button as signals reach the hit zone. Build massive combos and watch the speed increase. Perfect timing = Perfect score!</p>
+                    <a href="https://tr.ee/nbnQzf0nxV" target="_blank" class="story-cta">
                         📱 X'PAT S4S Mobile
                     </a>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game5.html')">
                     <div class="game-preview">
                         <div class="game-icon">📡</div>
-                        <div class="game-title">SIGNAL CONNECT</div>
+                        <div class="game-title">TOWER TAP</div>
                         <div class="game-instructions">
-                            Click Tiles<br>
-                            Connect towers!<br>
-                            Build the path!
+                            🕹️ ASD Keys or Buttons<br>
+                            🎯 Hit perfect timing!<br>
+                            🔥 Build huge combos!<br>
+                            ⚡ Speed increases!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game5.html', 'Signal Connect')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -535,23 +858,24 @@
             <!-- Stage 06: Builder's Challenge -->
             <div class="story-stage" data-stage="5">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 06</div>
+                    <div class="stage-label">🎮 STAGE 06 - ARCADE</div>
                     <h3 class="story-title">Building Your Future</h3>
-                    <p class="story-description">Stack blocks perfectly to build your future! Each perfect stack earns you more.</p>
-                    <a href="https://linktr.ee/tfpsolutionsofficial" target="_blank" class="story-cta">
+                    <p class="story-description">Stack blocks perfectly to build your tower of success! Time your drops carefully - perfect stacks earn huge bonuses. The blocks get smaller as you climb higher!</p>
+                    <a href="https://onesolution.my/" target="_blank" class="story-cta">
                         💼 X'PAT E-Wages
                     </a>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game6.html')">
                     <div class="game-preview">
-                        <div class="game-icon">🏗️</div>
+                        <div class="game-icon">🗼</div>
                         <div class="game-title">BUILDER CHALLENGE</div>
                         <div class="game-instructions">
-                            Spacebar to Drop<br>
-                            Stack perfectly!<br>
-                            Build high!
+                            🕹️ SPACE to Drop<br>
+                            🎯 Stack perfectly!<br>
+                            ⭐ Perfect = Bonus!<br>
+                            🏗️ Build high!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game6.html', 'Builder Challenge')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -559,23 +883,24 @@
             <!-- Stage 07: Money Runner -->
             <div class="story-stage" data-stage="6">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 07</div>
+                    <div class="stage-label">🎮 STAGE 07 - ARCADE</div>
                     <h3 class="story-title">Supporting Your Family</h3>
-                    <p class="story-description">Collect coins while jumping over obstacles! Every ringgit counts for your family.</p>
-                    <a href="https://linktr.ee/tfpsolutionsofficial" target="_blank" class="story-cta">
+                    <p class="story-description">Endless running action! Jump over obstacles and dive through gaps. Collect golden coins for your family. Chain combos by collecting coins quickly!</p>
+                    <a href="https://otr.seccurio.com/" target="_blank" class="story-cta">
                         💸 X'PAT Remittance
                     </a>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game7.html')">
                     <div class="game-preview">
                         <div class="game-icon">🏃</div>
                         <div class="game-title">MONEY RUNNER</div>
                         <div class="game-instructions">
-                            Spacebar to Jump<br>
-                            Collect coins!<br>
-                            Avoid obstacles!
+                            🕹️ SPACE to Jump/Dive<br>
+                            💰 Collect all coins!<br>
+                            🚧 Dodge obstacles!<br>
+                            🔥 Build combos!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game7.html', 'Money Runner')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -583,23 +908,24 @@
             <!-- Stage 08: Coin Collector -->
             <div class="story-stage" data-stage="7">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 08</div>
+                    <div class="stage-label">🎮 STAGE 08 - ARCADE</div>
                     <h3 class="story-title">Growing Your Wealth</h3>
-                    <p class="story-description">Click coins to collect them before they disappear! Build your savings quickly.</p>
-                    <a href="https://linktr.ee/tfpsolutionsofficial" target="_blank" class="story-cta">
+                    <p class="story-description">Lightning-fast clicking action! Tap coins before they disappear in this 30-second frenzy. Build massive combos and watch your score multiply. Every click counts!</p>
+                    <a href="https://mipay.my/" target="_blank" class="story-cta">
                         💰 X'PAT MiPay
                     </a>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game8.html')">
                     <div class="game-preview">
                         <div class="game-icon">💰</div>
                         <div class="game-title">COIN COLLECTOR</div>
                         <div class="game-instructions">
-                            Click Coins Fast!<br>
-                            30 seconds!<br>
-                            Build savings!
+                            🕹️ Click Coins Fast!<br>
+                            ⏱️ 30 seconds only!<br>
+                            💥 Combo multiplier!<br>
+                            🎯 Don't miss!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game8.html', 'Coin Collector')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -607,23 +933,24 @@
             <!-- Stage 09: Fireworks -->
             <div class="story-stage" data-stage="8">
                 <div class="story-content">
-                    <div class="stage-label">STAGE 09</div>
+                    <div class="stage-label">🎮 STAGE 09 - FINALE</div>
                     <h3 class="story-title">You Made It!</h3>
-                    <p class="story-description">Celebrate your success! Click to create fireworks and celebrate your journey from dreams to reality.</p>
+                    <p class="story-description">Celebrate your incredible journey! Click anywhere to launch spectacular fireworks into the night sky. You've conquered every challenge from dreams to reality. You're a champion!</p>
                     <a href="index.html#download" class="story-cta">
                         🎉 Download X'PAT Now
                     </a>
                 </div>
-                <div class="game-container">
+                <div class="game-container" onclick="openGame('games/game9.html')">
                     <div class="game-preview">
                         <div class="game-icon">🎆</div>
                         <div class="game-title">CELEBRATION!</div>
                         <div class="game-instructions">
-                            Click for Fireworks!<br>
-                            Celebrate success!<br>
-                            You made it!
+                            🕹️ Click Anywhere!<br>
+                            🎆 Launch fireworks!<br>
+                            🏆 You're a champion!<br>
+                            ⭐ Celebrate success!
                         </div>
-                        <button class="play-button" onclick="openGame('games/game9.html', 'Celebration')">PLAY NOW</button>
+                        <button class="play-button">► PLAY NOW</button>
                     </div>
                 </div>
             </div>
@@ -631,17 +958,53 @@
     </section>
 
     <script>
-        // ===== GAME MODAL FUNCTIONALITY =====
-        function openGame(gameUrl, gameTitle) {
-            window.location.href = gameUrl;
+        // ===== NAVIGATION HIDE ON SCROLL =====
+        let lastScrollTop = 0;
+        const nav = document.getElementById('mainNav');
+        const scrollThreshold = 100;
+
+        function handleNavScroll() {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (currentScroll > scrollThreshold) {
+                if (currentScroll > lastScrollTop) {
+                    nav.classList.add('nav-hidden');
+                } else {
+                    nav.classList.remove('nav-hidden');
+                }
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+            
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
         }
 
-        // Close modal with ESC key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeGame();
+        let navScrollTimer;
+        window.addEventListener('scroll', () => {
+            if (!navScrollTimer) {
+                navScrollTimer = requestAnimationFrame(() => {
+                    handleNavScroll();
+                    navScrollTimer = null;
+                });
             }
-        });
+        }, { passive: true });
+
+        // ===== MOBILE MENU =====
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            const isActive = mobileNav.classList.toggle('active');
+            document.body.style.overflow = isActive ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileNav').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ===== GAME MODAL FUNCTIONALITY =====
+        function openGame(gameUrl) {
+            window.location.href = gameUrl;
+        }
 
         // ===== PROGRESS BAR FUNCTIONALITY =====
         const progressBar = document.getElementById('storyProgressBar');
@@ -693,197 +1056,74 @@
         window.addEventListener('scroll', updateProgressDots);
         updateProgressDots();
 
-        // ===== GAME START LOGIC =====
-        let gameActive = false;
-        let game1Active = false;
-        let game2Active = false;
-        let game3Active = false;
-        let game4Active = false;
-        let game5Active = false;
-        let game6Active = false;
-        let game7Active = false;
-        let game8Active = false;
-        let game9Active = false;
+        // ===== INTERACTIVE LIQUID BACKGROUND =====
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
 
-        let game1Started = false;
-        let game2Started = false;
-        let game3Started = false;
-        let game4Started = false;
-        let game5Started = false;
-        let game6Started = false;
-        let game7Started = false;
-        let game8Started = false;
-        let game9Started = false;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
 
-        function startGame1() {
-            if (!game1Active) {
-                game1Active = true;
-                gameActive = true;
-                initGame1();
-            }
+        function animateBlobs() {
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            const blobs = document.querySelectorAll('.liquid-blob');
+            blobs.forEach((blob, index) => {
+                const speed = (index + 1) * 0.02;
+                const x = (targetX - window.innerWidth / 2) * speed;
+                const y = (targetY - window.innerHeight / 2) * speed;
+                
+                blob.style.transform = `translate(${x}px, ${y}px) translateZ(0)`;
+            });
+
+            requestAnimationFrame(animateBlobs);
         }
 
-        canvas1.addEventListener('click', startGame1);
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame1();
-                if (game1Active && !game1Started) {
-                    game1Started = true;
-                    updateGame1();
-                }
+        animateBlobs();
+
+        // Close mobile menu on outside click
+        document.addEventListener('click', (event) => {
+            const mobileNav = document.getElementById('mobileNav');
+            const menuBtn = document.querySelector('.menu-btn');
+            
+            if (mobileNav.classList.contains('active') && !mobileNav.contains(event.target) && !menuBtn.contains(event.target)) {
+                closeMobileMenu();
             }
         });
 
-        function startGame2() {
-            if (!game2Active) {
-                game2Active = true;
-                gameActive = true;
-                initGame2();
-            }
-        }
-
-        canvas2.addEventListener('click', startGame2);
+        // Keyboard accessibility
         document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame2();
-                if (game2Active && !game2Started) {
-                    game2Started = true;
-                    updateGame2();
-                }
+            if (e.key === 'Escape') {
+                closeMobileMenu();
             }
         });
 
-        function startGame3() {
-            if (!game3Active) {
-                game3Active = true;
-                gameActive = true;
-                initGame3();
-            }
-        }
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.includes('#') && !href.startsWith('http')) {
+                    const targetId = href.split('#')[1];
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        e.preventDefault();
+                        closeMobileMenu();
+                        
+                        const headerOffset = 120;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-        canvas3.addEventListener('click', startGame3);
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame3();
-                if (game3Active && !game3Started) {
-                    game3Started = true;
-                    updateGame3();
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
                 }
-            }
-        });
-
-        function startGame4() {
-            if (!game4Active) {
-                game4Active = true;
-                gameActive = true;
-                initGame4();
-            }
-        }
-
-        canvas4.addEventListener('click', startGame4);
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame4();
-                if (game4Active && !game4Started) {
-                    game4Started = true;
-                    updateGame4();
-                }
-            }
-        });
-
-        function startGame5() {
-            if (!game5Active) {
-                game5Active = true;
-                gameActive = true;
-                initGame5();
-            }
-        }
-
-        canvas5.addEventListener('click', startGame5);
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame5();
-                if (game5Active && !game5Started) {
-                    game5Started = true;
-                    updateGame5();
-                }
-            }
-        });
-
-        function startGame6() {
-            if (!game6Active) {
-                game6Active = true;
-                gameActive = true;
-                initGame6();
-            }
-        }
-
-        canvas6.addEventListener('click', startGame6);
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame6();
-                if (game6Active && !game6Started) {
-                    game6Started = true;
-                    updateGame6();
-                }
-            }
-        });
-
-        function startGame7() {
-            if (!game7Active) {
-                game7Active = true;
-                gameActive = true;
-                initGame7();
-            }
-        }
-
-        canvas7.addEventListener('click', startGame7);
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame7();
-                if (game7Active && !game7Started) {
-                    game7Started = true;
-                    updateGame7();
-                }
-            }
-        });
-
-        function startGame8() {
-            if (!game8Active) {
-                game8Active = true;
-                gameActive = true;
-                initGame8();
-            }
-        }
-
-        canvas8.addEventListener('click', startGame8);
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame8();
-                if (game8Active && !game8Started) {
-                    game8Started = true;
-                    updateGame8();
-                }
-            }
-        });
-
-        function startGame9() {
-            if (!game9Active) {
-                game9Active = true;
-                gameActive = true;
-                initGame9();
-            }
-        }
-
-        canvas9.addEventListener('click', startGame9);
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                startGame9();
-                if (game9Active && !game9Started) {
-                    game9Started = true;
-                    updateGame9();
-                }
-            }
+            });
         });
     </script>
 </body>
