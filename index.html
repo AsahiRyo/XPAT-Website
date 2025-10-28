@@ -281,6 +281,13 @@
             backdrop-filter: var(--blur);
         }
 
+        .nav-links a.active {
+            background: #0118D8;
+            color: white;
+            box-shadow: 0 4px 12px rgba(1, 24, 216, 0.5);
+            border: none;
+        }
+
         .menu-btn {
             background: var(--glass-bg);
             backdrop-filter: var(--blur);
@@ -950,6 +957,22 @@
             border-color: var(--secondary-blue);
         }
 
+        /* Replace existing .nav-links a.active rule */
+        .nav-links a.active {
+            background: #0118D8;
+            color: white;
+            box-shadow: 0 4px 12px rgba(1, 24, 216, 0.5);
+            border: none;
+        }
+
+        /* Update mobile navigation active state */
+        .mobile-nav a.active {
+            background: #0118D8;
+            color: white;
+            box-shadow: 0 4px 12px rgba(1, 24, 216, 0.5);
+            border: none;
+        }
+
         /* Media Queries - Mobile First Approach */
         
         /* Extra Small Devices (320px) */
@@ -1126,24 +1149,23 @@
             <a href="#home" class="logo">
                 <img src="s4slogo.png" alt="X'PAT Logo">
             </a>
-            
-            <!-- Desktop Navigation -->
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
+                <li><a href="#home" class="active">Home</a></li>
                 <li><a href="#services">All Services</a></li>
                 <li><a href="your_journey.html">Your Journey</a></li>
                 <li><a href="xpat-family.html">X'PAT Family</a></li>
                 <li><a href="s4s_plans.html">Sim Card</a></li>
                 <li><a href="#support">Support</a></li>
             </ul>
-
-            <button class="menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+            <button class="menu-btn" onclick="toggleMobileMenu()">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
     <!-- Mobile Navigation -->
     <div class="mobile-nav" id="mobileNav">
-        <a href="#home" onclick="closeMobileMenu()">Home</a>
+        <a href="#home" class="active" onclick="closeMobileMenu()">Home</a>
         <a href="#services" onclick="closeMobileMenu()">All Services</a>
         <a href="your_journey.html" onclick="closeMobileMenu()">Your Journey</a>
         <a href="xpat-family.html" onclick="closeMobileMenu()">X'PAT Family</a>
