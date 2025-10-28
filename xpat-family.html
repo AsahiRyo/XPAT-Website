@@ -262,11 +262,6 @@
             backdrop-filter: var(--blur);
         }
 
-        .nav-links a.active {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: var(--off-white);
-        }
-
         .menu-btn {
             background: var(--glass-bg);
             backdrop-filter: var(--blur);
@@ -469,10 +464,6 @@
             box-shadow: 0 5px 15px rgba(1, 24, 216, 0.3);
         }
 
-        .grid-cell.community-image.active {
-            background-blend-mode: normal;
-        }
-
         .grid-cell:active {
             transform: scale(0.95);
         }
@@ -486,7 +477,7 @@
             }
         }
 
-        /* Letter patterns - keep active state for structure */
+        /* Letter patterns */
         .letter-x .grid-cell:nth-child(1), .letter-x .grid-cell:nth-child(5),
         .letter-x .grid-cell:nth-child(7), .letter-x .grid-cell:nth-child(9),
         .letter-x .grid-cell:nth-child(12), .letter-x .grid-cell:nth-child(14),
@@ -494,27 +485,12 @@
         .letter-x .grid-cell:nth-child(24), .letter-x .grid-cell:nth-child(27),
         .letter-x .grid-cell:nth-child(29), .letter-x .grid-cell:nth-child(31),
         .letter-x .grid-cell:nth-child(35) {
-            background: linear-gradient(135deg, #0118D8, #1B56FD);
-        }
-
-        .letter-x .grid-cell:nth-child(1).community-image, .letter-x .grid-cell:nth-child(5).community-image,
-        .letter-x .grid-cell:nth-child(7).community-image, .letter-x .grid-cell:nth-child(9).community-image,
-        .letter-x .grid-cell:nth-child(12).community-image, .letter-x .grid-cell:nth-child(14).community-image,
-        .letter-x .grid-cell:nth-child(18).community-image, .letter-x .grid-cell:nth-child(22).community-image,
-        .letter-x .grid-cell:nth-child(24).community-image, .letter-x .grid-cell:nth-child(27).community-image,
-        .letter-x .grid-cell:nth-child(29).community-image, .letter-x .grid-cell:nth-child(31).community-image,
-        .letter-x .grid-cell:nth-child(35).community-image {
-            background-blend-mode: normal;
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
         }
 
         .letter-apostrophe .grid-cell:nth-child(1),
         .letter-apostrophe .grid-cell:nth-child(3) {
-            background: linear-gradient(135deg, #0118D8, #1B56FD);
-        }
-
-        .letter-apostrophe .grid-cell:nth-child(1).community-image,
-        .letter-apostrophe .grid-cell:nth-child(3).community-image {
-            background-blend-mode: normal;
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
         }
 
         .letter-p .grid-cell:nth-child(1), .letter-p .grid-cell:nth-child(2),
@@ -525,18 +501,7 @@
         .letter-p .grid-cell:nth-child(18), .letter-p .grid-cell:nth-child(19),
         .letter-p .grid-cell:nth-child(21), .letter-p .grid-cell:nth-child(26),
         .letter-p .grid-cell:nth-child(31) {
-            background: linear-gradient(135deg, #0118D8, #1B56FD);
-        }
-
-        .letter-p .grid-cell:nth-child(1).community-image, .letter-p .grid-cell:nth-child(2).community-image,
-        .letter-p .grid-cell:nth-child(3).community-image, .letter-p .grid-cell:nth-child(4).community-image,
-        .letter-p .grid-cell:nth-child(6).community-image, .letter-p .grid-cell:nth-child(10).community-image,
-        .letter-p .grid-cell:nth-child(11).community-image, .letter-p .grid-cell:nth-child(15).community-image,
-        .letter-p .grid-cell:nth-child(16).community-image, .letter-p .grid-cell:nth-child(17).community-image,
-        .letter-p .grid-cell:nth-child(18).community-image, .letter-p .grid-cell:nth-child(19).community-image,
-        .letter-p .grid-cell:nth-child(21).community-image, .letter-p .grid-cell:nth-child(26).community-image,
-        .letter-p .grid-cell:nth-child(31).community-image {
-            background-blend-mode: normal;
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
         }
 
         .letter-a .grid-cell:nth-child(2), .letter-a .grid-cell:nth-child(3),
@@ -548,19 +513,7 @@
         .letter-a .grid-cell:nth-child(21), .letter-a .grid-cell:nth-child(25),
         .letter-a .grid-cell:nth-child(26), .letter-a .grid-cell:nth-child(30),
         .letter-a .grid-cell:nth-child(31), .letter-a .grid-cell:nth-child(35) {
-            background: linear-gradient(135deg, #0118D8, #1B56FD);
-        }
-
-        .letter-a .grid-cell:nth-child(2).community-image, .letter-a .grid-cell:nth-child(3).community-image,
-        .letter-a .grid-cell:nth-child(4).community-image, .letter-a .grid-cell:nth-child(6).community-image,
-        .letter-a .grid-cell:nth-child(10).community-image, .letter-a .grid-cell:nth-child(11).community-image,
-        .letter-a .grid-cell:nth-child(15).community-image, .letter-a .grid-cell:nth-child(16).community-image,
-        .letter-a .grid-cell:nth-child(17).community-image, .letter-a .grid-cell:nth-child(18).community-image,
-        .letter-a .grid-cell:nth-child(19).community-image, .letter-a .grid-cell:nth-child(20).community-image,
-        .letter-a .grid-cell:nth-child(21).community-image, .letter-a .grid-cell:nth-child(25).community-image,
-        .letter-a .grid-cell:nth-child(26).community-image, .letter-a .grid-cell:nth-child(30).community-image,
-        .letter-a .grid-cell:nth-child(31).community-image, .letter-a .grid-cell:nth-child(35).community-image {
-            background-blend-mode: normal;
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
         }
 
         .letter-t .grid-cell:nth-child(1), .letter-t .grid-cell:nth-child(2),
@@ -569,16 +522,7 @@
         .letter-t .grid-cell:nth-child(13), .letter-t .grid-cell:nth-child(18),
         .letter-t .grid-cell:nth-child(23), .letter-t .grid-cell:nth-child(28),
         .letter-t .grid-cell:nth-child(33) {
-            background: linear-gradient(135deg, #0118D8, #1B56FD);
-        }
-
-        .letter-t .grid-cell:nth-child(1).community-image, .letter-t .grid-cell:nth-child(2).community-image,
-        .letter-t .grid-cell:nth-child(3).community-image, .letter-t .grid-cell:nth-child(4).community-image,
-        .letter-t .grid-cell:nth-child(5).community-image, .letter-t .grid-cell:nth-child(8).community-image,
-        .letter-t .grid-cell:nth-child(13).community-image, .letter-t .grid-cell:nth-child(18).community-image,
-        .letter-t .grid-cell:nth-child(23).community-image, .letter-t .grid-cell:nth-child(28).community-image,
-        .letter-t .grid-cell:nth-child(33).community-image {
-            background-blend-mode: normal;
+            background: linear-gradient(135deg, #0118D8, #1B56FD) !important;
         }
 
         /* Modal */
@@ -875,6 +819,12 @@
             animation: pixelFlip 0.6s ease-in-out;
         }
 
+        .grid-cell.show-image {
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
         /* Media Queries */
         @media (min-width: 480px) {
             .support-grid {
@@ -1004,7 +954,7 @@
                 <li><a href="index.html#home">Home</a></li>
                 <li><a href="index.html#services">All Services</a></li>
                 <li><a href="your_journey.html">Your Journey</a></li>
-                <li><a href="xpat-family.html" class="active">X'PAT Family</a></li>
+                <li><a href="xpat-family.html">X'PAT Family</a></li>
                 <li><a href="s4s_plans.html">Sim Card</a></li>
                 <li><a href="index.html#support">Support</a></li>
             </ul>
@@ -1323,16 +1273,20 @@
                 setTimeout(() => {
                     setCellImage(cell, imageData);
                     cell.classList.remove('flipping');
+                    cell.classList.add('show-image');
                 }, 300);
             } else {
                 setCellImage(cell, imageData);
-                cell.classList.add('animate-in');
+                cell.classList.add('animate-in', 'show-image');
                 setTimeout(() => cell.classList.remove('animate-in'), 800);
             }
         }
 
         function setCellImage(cell, imageData) {
             cell.style.backgroundImage = 'url(\'' + imageData.image + '\')';
+            cell.style.backgroundSize = 'cover';
+            cell.style.backgroundPosition = 'center';
+            cell.style.backgroundRepeat = 'no-repeat';
             cell.classList.add('community-image');
             cell.dataset.imageIndex = loadedImages.indexOf(imageData);
             cell.dataset.imageUrl = imageData.image;
