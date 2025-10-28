@@ -26,10 +26,10 @@
             align-items: center;
             touch-action: none;
             position: fixed;
+            user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            user-select: none;
         }
 
         .gameboy-container {
@@ -236,6 +236,37 @@
             51%, 100% { opacity: 0; }
         }
 
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #0118D8 0%, #1B56FD 100%);
+            color: #FFF8F8;
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(8px, 1.5vh, 10px);
+            padding: clamp(10px, 2vh, 15px) clamp(15px, 3vh, 20px);
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(1, 24, 216, 0.4);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(27, 86, 253, 0.6);
+            background: linear-gradient(135deg, #1B56FD 0%, #0118D8 100%);
+        }
+
+        .back-button:active {
+            transform: translateY(0);
+        }
+
         @media (orientation: landscape) and (max-height: 600px) {
             .gameboy-container {
                 flex-direction: row;
@@ -307,6 +338,9 @@
     </style>
 </head>
 <body>
+    <a href="../your_journey.html" class="back-button">
+        ◄ BACK TO JOURNEY
+    </a>
     <div class="gameboy-container">
         <div class="screen-section">
             <div class="screen-bezel">
@@ -777,5 +811,6 @@
             requestAnimationFrame(gameLoop);
         }
     </script>
+    
 </body>
 </html>
