@@ -175,38 +175,6 @@
             transform: translateY(0);
         }
 
-        @media (orientation: landscape) and (max-height: 600px) {
-            .gameboy-container {
-                max-width: 95vw;
-                padding: 2vh 3vw;
-            }
-
-            .brand {
-                margin: 1vh 0;
-                font-size: clamp(8px, 1.5vh, 12px);
-            }
-
-            .controls-hint {
-                padding: 1vh;
-                font-size: clamp(5px, 1vh, 7px);
-            }
-        }
-
-        @media (min-width: 768px) and (orientation: portrait) {
-            .gameboy-container {
-                max-width: 500px;
-            }
-        }
-
-        .gameboy-container::-webkit-scrollbar {
-            width: 0;
-            display: none;
-        }
-
-        .gameboy-container {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
     </style>
 </head>
 <body>
@@ -236,10 +204,6 @@
             MATCH ALL PAIRS FAST!<br>
             BEAT THE TIMER! ⏰
         </div>
-
-        <a class="back-button" href="#">
-            ← BACK
-        </a>
     </div>
 
     <script>
@@ -285,13 +249,12 @@
         const CARD_SYMBOLS = ['🛂', '✈️', '🏢', '🎓', '👨‍👩‍👧', '💼', '🏥', '🌴', '🚗', '🏠', '🎫', '📋'];
         
         const GRID_CONFIGS = [
-            { cols: 3, rows: 4, pairs: 6, time: 60 },   // Level 1: 12 cards
-            { cols: 4, rows: 4, pairs: 8, time: 70 },   // Level 2: 16 cards
-            { cols: 4, rows: 5, pairs: 10, time: 80 },  // Level 3: 20 cards
-            { cols: 4, rows: 6, pairs: 12, time: 90 },  // Level 4: 24 cards
+            { cols: 3, rows: 4, pairs: 6, time: 60 },
+            { cols: 4, rows: 4, pairs: 8, time: 70 },
+            { cols: 4, rows: 5, pairs: 10, time: 80 },
+            { cols: 4, rows: 6, pairs: 12, time: 90 },
         ];
 
-        // Start game
         startScreen.addEventListener('click', startGame);
         startScreen.addEventListener('touchstart', (e) => {
             e.preventDefault();
@@ -341,10 +304,8 @@
             freezeActive = false;
             freezeTimer = 0;
             
-            // Determine grid configuration
             let configIndex = Math.min(level - 1, GRID_CONFIGS.length - 1);
             if (level > GRID_CONFIGS.length) {
-                // Boss levels: use max grid, reduce time
                 configIndex = GRID_CONFIGS.length - 1;
                 const extraLevels = level - GRID_CONFIGS.length;
                 timeLimit = Math.max(50, 90 - (extraLevels * 5));
@@ -356,13 +317,11 @@
             gridRows = GRID_CONFIGS[configIndex].rows;
             totalPairs = GRID_CONFIGS[configIndex].pairs;
             
-            // Award powerups every 3 levels
             if (level % 3 === 0 && level > 1) {
                 powerups.reveal++;
                 powerups.freeze++;
             }
             
-            // Boss level (every 5 levels) gives extra powerup
             if (level % 5 === 0 && level > 1) {
                 powerups.autoMatch++;
             }
@@ -380,27 +339,20 @@
 
         function createCards() {
             cards = [];
-            
-            // Select random symbols for this level
             const symbols = CARD_SYMBOLS.slice(0, totalPairs);
-            const cardData = [...symbols, ...symbols]; // Create pairs
-            
-            // Shuffle
+            const cardData = [...symbols, ...symbols];
             for (let i = cardData.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [cardData[i], cardData[j]] = [cardData[j], cardData[i]];
             }
             
-            // Calculate card dimensions
             const padding = 10;
             const spacing = 5;
             const availableWidth = canvas.width - (padding * 2);
-            const availableHeight = canvas.height - 100; // Leave room for HUD
-            
+            const availableHeight = canvas.height - 100;
             const cardWidth = (availableWidth - (spacing * (gridCols - 1))) / gridCols;
             const cardHeight = (availableHeight - (spacing * (gridRows - 1))) / gridRows;
             
-            // Create card objects
             let index = 0;
             for (let row = 0; row < gridRows; row++) {
                 for (let col = 0; col < gridCols; col++) {
@@ -448,7 +400,6 @@
         }
 
         function checkCardClick(x, y) {
-            // Check powerup buttons
             if (y >= 10 && y <= 35) {
                 if (x >= 10 && x <= 90 && powerups.reveal > 0) {
                     usePowerup('reveal');
@@ -464,7 +415,6 @@
                 }
             }
             
-            // Check card clicks
             for (let card of cards) {
                 if (x >= card.x && x <= card.x + card.width &&
                     y >= card.y && y <= card.y + card.height &&
@@ -490,13 +440,11 @@
             const [card1, card2] = flippedCards;
             
             if (card1.symbol === card2.symbol) {
-                // Match!
                 card1.matched = true;
                 card2.matched = true;
                 matchedCards.push(card1, card2);
                 matches++;
                 
-                // Check for fast match (combo)
                 const now = Date.now();
                 if (now - lastMatchTime < 3000) {
                     combo++;
@@ -507,12 +455,10 @@
                 }
                 lastMatchTime = now;
                 
-                // Check win condition
                 if (matches >= totalPairs) {
                     winLevel();
                 }
             } else {
-                // No match
                 card1.flipped = false;
                 card2.flipped = false;
                 mistakes++;
@@ -531,7 +477,6 @@
             powerups[type]--;
             
             if (type === 'reveal') {
-                // Show all cards for 2 seconds
                 cards.forEach(card => {
                     if (!card.matched) card.flipped = true;
                 });
@@ -543,11 +488,9 @@
                     canClick = true;
                 }, 2000);
             } else if (type === 'freeze') {
-                // Freeze time for 10 seconds
                 freezeActive = true;
                 freezeTimer = 10;
             } else if (type === 'autoMatch') {
-                // Auto-match one pair
                 const unmatched = cards.filter(c => !c.matched);
                 if (unmatched.length >= 2) {
                     const symbol = unmatched[0].symbol;
@@ -559,7 +502,6 @@
                     });
                     matches++;
                     score += 50;
-                    
                     if (matches >= totalPairs) {
                         winLevel();
                     }
@@ -569,45 +511,28 @@
 
         function winLevel() {
             levelComplete = true;
-            
-            // Level complete bonus
             score += 200;
-            
-            // Time bonus
             score += Math.floor(timeRemaining) * 10;
-            
-            // Perfect run bonus
-            if (perfectRun) {
-                score += 500;
-            }
-            
-            // Boss level bonus (every 5 levels)
-            if (level % 5 === 0) {
-                score += 1000;
-            }
+            if (perfectRun) score += 500;
+            if (level % 5 === 0) score += 1000;
         }
 
         function update() {
             if (gameOver || levelComplete) return;
-            
-            // Update timer
             if (!freezeActive) {
                 const now = Date.now();
                 const delta = (now - lastTime) / 1000;
                 lastTime = now;
                 timeRemaining -= delta;
-                
                 if (timeRemaining <= 0) {
                     timeRemaining = 0;
                     gameOver = true;
                 }
             } else {
-                // Update freeze timer
                 const now = Date.now();
                 const delta = (now - lastTime) / 1000;
                 lastTime = now;
                 freezeTimer -= delta;
-                
                 if (freezeTimer <= 0) {
                     freezeActive = false;
                     freezeTimer = 0;
@@ -616,155 +541,74 @@
         }
 
         function drawCard(card) {
-            if (card.matched) {
-                // Matched - show with gold border
-                ctx.fillStyle = '#ffd700';
-                ctx.fillRect(card.x, card.y, card.width, card.height);
-                ctx.fillStyle = '#0f380f';
-                ctx.font = `${Math.min(card.width, card.height) * 0.5}px "Press Start 2P"`;
+            if (card.matched) return;
+            ctx.fillStyle = card.flipped ? '#FFF' : '#333';
+            ctx.fillRect(card.x, card.y, card.width, card.height);
+            
+            ctx.strokeStyle = '#1a1a1a';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(card.x, card.y, card.width, card.height);
+            
+            if (card.flipped) {
+                ctx.fillStyle = '#333';
+                ctx.font = `${Math.min(card.width, card.height) * 0.6}px Press Start 2P`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(card.symbol, card.x + card.width / 2, card.y + card.height / 2);
-            } else if (card.flipped) {
-                // Flipped - show symbol
-                ctx.fillStyle = '#e8f4f8';
-                ctx.fillRect(card.x, card.y, card.width, card.height);
-                ctx.strokeStyle = '#0f380f';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(card.x, card.y, card.width, card.height);
-                
-                ctx.fillStyle = '#0f380f';
-                ctx.font = `${Math.min(card.width, card.height) * 0.5}px "Press Start 2P"`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(card.symbol, card.x + card.width / 2, card.y + card.height / 2);
-            } else {
-                // Face down
-                ctx.fillStyle = '#306230';
-                ctx.fillRect(card.x, card.y, card.width, card.height);
-                ctx.strokeStyle = '#0f380f';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(card.x, card.y, card.width, card.height);
-                
-                // Draw question mark
-                ctx.fillStyle = '#0f380f';
-                ctx.font = `${Math.min(card.width, card.height) * 0.6}px "Press Start 2P"`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('?', card.x + card.width / 2, card.y + card.height / 2);
-            }
-        }
-
-        function draw() {
-            // Background
-            ctx.fillStyle = '#9bbc0f';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if (gameOver) {
-                ctx.fillStyle = '#0f380f';
-                ctx.font = '20px "Press Start 2P"';
-                ctx.textAlign = 'center';
-                ctx.fillText('TIME UP!', canvas.width / 2, canvas.height / 2 - 40);
-                ctx.font = '14px "Press Start 2P"';
-                ctx.fillText(`LEVEL: ${level}`, canvas.width / 2, canvas.height / 2 - 10);
-                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
-                ctx.font = '10px "Press Start 2P"';
-                ctx.fillText('TAP TO RETRY', canvas.width / 2, canvas.height / 2 + 50);
-                return;
-            }
-
-            if (levelComplete) {
-                ctx.fillStyle = '#ffd700';
-                ctx.font = '18px "Press Start 2P"';
-                ctx.textAlign = 'center';
-                ctx.fillText('LEVEL CLEAR!', canvas.width / 2, canvas.height / 2 - 50);
-                ctx.fillStyle = '#0f380f';
-                ctx.font = '12px "Press Start 2P"';
-                ctx.fillText(`LEVEL: ${level}`, canvas.width / 2, canvas.height / 2 - 20);
-                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2);
-                if (perfectRun) {
-                    ctx.fillStyle = '#ff6600';
-                    ctx.font = '10px "Press Start 2P"';
-                    ctx.fillText('PERFECT! +500', canvas.width / 2, canvas.height / 2 + 25);
-                }
-                ctx.fillStyle = '#0f380f';
-                ctx.font = '10px "Press Start 2P"';
-                ctx.fillText('TAP TO CONTINUE', canvas.width / 2, canvas.height / 2 + 50);
-                return;
-            }
-
-            // Draw powerup buttons
-            ctx.font = '8px "Press Start 2P"';
-            ctx.textAlign = 'left';
-            
-            // Reveal button
-            ctx.fillStyle = powerups.reveal > 0 ? '#ffd700' : '#666';
-            ctx.fillRect(10, 10, 80, 25);
-            ctx.fillStyle = '#0f380f';
-            ctx.fillText(`REVEAL:${powerups.reveal}`, 15, 28);
-            
-            // Freeze button
-            ctx.fillStyle = powerups.freeze > 0 ? '#00bfff' : '#666';
-            ctx.fillRect(100, 10, 80, 25);
-            ctx.fillStyle = '#0f380f';
-            ctx.fillText(`FREEZE:${powerups.freeze}`, 105, 28);
-            
-            // Auto-match button
-            ctx.fillStyle = powerups.autoMatch > 0 ? '#ff6600' : '#666';
-            ctx.fillRect(190, 10, 90, 25);
-            ctx.fillStyle = '#0f380f';
-            ctx.fillText(`AUTO:${powerups.autoMatch}`, 195, 28);
-
-            // HUD - Top Right
-            ctx.textAlign = 'right';
-            ctx.fillStyle = '#0f380f';
-            ctx.font = '10px "Press Start 2P"';
-            ctx.fillText(`LV:${level}`, canvas.width - 10, 20);
-            
-            // Timer (red if < 10 seconds or frozen)
-            const timeColor = freezeActive ? '#00bfff' : (timeRemaining < 10 ? '#ff0000' : '#0f380f');
-            ctx.fillStyle = timeColor;
-            ctx.fillText(`TIME:${Math.ceil(timeRemaining)}`, canvas.width - 10, 35);
-            
-            if (freezeActive) {
-                ctx.font = '8px "Press Start 2P"';
-                ctx.fillText('FROZEN!', canvas.width - 10, 48);
-            }
-
-            // HUD - Bottom
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#0f380f';
-            ctx.font = '9px "Press Start 2P"';
-            ctx.fillText(`MATCHES: ${matches}/${totalPairs}`, canvas.width / 2, 65);
-            
-            if (combo > 1) {
-                ctx.fillStyle = combo >= 5 ? '#ff0000' : (combo >= 3 ? '#ff6600' : '#ffd700');
-                ctx.fillText(`COMBO x${combo}!`, canvas.width / 2, canvas.height - 10);
-            }
-            
-            ctx.fillStyle = '#0f380f';
-            ctx.textAlign = 'right';
-            ctx.fillText(`SCORE:${score}`, canvas.width - 10, canvas.height - 10);
-
-            // Draw all cards
-            cards.forEach(drawCard);
-            
-            // Boss level indicator
-            if (level % 5 === 0) {
-                ctx.fillStyle = '#ff0000';
-                ctx.font = '8px "Press Start 2P"';
-                ctx.textAlign = 'left';
-                const alpha = (Math.floor(Date.now() / 500) % 2) ? 1 : 0.5;
-                ctx.globalAlpha = alpha;
-                ctx.fillText('BOSS LEVEL!', 10, canvas.height - 10);
-                ctx.globalAlpha = 1;
             }
         }
 
         function gameLoop() {
-            if (!gameStarted) return;
             update();
-            draw();
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            cards.forEach(drawCard);
+            
+            if (gameOver) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#FFF';
+                ctx.font = 'bold 24px Press Start 2P';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
+                
+                ctx.font = '16px Press Start 2P';
+                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
+                ctx.fillText('TAP TO RESTART', canvas.width / 2, canvas.height / 2 + 40);
+            } else if (levelComplete) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#FFF';
+                ctx.font = 'bold 24px Press Start 2P';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('LEVEL COMPLETE', canvas.width / 2, canvas.height / 2 - 10);
+                
+                ctx.font = '16px Press Start 2P';
+                ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
+                ctx.fillText('TAP TO NEXT LEVEL', canvas.width / 2, canvas.height / 2 + 40);
+            } else {
+                ctx.fillStyle = '#000';
+                ctx.font = '16px Press Start 2P';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'top';
+                ctx.fillText(`TIME: ${Math.ceil(timeRemaining)}`, 10, 10);
+                ctx.fillText(`LEVEL: ${level}`, 10, 30);
+                ctx.fillText(`SCORE: ${score}`, 10, 50);
+                
+                const powerupIcons = ['🔍', '❄️', '⚡'];
+                powerupIcons.forEach((icon, index) => {
+                    const x = 10 + index * 90;
+                    const y = canvas.height - 40;
+                    ctx.fillText(icon, x, y);
+                    ctx.fillText(powerups[Object.keys(powerups)[index]], x + 20, y);
+                });
+            }
+            
             requestAnimationFrame(gameLoop);
         }
     </script>

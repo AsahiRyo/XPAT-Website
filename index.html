@@ -335,17 +335,32 @@
             text-align: center;
         }
 
+        /* Sliding Gradient Title */
         .hero h1 {
             font-size: clamp(28px, 5vw, 48px);
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: clamp(16px, 3vw, 24px);
-            background: linear-gradient(135deg, #FFF8F8 0%, #1B56FD 50%, #0118D8 100%);
+            background: linear-gradient(
+                90deg,
+                #FFF8F8 0%,
+                #1B56FD 40%,
+                #0118D8 50%,
+                #1B56FD 60%,
+                #FFF8F8 100%
+            );
+            background-size: 200% 100%;
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
             word-wrap: break-word;
+            animation: gradientSlide 3s linear infinite;
+        }
+
+        @keyframes gradientSlide {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
 
         .hero-subtitle {
@@ -957,15 +972,6 @@
             border-color: var(--secondary-blue);
         }
 
-        /* Replace existing .nav-links a.active rule */
-        .nav-links a.active {
-            background: #0118D8;
-            color: white;
-            box-shadow: 0 4px 12px rgba(1, 24, 216, 0.5);
-            border: none;
-        }
-
-        /* Update mobile navigation active state */
         .mobile-nav a.active {
             background: #0118D8;
             color: white;
@@ -1265,8 +1271,8 @@
                     </div>
                 </a>
 
-                <!-- Air Tickets -->
-                <a href="https://linktr.ee/tfpsolutionsofficial" target="_blank" class="service-card">
+                <!-- Air Tickets - UPDATED LINK -->
+                <a href="AirTicket.html" class="service-card">
                     <div class="service-image" style="background-image: url('services/airtickets-service.png');"></div>
                     <div class="service-content">
                         <h3 class="service-title">Air Tickets</h3>
@@ -1274,8 +1280,8 @@
                     </div>
                 </a>
 
-                <!-- S4S Mobile Data -->
-                <a href="https://tr.ee/nbnQzf0nxV" target="_blank" class="service-card">
+                <!-- S4S Mobile Data - UPDATED LINK -->
+                <a href="s4s_plans.html" class="service-card">
                     <div class="service-image" style="background-image: url('services/mobile-service.png');"></div>
                     <div class="service-content">
                         <h3 class="service-title">S4S Mobile Data</h3>
@@ -1485,8 +1491,8 @@
             { name: "Micro Finance", gif: "gifs/loans.gif", link: "https://frontend.onetranzact.com.my/" },
             { name: "Visa Renewal", gif: "gifs/visa.gif", link: "https://linktr.ee/tfpsolutionsofficial" },
             { name: "Top-Up & Bill Payment", gif: "gifs/topup.gif", link: "https://www.mobilityone.com.my/v4/topup.html" },
-            { name: "Air Tickets", gif: "gifs/airtickets.gif", link: "https://linktr.ee/tfpsolutionsofficial" },
-            { name: "S4S Mobile Data", gif: "gifs/mobile.gif", link: "https://tr.ee/nbnQzf0nxV" }
+            { name: "Air Tickets", gif: "gifs/airtickets.gif", link: "AirTicket.html" },
+            { name: "S4S Mobile Data", gif: "gifs/mobile.gif", link: "s4s_plans.html" }
         ];
 
         class InfiniteCarousel {
@@ -1537,7 +1543,11 @@
 
                     itemEl.addEventListener('click', (e) => {
                         if (!this.isScrolling && itemEl.classList.contains('center')) {
-                            window.open(item.link, '_blank');
+                            if (item.link.startsWith('http')) {
+                                window.open(item.link, '_blank');
+                            } else {
+                                window.location.href = item.link;
+                            }
                         }
                     });
 
@@ -1598,9 +1608,6 @@
                         }
                     });
                 }
-
-                // Mobile: NO touch swipe - allow normal page scrolling
-                // The carousel container allows touch events to pass through for page scrolling
             }
 
             handleScroll(delta) {

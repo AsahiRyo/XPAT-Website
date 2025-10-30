@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Air Tickets - Coming Soon | X'PAT</title>
+    <meta name="description" content="X'PAT Air Tickets service is coming soon. Book affordable flights home with the best prices.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #0118D8;
+            --secondary-blue: #1B56FD;
+            --sky-blue: #4A90E2;
+            --light-blue: #87CEEB;
+            --cream: #E9DFC3;
+            --off-white: #FFF8F8;
+            --text-primary: #FFF8F8;
+            --text-secondary: #E9DFC3;
+            --glass-bg: rgba(1, 24, 216, 0.15);
+            --glass-border: rgba(233, 223, 195, 0.3);
+            --glass-strong: rgba(27, 86, 253, 0.25);
+            --radius: clamp(16px, 3vw, 24px);
+            --blur: blur(30px);
+            --blur-strong: blur(40px);
+            --container-padding: clamp(16px, 4vw, 48px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(180deg, #001233 0%, #0a1f44 50%, #1a3a6e 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+        }
+
+        /* Sky Background with Clouds */
+        .sky-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(180deg, #001233 0%, #0a2f5f 30%, #1a4a8e 60%, #87CEEB 100%);
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 100px;
+            opacity: 0.8;
+            animation: floatCloud linear infinite;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 100px;
+        }
+
+        .cloud-1 {
+            width: 100px;
+            height: 40px;
+            top: 15%;
+            left: -100px;
+            animation-duration: 45s;
+        }
+
+        .cloud-1::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 10px;
+        }
+
+        .cloud-1::after {
+            width: 60px;
+            height: 40px;
+            top: -15px;
+            right: 10px;
+        }
+
+        .cloud-2 {
+            width: 120px;
+            height: 45px;
+            top: 35%;
+            left: -120px;
+            animation-duration: 55s;
+            animation-delay: 5s;
+        }
+
+        .cloud-2::before {
+            width: 55px;
+            height: 55px;
+            top: -28px;
+            left: 15px;
+        }
+
+        .cloud-2::after {
+            width: 65px;
+            height: 45px;
+            top: -18px;
+            right: 15px;
+        }
+
+        .cloud-3 {
+            width: 90px;
+            height: 35px;
+            top: 60%;
+            left: -90px;
+            animation-duration: 40s;
+            animation-delay: 10s;
+        }
+
+        .cloud-3::before {
+            width: 45px;
+            height: 45px;
+            top: -22px;
+            left: 8px;
+        }
+
+        .cloud-3::after {
+            width: 50px;
+            height: 35px;
+            top: -12px;
+            right: 8px;
+        }
+
+        .cloud-4 {
+            width: 110px;
+            height: 42px;
+            top: 25%;
+            left: -110px;
+            animation-duration: 50s;
+            animation-delay: 15s;
+        }
+
+        .cloud-4::before {
+            width: 52px;
+            height: 52px;
+            top: -26px;
+            left: 12px;
+        }
+
+        .cloud-4::after {
+            width: 58px;
+            height: 42px;
+            top: -16px;
+            right: 12px;
+        }
+
+        .cloud-5 {
+            width: 95px;
+            height: 38px;
+            top: 50%;
+            left: -95px;
+            animation-duration: 48s;
+            animation-delay: 20s;
+        }
+
+        .cloud-5::before {
+            width: 48px;
+            height: 48px;
+            top: -24px;
+            left: 10px;
+        }
+
+        .cloud-5::after {
+            width: 52px;
+            height: 38px;
+            top: -14px;
+            right: 10px;
+        }
+
+        @keyframes floatCloud {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(100vw + 200px));
+            }
+        }
+
+        /* Airplane Animation */
+        .airplane-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .airplane {
+            position: absolute;
+            font-size: clamp(40px, 8vw, 60px);
+            animation: flyAcross 15s linear infinite;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .airplane-1 {
+            top: 20%;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .airplane-2 {
+            top: 45%;
+            left: -100px;
+            animation-delay: 7s;
+        }
+
+        .airplane-3 {
+            top: 70%;
+            left: -100px;
+            animation-delay: 14s;
+        }
+
+        @keyframes flyAcross {
+            0% {
+                transform: translateX(0) rotate(-5deg);
+            }
+            100% {
+                transform: translateX(calc(100vw + 200px)) rotate(-5deg);
+            }
+        }
+
+        /* Stars for night sky effect */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            width: 100%;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: clamp(12px, 2vh, 30px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 8, 20, 0.85);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: clamp(40px, 8vw, 60px);
+            z-index: 1000;
+            padding: clamp(8px, 1.5vw, 16px) clamp(16px, 3vw, 40px);
+            box-shadow: 0 20px 60px rgba(1, 24, 216, 0.3);
+            width: calc(100% - clamp(16px, 4vw, 60px));
+            max-width: 1100px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        nav.nav-hidden {
+            transform: translateX(-50%) translateY(-150%);
+            opacity: 0;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: auto;
+            min-height: clamp(60px, 10vw, 105px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: clamp(60px, 12vw, 105px);
+            width: auto;
+            object-fit: contain;
+            max-width: 100%;
+        }
+
+        .nav-links {
+            display: none;
+            list-style: none;
+            gap: clamp(12px, 2vw, 32px);
+        }
+
+        .nav-links a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: clamp(13px, 1.8vw, 15px);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+            padding: clamp(6px, 1vw, 8px) clamp(12px, 2vw, 16px);
+            border-radius: clamp(12px, 2vw, 20px);
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: var(--off-white);
+            background: var(--glass-strong);
+            backdrop-filter: var(--blur);
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--off-white);
+        }
+
+        .menu-btn {
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            color: var(--off-white);
+            font-size: clamp(14px, 3vw, 16px);
+            cursor: pointer;
+            padding: clamp(6px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
+            border-radius: clamp(12px, 2vw, 16px);
+            transition: all 0.2s ease;
+            width: clamp(36px, 8vw, 40px);
+            height: clamp(36px, 8vw, 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .menu-btn:hover {
+            background: var(--glass-strong);
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 8, 20, 0.98);
+            backdrop-filter: var(--blur-strong);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(20px, 4vw, 32px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: clamp(20px, 5vw, 40px);
+        }
+
+        .mobile-nav.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-nav a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: clamp(17px, 4vw, 22px);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            padding: clamp(10px, 2vw, 14px) clamp(20px, 4vw, 28px);
+            border-radius: clamp(14px, 3vw, 18px);
+            background: var(--glass-bg);
+            backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .mobile-nav a:hover, .mobile-nav a:active {
+            color: var(--off-white);
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-color: var(--secondary-blue);
+        }
+
+        /* Main Content */
+        .coming-soon-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(160px, 22vh, 220px) var(--container-padding) clamp(60px, 10vh, 100px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .coming-soon-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .coming-soon-content {
+            transform: translateY(30px);
+        }
+
+        /* Animated Ticket */
+        .ticket-container {
+            position: relative;
+            margin: 0 auto clamp(40px, 6vw, 60px);
+            max-width: 500px;
+            perspective: 1000px;
+        }
+
+        .boarding-pass {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 248, 255, 0.95) 100%);
+            border-radius: clamp(12px, 2vw, 16px);
+            padding: clamp(24px, 4vw, 32px);
+            box-shadow: 0 clamp(15px, 4vw, 20px) clamp(40px, 8vw, 60px) rgba(1, 24, 216, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: ticketFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes ticketFloat {
+            0%, 100% { transform: translateY(0) rotateX(0deg); }
+            50% { transform: translateY(-10px) rotateX(2deg); }
+        }
+
+        .ticket-perforation {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            top: 50%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 8px,
+                #ccc 8px,
+                #ccc 12px
+            );
+        }
+
+        .ticket-header {
+            border-bottom: 2px dashed #ddd;
+            padding-bottom: clamp(16px, 3vw, 20px);
+            margin-bottom: clamp(16px, 3vw, 20px);
+        }
+
+        .airline-logo {
+            font-size: clamp(32px, 6vw, 48px);
+            margin-bottom: clamp(8px, 2vw, 12px);
+        }
+
+        .ticket-title {
+            font-size: clamp(18px, 4vw, 24px);
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: clamp(6px, 1vw, 8px);
+        }
+
+        .ticket-subtitle {
+            font-size: clamp(13px, 2.5vw, 15px);
+            color: #666;
+        }
+
+        .flight-route {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: clamp(20px, 4vw, 28px) 0;
+            padding: 0 clamp(8px, 2vw, 16px);
+        }
+
+        .airport-code {
+            font-size: clamp(28px, 6vw, 40px);
+            font-weight: 800;
+            color: var(--primary-blue);
+            letter-spacing: 2px;
+        }
+
+        .plane-icon {
+            font-size: clamp(24px, 5vw, 32px);
+            color: var(--secondary-blue);
+            animation: planeBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes planeBounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .ticket-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: clamp(12px, 2vw, 16px);
+            margin-top: clamp(16px, 3vw, 20px);
+        }
+
+        .info-item {
+            text-align: left;
+        }
+
+        .info-label {
+            font-size: clamp(11px, 2vw, 12px);
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: clamp(14px, 3vw, 16px);
+            font-weight: 600;
+            color: #333;
+        }
+
+        .coming-soon-badge {
+            position: absolute;
+            top: clamp(16px, 3vw, 20px);
+            right: clamp(16px, 3vw, 20px);
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            color: white;
+            padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2.5vw, 16px);
+            border-radius: clamp(20px, 4vw, 30px);
+            font-size: clamp(10px, 2vw, 12px);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Main Title with Moving Gradient */
+        .main-title {
+            font-size: clamp(36px, 8vw, 72px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: clamp(16px, 3vw, 24px);
+            background: linear-gradient(
+                90deg,
+                #FFF8F8 0%,
+                #FFF8F8 20%,
+                #4A90E2 40%,
+                #1B56FD 50%,
+                #4A90E2 60%,
+                #FFF8F8 80%,
+                #FFF8F8 100%
+            );
+            background-size: 200% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            animation: gradientSlide 3s linear infinite;
+        }
+
+        @keyframes gradientSlide {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        .main-subtitle {
+            font-size: clamp(16px, 3.5vw, 24px);
+            color: var(--cream);
+            margin-bottom: clamp(32px, 5vw, 48px);
+            line-height: 1.6;
+        }
+
+        /* Features Grid */
+        .features-preview {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(16px, 3vw, 20px);
+            max-width: 700px;
+            margin: 0 auto clamp(40px, 6vw, 60px);
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: clamp(12px, 2vw, 16px);
+            padding: clamp(16px, 3vw, 20px);
+            display: flex;
+            align-items: center;
+            gap: clamp(12px, 2vw, 16px);
+            transition: all 0.3s ease;
+            animation: slideIn 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 0.2s; }
+        .feature-item:nth-child(2) { animation-delay: 0.4s; }
+        .feature-item:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-item {
+            transform: translateX(-30px);
+        }
+
+        .feature-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--light-blue);
+        }
+
+        .feature-icon {
+            font-size: clamp(24px, 5vw, 32px);
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            text-align: left;
+            font-size: clamp(14px, 3vw, 16px);
+            color: var(--off-white);
+            font-weight: 500;
+        }
+
+        /* CTA Button */
+        .notify-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(14px, 3vw, 18px) clamp(32px, 6vw, 48px);
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--off-white);
+            border-radius: clamp(16px, 3vw, 20px);
+            font-size: clamp(15px, 3vw, 18px);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 clamp(8px, 2vw, 10px) clamp(20px, 4vw, 30px) rgba(1, 24, 216, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notify-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .notify-btn:hover::before {
+            left: 100%;
+        }
+
+        .notify-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 clamp(12px, 3vw, 15px) clamp(30px, 6vw, 40px) rgba(27, 86, 253, 0.5);
+        }
+
+        /* Media Queries */
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: none;
+            }
+
+            .features-preview {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sky Background -->
+    <div class="sky-background">
+        <div class="stars" id="starsContainer"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+        <div class="cloud cloud-4"></div>
+        <div class="cloud cloud-5"></div>
+    </div>
+
+    <!-- Flying Airplanes -->
+    <div class="airplane-container">
+        <div class="airplane airplane-1">✈️</div>
+        <div class="airplane airplane-2">✈️</div>
+        <div class="airplane airplane-3">✈️</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="s4slogo.png" alt="X'PAT Logo">
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#services">All Services</a></li>
+                <li><a href="your_journey.html">Your Journey</a></li>
+                <li><a href="xpat-family.html">X'PAT Family</a></li>
+                <li><a href="s4s_plans.html">Sim Card</a></li>
+                <li><a href="index.html#support">Support</a></li>
+            </ul>
+
+            <button class="menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="index.html">Home</a>
+        <a href="index.html#services">All Services</a>
+        <a href="your_journey.html">Your Journey</a>
+        <a href="xpat-family.html">X'PAT Family</a>
+        <a href="s4s_plans.html">Sim Card</a>
+        <a href="index.html#support">Support</a>
+    </div>
+
+    <!-- Main Content -->
+    <section class="coming-soon-section">
+        <div class="coming-soon-content">
+            <div class="ticket-container">
+                <div class="boarding-pass">
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    <div class="ticket-perforation"></div>
+                    
+                    <div class="ticket-header">
+                        <div class="airline-logo">✈️</div>
+                        <div class="ticket-title">X'PAT Air Tickets</div>
+                        <div class="ticket-subtitle">Your Journey Home</div>
+                    </div>
+
+                    <div class="flight-route">
+                        <div class="airport-code">MYS</div>
+                        <div class="plane-icon">🛫</div>
+                        <div class="airport-code">HOME</div>
+                    </div>
+
+                    <div class="ticket-info">
+                        <div class="info-item">
+                            <div class="info-label">Feature</div>
+                            <div class="info-value">Best Prices</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Booking</div>
+                            <div class="info-value">Easy & Fast</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Service</div>
+                            <div class="info-value">24/7 Support</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Payment</div>
+                            <div class="info-value">Flexible</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="main-title">Air Tickets Coming Soon</h1>
+            <p class="main-subtitle">We're preparing an amazing flight booking experience just for you. Book affordable tickets home with the best prices.</p>
+
+            <div class="features-preview">
+                <div class="feature-item">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-text">Competitive prices on all routes</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌍</div>
+                    <div class="feature-text">Flights to Bangladesh, Nepal, India & more</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-text">Book directly from X'PAT app</div>
+                </div>
+            </div>
+
+            <a href="index.html#services" class="notify-btn">
+                Explore Other Services
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Generate random stars
+        function generateStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const starCount = 50;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Navigation scroll handler
+        let lastScrollTop = 0;
+        const nav = document.getElementById('mainNav');
+        const scrollThreshold = 100;
+
+        function handleNavScroll() {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (currentScroll > scrollThreshold) {
+                if (currentScroll > lastScrollTop) {
+                    nav.classList.add('nav-hidden');
+                } else if (currentScroll < lastScrollTop) {
+                    nav.classList.remove('nav-hidden');
+                }
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+            
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        }
+
+        let navScrollTimer;
+        window.addEventListener('scroll', () => {
+            if (!navScrollTimer) {
+                navScrollTimer = requestAnimationFrame(() => {
+                    handleNavScroll();
+                    navScrollTimer = null;
+                });
+            }
+        }, { passive: true });
+
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobileNav');
+            const isActive = mobileNav.classList.toggle('active');
+            document.body.style.overflow = isActive ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileNav').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close mobile menu on outside click
+        document.addEventListener('click', (event) => {
+            const mobileNav = document.getElementById('mobileNav');
+            const menuBtn = document.querySelector('.menu-btn');
+            
+            if (mobileNav.classList.contains('active') && 
+                !mobileNav.contains(event.target) && 
+                !menuBtn.contains(event.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMobileMenu();
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.includes('#') && !href.startsWith('http')) {
+                    const targetId = href.split('#')[1];
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        e.preventDefault();
+                        closeMobileMenu();
+                        
+                        const headerOffset = 120;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Resize handler
+        let resizeTimer;
+        let lastWidth = window.innerWidth;
+        
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                const currentWidth = window.innerWidth;
+                if (Math.abs(currentWidth - lastWidth) > 50) {
+                    lastWidth = currentWidth;
+                    if (currentWidth >= 768) {
+                        closeMobileMenu();
+                    }
+                }
+            }, 150);
+        });
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            generateStars();
+        });
+    </script>
+</body>
+</html>
